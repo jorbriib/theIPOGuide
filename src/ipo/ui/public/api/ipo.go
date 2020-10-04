@@ -16,7 +16,7 @@ func NewController(handler application.Handler) Controller {
 
 func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
 	query := application.NewGetIposQuery()
-	response := c.handler.GetIPOs(query)
+	response, _ := c.handler.GetIPOs(query)
 
 	fmt.Fprint(writer, response)
 }

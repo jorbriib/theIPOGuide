@@ -2,18 +2,13 @@ package domain
 
 type CompanyId string
 
-type Company struct{
-	id CompanyId
+type Company struct {
 	symbol string
-	name string
+	name   string
 }
 
-func NewCompany(id CompanyId, symbol string, name string ) Company{
-	return Company{id, symbol, name}
-}
-
-func (c Company) Id() CompanyId {
-	return c.id
+func NewCompany(symbol string, name string) Company {
+	return Company{symbol, name}
 }
 
 func (c Company) Symbol() string {

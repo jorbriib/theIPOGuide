@@ -23,12 +23,16 @@ type GetIposResponse struct {
 	ipos []string
 }
 
-func (h Handler) GetIPOs(query getIposQuery) GetIposResponse {
-	ipos := h.ipoRepository.Find()
-	iposName := make([]string, len(ipos))
-	for _, ipo := range ipos {
-		iposName = append(iposName, ipo.Company().Name())
+func (h Handler) GetIPOs(query getIposQuery) (GetIposResponse, error) {
+	ipos, err := h.ipoRepository.Find()
+	if err != nil {
+		return GetIposResponse{}, err
 	}
 
-	return GetIposResponse{ipos: iposName}
+	iposName := make([]string, len(ipos))
+	for _, ipo := range ipos {
+		iposName = append(iposName, ipo.ToString())
+	}
+
+	return GetIposResponse{ipos: iposName}, nil
 }
