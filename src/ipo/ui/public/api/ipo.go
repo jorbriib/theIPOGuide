@@ -2,19 +2,22 @@ package api
 
 import (
 	"fmt"
-	"github.com/golossus/routing"
+	"github.com/jorbriib/theIPOGuide/src/ipo/application"
 	"net/http"
 )
 
-func AddRoutes(router *routing.Router) {
-	controller := ipoController{}
-	_ = router.Get("/", controller.GetIPOs)
+type Controller struct {
+	handler application.Handler
 }
 
-type ipoController struct {
-
+func NewController(handler application.Handler) Controller {
+	return Controller{handler: handler}
 }
 
-func (c ipoController) GetIPOs(writer http.ResponseWriter, request *http.Request) {
-	_, _ = fmt.Fprint(writer, "Welcome to the API")
+func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
+	query := application.NewGetIposQuery()
+	response := c.handler.GetIPOs(query)
+
+	fmt.Fprint(writer, response)
 }
+

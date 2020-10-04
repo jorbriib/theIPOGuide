@@ -5,6 +5,10 @@ type Country struct{
 	name string
 }
 
+func NewCountry(code string, name string) Country {
+	return Country{code: code, name: name}
+}
+
 func (c Country) Code() string {
 	return c.code
 }

@@ -8,6 +8,9 @@ type Ipo struct {
 	market Market
 	expectedDate string
 }
+func NewIpo(id ID, company Company, market Market, expectedDate string) Ipo {
+	return Ipo{id: id, company: company, market: market, expectedDate: expectedDate}
+}
 
 func (i Ipo) Id() ID{
 	return i.id

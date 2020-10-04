@@ -8,6 +8,10 @@ type Company struct{
 	name string
 }
 
+func NewCompany(id CompanyId, symbol string, name string ) Company{
+	return Company{id, symbol, name}
+}
+
 func (c Company) Id() CompanyId {
 	return c.id
 }
