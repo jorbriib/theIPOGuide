@@ -7,16 +7,16 @@ import (
 )
 
 type Controller struct {
-	handler application.Handler
+	service application.Service
 }
 
-func NewController(handler application.Handler) Controller {
-	return Controller{handler: handler}
+func NewController(service application.Service) Controller {
+	return Controller{service: service} 
 }
 
 func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
 	query := application.NewGetIposQuery()
-	response, _ := c.handler.GetIPOs(query)
+	response, _ := c.service.GetIPOs(query)
 
 	fmt.Fprint(writer, response)
 }

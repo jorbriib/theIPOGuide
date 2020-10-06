@@ -19,8 +19,8 @@ func main() {
 	db := getDB()
 
 	repository := infrastructure.NewMySQLIpoRepository(db)
-	handler := application.NewHandler(repository)
-	controller := ipo_public_api.NewController(handler)
+	service := application.NewService(repository)
+	controller := ipo_public_api.NewController(service)
 	_ = r.Get("/", controller.GetIpos)
 
 	fmt.Println("Server listening")

@@ -4,26 +4,26 @@ import (
 	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
 )
 
-type Handler struct {
+type Service struct {
 	ipoRepository domain.IpoRepository
 }
 
-func NewHandler(ipoRepository domain.IpoRepository) Handler {
-	return Handler{ipoRepository: ipoRepository}
+func NewService(ipoRepository domain.IpoRepository) Service {
+	return Service{ipoRepository: ipoRepository}
 }
 
-type getIposQuery struct {
+type GetIposQuery struct {
 }
 
-func NewGetIposQuery() getIposQuery {
-	return getIposQuery{}
+func NewGetIposQuery() GetIposQuery {
+	return GetIposQuery{}
 }
 
 type GetIposResponse struct {
 	ipos []string
 }
 
-func (h Handler) GetIPOs(query getIposQuery) (GetIposResponse, error) {
+func (h Service) GetIPOs(query GetIposQuery) (GetIposResponse, error) {
 	ipos, err := h.ipoRepository.Find()
 	if err != nil {
 		return GetIposResponse{}, err
