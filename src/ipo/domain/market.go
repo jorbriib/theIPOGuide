@@ -6,7 +6,7 @@ type Market struct {
 	country Country
 }
 
-func NewMarket(code string, name string, country Country) Market {
+func HydrateMarket(code string, name string, country Country) Market {
 	return Market{
 		code:    code,
 		name:    name,
@@ -20,4 +20,8 @@ func (m Market) Code() string {
 
 func (m Market) Name() string {
 	return m.name
+}
+
+func (m Market) Country() Country{
+	return m.country
 }

@@ -4,12 +4,8 @@ import (
 	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
 )
 
-type Service struct {
-	ipoRepository domain.IpoRepository
-}
-
-func NewService(ipoRepository domain.IpoRepository) Service {
-	return Service{ipoRepository: ipoRepository}
+type Service interface {
+	GetIPOs(query GetIposQuery) (GetIposResponse, error)
 }
 
 type GetIposQuery struct {
@@ -23,15 +19,27 @@ type GetIposResponse struct {
 	ipos []string
 }
 
-func (h Service) GetIPOs(query GetIposQuery) (GetIposResponse, error) {
+func (r GetIposResponse) GetIpos() []string{
+	return r.ipos
+}
+
+type IpoService struct {
+	ipoRepository domain.IpoRepository
+}
+
+func NewService(ipoRepository domain.IpoRepository) IpoService {
+	return IpoService{ipoRepository: ipoRepository}
+}
+
+func (h IpoService) GetIPOs(query GetIposQuery) (GetIposResponse, error) {
 	ipos, err := h.ipoRepository.Find()
 	if err != nil {
 		return GetIposResponse{}, err
 	}
 
-	iposName := make([]string, len(ipos))
-	for _, ipo := range ipos {
-		iposName = append(iposName, ipo.ToString())
+	var iposName = make([]string, len(ipos))
+	for k, ipo := range ipos {
+		iposName[k] = ipo.ToString()
 	}
 
 	return GetIposResponse{ipos: iposName}, nil

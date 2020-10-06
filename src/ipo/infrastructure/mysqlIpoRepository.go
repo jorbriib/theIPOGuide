@@ -27,7 +27,7 @@ func NewMySQLIpoRepository(db *sql.DB) MySQLIpoRepository {
 	return MySQLIpoRepository{table: "ipos", db: db}
 }
 
-func (r MySQLIpoRepository) Find() ([]*domain.Ipo, error) {
+func (r MySQLIpoRepository) Find() ([]domain.Ipo, error) {
 
 	query := `
     SELECT i.uuid as id, 
@@ -48,7 +48,7 @@ func (r MySQLIpoRepository) Find() ([]*domain.Ipo, error) {
 	}
 	defer func() { _ = rows.Close() }()
 
-	var result []*domain.Ipo
+	var result []domain.Ipo
 	for rows.Next() {
 		ipoSql := &ipoSQL{}
 
@@ -63,12 +63,12 @@ func (r MySQLIpoRepository) Find() ([]*domain.Ipo, error) {
 			&ipoSql.ExpectedDate,
 		)
 
-		company := domain.NewCompany(ipoSql.CompanySymbol, ipoSql.CompanyName)
-		country := domain.NewCountry(ipoSql.CountryCode, ipoSql.CountryName)
-		market := domain.NewMarket(ipoSql.MarketCode, ipoSql.MarketName, country)
-		ipo := domain.NewIpo(domain.ID(ipoSql.Id), company, market, ipoSql.ExpectedDate)
+		company := domain.HydrateCompany(ipoSql.CompanySymbol, ipoSql.CompanyName)
+		country := domain.HydrateCountry(ipoSql.CountryCode, ipoSql.CountryName)
+		market := domain.HydrateMarket(ipoSql.MarketCode, ipoSql.MarketName, country)
+		ipo := domain.HydrateIpo(domain.ID(ipoSql.Id), company, market, ipoSql.ExpectedDate)
 
-		result = append(result, &ipo)
+		result = append(result, ipo)
 	}
 
 

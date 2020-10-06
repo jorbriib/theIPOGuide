@@ -1,5 +1,5 @@
 package domain
 
 type IpoRepository interface {
-	Find() ([]*Ipo, error)
+	Find() ([]Ipo, error)
 }

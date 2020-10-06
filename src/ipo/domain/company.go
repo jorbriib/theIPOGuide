@@ -7,7 +7,7 @@ type Company struct {
 	name   string
 }
 
-func NewCompany(symbol string, name string) Company {
+func HydrateCompany(symbol string, name string) Company {
 	return Company{symbol, name}
 }
 

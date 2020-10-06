@@ -11,7 +11,7 @@ type Ipo struct {
 	expectedDate *time.Time
 }
 
-func NewIpo(id ID, company Company, market Market, expectedDate *time.Time) Ipo {
+func HydrateIpo(id ID, company Company, market Market, expectedDate *time.Time) Ipo {
 	return Ipo{id: id, company: company, market: market, expectedDate: expectedDate}
 }
 
