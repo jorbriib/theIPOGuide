@@ -32,10 +32,10 @@ func TestService_GetIPOs_FailsWhenRepositoryReturnsError(t *testing.T) {
 
 	service := NewService(r)
 	query := NewGetIposQuery()
-	response, error := service.GetIPOs(query)
+	ipos, err := service.GetIPOs(query)
 
-	assertion.Equal(0, len(response.GetIpos()))
-	assertion.NotNil(error)
+	assertion.Equal(0, len(ipos))
+	assertion.NotNil(err)
 }
 
 func TestService_GetIPOs(t *testing.T) {
@@ -51,9 +51,9 @@ func TestService_GetIPOs(t *testing.T) {
 
 	service := NewService(r)
 	query := NewGetIposQuery()
-	response, err := service.GetIPOs(query)
+	ipos, err := service.GetIPOs(query)
 
-	assertion.Equal(2, len(response.GetIpos()))
+	assertion.Equal(2, len(ipos))
 	assertion.Nil(err)
 }
 

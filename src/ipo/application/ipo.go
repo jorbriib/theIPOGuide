@@ -5,7 +5,7 @@ import (
 )
 
 type Service interface {
-	GetIPOs(query GetIposQuery) (GetIposResponse, error)
+	GetIPOs(query GetIposQuery) ([]domain.Ipo, error)
 }
 
 type GetIposQuery struct {
@@ -13,14 +13,6 @@ type GetIposQuery struct {
 
 func NewGetIposQuery() GetIposQuery {
 	return GetIposQuery{}
-}
-
-type GetIposResponse struct {
-	ipos []string
-}
-
-func (r GetIposResponse) GetIpos() []string{
-	return r.ipos
 }
 
 type IpoService struct {
@@ -31,16 +23,11 @@ func NewService(ipoRepository domain.IpoRepository) IpoService {
 	return IpoService{ipoRepository: ipoRepository}
 }
 
-func (h IpoService) GetIPOs(query GetIposQuery) (GetIposResponse, error) {
+func (h IpoService) GetIPOs(query GetIposQuery) ([]domain.Ipo, error) {
 	ipos, err := h.ipoRepository.Find()
 	if err != nil {
-		return GetIposResponse{}, err
+		return []domain.Ipo{}, err
 	}
 
-	var iposName = make([]string, len(ipos))
-	for k, ipo := range ipos {
-		iposName[k] = ipo.ToString()
-	}
-
-	return GetIposResponse{ipos: iposName}, nil
+	return ipos, nil
 }
