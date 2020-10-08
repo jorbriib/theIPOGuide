@@ -1,26 +1,26 @@
 version: "3"
 services:
-  api:
+  api_test:
     build:
       context: docker
-      target: development
+      target: test
     volumes:
       - ./src/ipo:/src
+      - ./docker/wait_for_mysql.sh:/src/wait_for_mysql.sh
     working_dir: /src
-    ports:
-      - 80:80
+    entrypoint: >
+      sh -c "sh /src/wait_for_mysql.sh
+      && go test ./..."
     env_file:
-      - src/ipo/.env
+      - src/ipo/.env.test
     depends_on:
-      - db
+      - db_test
 
-  db:
+  db_test:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     env_file:
-      - src/ipo/.env
+      - src/ipo/.env.test
     volumes:
       - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
-    ports:
-      - 3306:3306
