@@ -32,17 +32,23 @@ help:
 up:
 	@docker-compose up -d && docker-compose logs -f
 
-## Halts the application by stoping all services
+## Halts the application by stopping all services
 down:
 	@docker-compose down --remove-orphans
 
 ## Re-starts all application services
 restart: down up
 
-## Builds application services images for e2e suite
+## Prunes all volumes and images
+prune:
+	@docker-compose down -v
+	@docker rmi theipoguide_frontend
+	##@docker rmi theipoguide_api
+
+## Builds application services images
 build:
 	@docker-compose build
 
-## Runs tests for backend using local code and tag $IMAGE_TAG
+## Runs tests for src using local code
 test:
 	@docker-compose -f docker-compose.test.yml up --abort-on-container-exit

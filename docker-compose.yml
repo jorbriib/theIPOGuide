@@ -24,3 +24,19 @@ services:
       - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     ports:
       - 3306:3306
+
+  frontend:
+    build:
+      context: web
+      target: development
+    volumes:
+      - ./web:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    working_dir: /home/node/app
+    ports:
+      - 9000:9000
+    env_file:
+      - web/.env
+
+volumes:
+  node_modules:
