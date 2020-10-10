@@ -1,0 +1,83 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended",
+    "prettier/react"
+  ],
+  "plugins": [
+    "react",
+    "import",
+    "react-hooks",
+    "jest",
+    "prettier"
+  ],
+  "rules": {
+    "no-unused-vars": [
+      "error",
+      {
+        "varsIgnorePattern": "^__$"
+      }
+    ],
+    "no-console": [
+      "error"
+    ],
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "import/namespace": [
+      "error",
+      {
+        "allowComputed": true
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always",
+        "groups": [
+          [
+            "builtin",
+            "external"
+          ],
+          "internal",
+          [
+            "sibling",
+            "parent"
+          ],
+          "index"
+        ]
+      }
+    ]
+  },
+  "env": {
+    "node": true,
+    "es6": true,
+    "browser": true
+  },
+  "globals": {
+    "newrelic": true
+  },
+  "overrides": [
+    {
+      "extends": [
+        "plugin:jest/recommended"
+      ],
+      "files": [
+        "**/*.spec.js",
+        "**/*.stories.js",
+        "**/spec/**/*.js"
+      ],
+      "env": {
+        "jest/globals": true,
+        "node": true
+      },
+      "rules": {
+        "jest/expect-expect": "off",
+        "jest/no-disabled-tests": "error",
+        "jest/no-try-expect": "off"
+      }
+    }
+  ]
+}
