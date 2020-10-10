@@ -3,6 +3,7 @@ const path = require("path");
 module.exports = {
   entry: ["./src/index.js"],
   output: {
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, "../public"),
   },
   devtool: "source-map",
@@ -29,6 +30,8 @@ module.exports = {
     require("./plugins/clean"),
     require("./plugins/chunks2Json"),
     require("./plugins/copy"),
+    require("./plugins/html"),
+
   ],
   resolve: require("./rules/resolve"),
 };
