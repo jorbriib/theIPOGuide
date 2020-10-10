@@ -4,12 +4,19 @@ import Header from "../../components/layout/Header";
 import Footer from "../../components/layout/Footer";
 import BreadcrumbWraper from "../../components/elements/Breadcrumbs";
 import List from "../../components/container/List";
+import useListIpos from "./useListIpos";
 
 const ListIpos = () => {
+  const { status, ipos } = useListIpos();
+
   const backgroundImage = {
     backgroundImage: "url('/assets/images/wallstreet-bull.jpg')",
     opacity: 1,
   };
+
+  if (status !== "ready") {
+    return "";
+  }
 
   return (
     <Fragment>
@@ -29,7 +36,7 @@ const ListIpos = () => {
       </section>
       {/* Header section end */}
 
-      <List list={[]} categories={[]} />
+      <List list={ipos} categories={[]} />
       <Footer />
     </Fragment>
   );

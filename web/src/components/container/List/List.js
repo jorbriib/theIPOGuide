@@ -3,11 +3,6 @@ import React, { Fragment } from "react";
 import CardList from "../../elements/CardList/CardList";
 
 const List = ({ list }) => {
-  const sort = [];
-  Object.values(list).map((item) => {
-    return sort.push(item);
-  });
-
   return (
     <Fragment>
       <section className="all-listing-wrapper section-bg">
@@ -51,7 +46,7 @@ const List = ({ list }) => {
                     ) : (
                       <div className="col-lg-12">
                         <div className="alert alert-warning" role="alert">
-                          Data Not found!
+                          Companies not found!
                         </div>
                       </div>
                     )}

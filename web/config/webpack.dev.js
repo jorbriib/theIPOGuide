@@ -7,7 +7,7 @@ const common = require("./webpack.common.js");
 module.exports = merge(common, {
   mode: "development",
   plugins: [
-    require("./plugins/define")("development"),
+    require("./plugins/define")("development", "http://localhost"),
     new MiniCssExtractPlugin(),
   ],
   devServer: {
