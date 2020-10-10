@@ -24,7 +24,7 @@ func TestGetIpos(t *testing.T) {
 	service := application.NewService(repository)
 	controller := ipo_public_api.NewController(service)
 
-	req := httptest.NewRequest("GET", "/", nil)
+	req := httptest.NewRequest("GET", "/v1/ipos", nil)
 	w := httptest.NewRecorder()
 	controller.GetIpos(w, req)
 

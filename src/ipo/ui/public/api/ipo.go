@@ -29,11 +29,16 @@ func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
 	for k, ipo := range ipos {
 		response[k] = GetIpoResponse{CompanyName: ipo.Company().Name(), MarketName: ipo.Market().Name()}
 	}
-
+	
+    enableCors(&writer)
 	writer.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	writer.WriteHeader(http.StatusOK)
 	err := json.NewEncoder(writer).Encode(response)
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
 	}
+}
+
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }

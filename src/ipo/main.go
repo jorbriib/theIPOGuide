@@ -21,7 +21,7 @@ func main() {
 	repository := infrastructure.NewMySQLIpoRepository(db)
 	service := application.NewService(repository)
 	controller := ipo_public_api.NewController(service)
-	_ = r.Get("/", controller.GetIpos)
+	_ = r.Get("/v1/ipos", controller.GetIpos)
 
 	fmt.Println("Server listening")
 	errServer := http.ListenAndServe(":80", &r)
@@ -29,6 +29,7 @@ func main() {
 		log.Fatal(errServer)
 	}
 }
+
 
 func getDB() *sql.DB {
 	mysqlAddr := os.Getenv("MYSQL_ADDR")
