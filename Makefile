@@ -43,7 +43,7 @@ restart: down up
 prune:
 	@docker-compose down -v
 	@docker rmi theipoguide_frontend
-	##@docker rmi theipoguide_api
+	@docker rmi theipoguide_api
 
 ## Builds application services images
 build:

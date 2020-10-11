@@ -7,32 +7,32 @@ import (
 
 func TestHydrateMarket(t *testing.T) {
 	assertion := assert.New(t)
-	country := HydrateCountry("US", "USA")
-	market := HydrateMarket("NQ", "Nasdaq", country)
+	currency := HydrateCurrency("USD", "American Dollar", "$%s")
+	market := HydrateMarket("NQ", "Nasdaq", currency)
 	assertion.NotNil(market)
 }
 
 func TestMarket_Symbol(t *testing.T) {
 	assertion := assert.New(t)
-	country := HydrateCountry("US", "USA")
-	market := HydrateMarket("NQ", "Nasdaq", country)
+	currency := HydrateCurrency("USD", "American Dollar", "$%s")
+	market := HydrateMarket("NQ", "Nasdaq", currency)
 
 	assertion.Equal("NQ", market.Code())
 }
 
 func TestMarket_Name(t *testing.T) {
 	assertion := assert.New(t)
-	country := HydrateCountry("US", "USA")
-	market := HydrateMarket("NQ", "Nasdaq", country)
+	currency := HydrateCurrency("USD", "American Dollar", "$%s")
+	market := HydrateMarket("NQ", "Nasdaq", currency)
 
 	assertion.Equal("Nasdaq", market.Name())
 }
 
 
-func TestMarket_Country(t *testing.T) {
+func TestMarket_Currency(t *testing.T) {
 	assertion := assert.New(t)
-	country := HydrateCountry("US", "USA")
-	market := HydrateMarket("NQ", "Nasdaq", country)
+	currency := HydrateCurrency("USD", "American Dollar", "$%s")
+	market := HydrateMarket("NQ", "Nasdaq", currency)
 
-	assertion.Equal(country, market.Country())
+	assertion.Equal(currency, market.Currency())
 }

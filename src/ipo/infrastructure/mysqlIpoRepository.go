@@ -11,6 +11,8 @@ type ipoSQL struct {
 	Id            string     `db:"id"`
 	CompanySymbol string     `db:"companySymbol"`
 	CompanyName   string     `db:"companyName"`
+	CompanyLogo   string     `db:"companyLogo"`
+	CompanySector string     `db:"companySector"`
 	MarketCode    string     `db:"marketCode"`
 	MarketName    string     `db:"marketName"`
 	CountryCode   string     `db:"countryCode"`
@@ -34,11 +36,14 @@ func (r MySQLIpoRepository) Find() ([]domain.Ipo, error) {
            c.symbol as companySymbol, c.name as companyName, 
            m.code as marketCode, m.name as marketName, 
            ct.code as countryCode, ct.name as countryName,
+           s.name as companySector,
+           c.logo_url as companyLogo,
            i.expected_date as expectedDate
 	FROM ipos i
 	INNER JOIN companies c ON c.uuid = i.company_id
 	INNER JOIN markets m ON m.uuid = i.market_id
-	INNER JOIN countries ct ON ct.uuid = m.country_id
+	INNER JOIN countries ct ON ct.uuid = c.country_id
+	INNER JOIN sectors s ON s.uuid = c.sector_id
   `
 
 	rows, err := r.db.Query(query)
@@ -56,6 +61,8 @@ func (r MySQLIpoRepository) Find() ([]domain.Ipo, error) {
 			&ipoSql.Id,
 			&ipoSql.CompanySymbol,
 			&ipoSql.CompanyName,
+			&ipoSql.CompanyLogo,
+			&ipoSql.CompanySector,
 			&ipoSql.MarketCode,
 			&ipoSql.MarketName,
 			&ipoSql.CountryCode,
@@ -63,14 +70,19 @@ func (r MySQLIpoRepository) Find() ([]domain.Ipo, error) {
 			&ipoSql.ExpectedDate,
 		)
 
-		company := domain.HydrateCompany(ipoSql.CompanySymbol, ipoSql.CompanyName)
+		sector := domain.HydrateSector(ipoSql.CompanySector)
 		country := domain.HydrateCountry(ipoSql.CountryCode, ipoSql.CountryName)
-		market := domain.HydrateMarket(ipoSql.MarketCode, ipoSql.MarketName, country)
-		ipo := domain.HydrateIpo(domain.ID(ipoSql.Id), company, market, ipoSql.ExpectedDate)
+		currency := domain.HydrateCurrency("USD", "American Dollar", "$%s")
+
+		company := domain.HydrateCompany(ipoSql.CompanySymbol, ipoSql.CompanyName, sector, "",
+			country, "", "", "", 0, "",
+			2000, "", "", "", "")
+
+		market := domain.HydrateMarket(ipoSql.MarketCode, ipoSql.MarketName, currency)
+		ipo := domain.HydrateIpo(domain.ID(ipoSql.Id), market, company, 20, 21, 19999, ipoSql.ExpectedDate)
 
 		result = append(result, ipo)
 	}
-
 
 	return result, nil
 }
