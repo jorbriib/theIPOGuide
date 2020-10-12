@@ -74,7 +74,7 @@ CREATE TABLE ipos
     price_cents_from MEDIUMINT UNSIGNED NULL DEFAULT NULL,
     price_cents_to   MEDIUMINT UNSIGNED NULL DEFAULT NULL,
     shares           INT UNSIGNED       NULL DEFAULT NULL,
-    expected_date    DATETIME           NULL DEFAULT NULL,
+    expected_date    DATE               NULL DEFAULT NULL,
     created_at       TIMESTAMP               DEFAULT CURRENT_TIMESTAMP,
     updated_at       TIMESTAMP               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -111,16 +111,17 @@ VALUES (UUID_TO_BIN('c2b71e7b-f9f9-4293-8271-77a4ce70c6f0', true), 'PINS', 'Pint
         '505 Brannan Street San Francisco, CA 94107', UUID_TO_BIN('7ca2f739-a0f3-4e5f-848a-54887e762d3a', true),
         '492929893', 'email@email.com', 'https://investor.pinterestinc.com',
         3929, 'Pinterest is a company...', 2012, 'Tomas Cook', 'March 31',
-        'http://nasdaq.com/pins', 'http://sec.com/pins/', 'https://s23.q4cdn.com/958601754/files/design/pinterest-logo-footer.png');
+        'http://nasdaq.com/pins', 'http://sec.com/pins/',
+        '/assets/images/pinterest-logo.jpg');
 
 INSERT INTO ipos (uuid, market_id, company_id, price_cents_from, price_cents_to, shares, expected_date, created_at,
                   updated_at)
 VALUES (UUID_TO_BIN('28e29e39-06e1-4935-8d43-09fdf62ba7dc', true),
         UUID_TO_BIN('a9da11f6-bb30-47a0-9f27-b52510f1cc6a', true),
         UUID_TO_BIN('c2b71e7b-f9f9-4293-8271-77a4ce70c6f0', true),
-        2400,
-        2500,
+        2450,
+        2580,
         3000000,
-        '2020-10-10 00:00:00',
+        '2020-10-10',
         '2020-10-01 00:00:00',
         '2020-10-05 00:00:00')

@@ -26,7 +26,14 @@ export default function useListIpos(client = Client) {
 
 function Ipo(ipo) {
   return {
+    companySymbol: ipo.companySymbol,
     companyName: ipo.companyName,
+    companySector: ipo.companySector,
+    companyCountry: ipo.companyCountry,
+    companyLogo: ipo.companyLogo,
     marketName: ipo.marketName,
+    priceFrom: ipo.priceFrom,
+    priceTo: ipo.priceTo,
+    expectedDate: ipo.expectedDate,
   };
 }

@@ -5,16 +5,24 @@ const CardList = ({ list }) => {
   return (
     <Fragment>
       {Object.values(list).map((ipo, key) => {
-        const { companyName, marketName } = ipo;
+        const {
+          companyName,
+          companyCountry,
+          companySector,
+          companyLogo,
+          priceFrom,
+          marketName,
+          expectedDate,
+        } = ipo;
         return (
           <div className="col-lg-12" key={key}>
             <div className="atbd_single_listing atbd_listing_list">
               <article className="atbd_single_listing_wrapper">
                 <figure className="atbd_listing_thumbnail_area">
                   <div className="atbd_listing_image">
-                    <a href=" ">
-                      <img src="" alt="listingimage" />
-                    </a>
+                    <NavLink to={"/company" + companyName}>
+                      <img src={companyLogo} alt={companyName} />
+                    </NavLink>
                   </div>
                   {/*<!-- ends: .atbd_listing_image -->*/}
                 </figure>
@@ -26,33 +34,39 @@ const CardList = ({ list }) => {
                         {companyName}
                       </NavLink>
                     </h4>
-                    <div className="atbd_listing_meta">
-                      <span className="atbd_meta atbd_listing_price">
-                        {"$ 20"}
-                      </span>
-                    </div>
-                    {/*<!-- End atbd listing meta -->*/}
                     <div className="atbd_listing_data_list">
                       <ul>
                         <li>
-                          <p>
-                            <span className="la la-map-marker"></span>
-                            {marketName}
-                          </p>
+                          <span className="la la-money"></span>
+                          {marketName}
+                        </li>
+                        <li>
+                          <span className="la la-map-marker"></span>
+                          {companyCountry}
+                        </li>
+                        <li>
+                          <span className="la la-calendar-check-o"></span>
+                          {new Intl.DateTimeFormat("en-GB", {
+                            year: "numeric",
+                            month: "long",
+                            day: "2-digit",
+                          }).format(expectedDate)}
                         </li>
                       </ul>
                     </div>
-                    {/*<!-- End atbd listing meta -->*/}
                   </div>
-                  {/*<!-- end .atbd_content_upper -->*/}
                   <div className="atbd_listing_bottom_content">
                     <div className="atbd_content_left">
                       <div className="atbd_listing_category">
-                        <a href=" ">Technology</a>
+                        <a href=" ">{companySector}</a>
                       </div>
                     </div>
                   </div>
-                  {/*<!-- end .atbd_listing_bottom_content -->*/}
+                  <div className="atbd_listing_meta">
+                    <span className="atbd_meta atbd_listing_price">
+                      {priceFrom}
+                    </span>
+                  </div>
                 </div>
                 {/*<!-- ends: .atbd_listing_info -->*/}
               </article>

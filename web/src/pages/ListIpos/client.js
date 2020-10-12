@@ -16,7 +16,14 @@ export const fetchIPOs = async () => {
 
 export function Ipo(ipo) {
   return {
-    companyName: ipo.companyName,
-    marketName: ipo.marketName,
+    companySymbol: ipo.company.symbol,
+    companyName: ipo.company.name,
+    companySector: ipo.company.sector,
+    companyCountry: ipo.company.country,
+    companyLogo: ipo.company.logo,
+    priceFrom: ipo.priceFrom,
+    priceTo: ipo.priceTo,
+    expectedDate: new Date(ipo.expectedDate),
+    marketName: ipo.market.name,
   };
 }

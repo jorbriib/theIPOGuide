@@ -14,12 +14,27 @@ func NewController(service application.Service) Controller {
 	return Controller{service: service}
 }
 
-type GetIpoJsonResponse struct {
-	CompanyName string `json:"companyName"`
-	MarketName  string `json:"marketName"`
+type IpoJsonResponse struct {
+	Company *CompanyJsonResponse `json:"company"`
+	Market  *MarketJsonResponse  `json:"market"`
+	PriceFrom string `json:"priceFrom"`
+	PriceTo string `json:"priceTo"`
+	ExpectedDate string `json:"expectedDate"`
 }
 
-type GetIposJsonResponse []GetIpoJsonResponse
+type CompanyJsonResponse struct {
+	Symbol  string `json:"symbol"`
+	Name    string `json:"name"`
+	Sector  string `json:"sector"`
+	Country string `json:"country"`
+	Logo string `json:"logo"`
+}
+
+type MarketJsonResponse struct {
+	Name string `json:"name"`
+}
+
+type GetIposJsonResponse []IpoJsonResponse
 
 func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
 	enableCors(&writer)
@@ -33,24 +48,40 @@ func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
 
 	ipos, markets, companies := response.Get()
 
-	jsonResponse := make([]GetIpoJsonResponse, len(ipos))
+	jsonResponse := make([]IpoJsonResponse, len(ipos))
 	for k, ipo := range ipos {
-		companyName := ""
-		for _, company := range companies{
-			if company.Id() == ipo.CompanyId(){
-				companyName = company.Name()
+		companyJsonResponse := &CompanyJsonResponse{}
+		for _, company := range companies {
+			if company.Id() == ipo.CompanyId() {
+				companyJsonResponse.Symbol = company.Symbol()
+				companyJsonResponse.Name = company.Name()
+				companyJsonResponse.Sector = company.Sector().Name()
+				companyJsonResponse.Country = company.Country().Name()
+				companyJsonResponse.Logo = company.LogoUrl()
 				break
 			}
 		}
 
-		marketName := ""
-		for _, market := range markets{
-			if market.Id() == ipo.MarketId(){
-				marketName = market.Name()
+		var priceFrom string
+		var priceTo string
+		marketJsonResponse := &MarketJsonResponse{}
+		for _, market := range markets {
+			if market.Id() == ipo.MarketId() {
+				marketJsonResponse.Name = market.Name()
+				priceFrom = market.Currency().DisplayFromCents(ipo.PriceCentsFrom())
+				priceTo = market.Currency().DisplayFromCents(ipo.PriceCentsTo())
 				break
 			}
 		}
-		jsonResponse[k] = GetIpoJsonResponse{CompanyName: companyName, MarketName: marketName}
+
+
+		jsonResponse[k] = IpoJsonResponse{
+			companyJsonResponse,
+			marketJsonResponse,
+			priceFrom,
+			priceTo,
+			ipo.ExpectedDate().String(),
+		}
 	}
 
 	writer.WriteHeader(http.StatusOK)

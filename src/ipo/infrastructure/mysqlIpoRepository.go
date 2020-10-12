@@ -2,18 +2,19 @@ package infrastructure
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
 	"time"
 )
 
 type ipoSQL struct {
-	Id             string     `db:"id"`
-	MarketId       string     `db:"marketId"`
-	CompanyId      string     `db:"companyId"`
-	PriceCentsFrom uint32     `db:"priceCentsFrom"`
-	PriceCentsTo   uint32     `db:"priceCentsTo"`
-	Shares         uint32     `db:"shares"`
-	ExpectedDate   *time.Time `db:"expectedDate"`
+	Id             string `db:"id"`
+	MarketId       string `db:"marketId"`
+	CompanyId      string `db:"companyId"`
+	PriceCentsFrom uint32 `db:"priceCentsFrom"`
+	PriceCentsTo   uint32 `db:"priceCentsTo"`
+	Shares         uint32 `db:"shares"`
+	ExpectedDate   string `db:"expectedDate"`
 }
 
 type MySQLIpoRepository struct {
@@ -54,6 +55,12 @@ func (r MySQLIpoRepository) Find() ([]domain.Ipo, error) {
 			&ipoSql.ExpectedDate,
 		)
 
+		layout := "2006-01-02"
+		timeExpectedDate, err := time.Parse(layout, ipoSql.ExpectedDate)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
 		ipo := domain.HydrateIpo(
 			domain.IpoId(ipoSql.Id),
 			domain.MarketId(ipoSql.MarketId),
@@ -61,7 +68,7 @@ func (r MySQLIpoRepository) Find() ([]domain.Ipo, error) {
 			ipoSql.PriceCentsFrom,
 			ipoSql.PriceCentsTo,
 			ipoSql.Shares,
-			ipoSql.ExpectedDate,
+			&timeExpectedDate,
 		)
 
 		result = append(result, ipo)
