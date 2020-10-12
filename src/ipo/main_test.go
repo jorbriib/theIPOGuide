@@ -16,9 +16,28 @@ import (
 	"testing"
 )
 
+var db *sql.DB
+
+func TestMain(m *testing.M) {
+	mysqlAddr := os.Getenv("MYSQL_ADDR")
+	mysqlDBName := os.Getenv("MYSQL_DATABASE")
+	mysqlUser := os.Getenv("MYSQL_USER")
+	mysqlPassword := os.Getenv("MYSQL_PASSWORD")
+
+	conn := fmt.Sprintf("%s:%s@tcp(%s)/%s", mysqlUser, mysqlPassword, mysqlAddr, mysqlDBName)
+
+	var errorDB error
+	db, errorDB = sql.Open("mysql", conn)
+	if errorDB != nil {
+		log.Fatal(errorDB)
+	}
+
+	code := m.Run()
+	os.Exit(code)
+}
+
 func TestGetIpos(t *testing.T) {
 	assertion := assert.New(t)
-	db := getDbTest()
 
 	ipoRepository := infrastructure.NewMySQLIpoRepository(db)
 	marketRepository := infrastructure.NewMySQLMarketRepository(db)
@@ -37,19 +56,4 @@ func TestGetIpos(t *testing.T) {
 	assertion.Equal("application/json; charset=UTF-8", resp.Header.Get("Content-Type"))
 	assertion.JSONEq("[{\"companyName\":\"Pinterest\",\"marketName\":\"Nasdaq\"}]", string(body))
 
-}
-
-func getDbTest() *sql.DB {
-	mysqlAddr := os.Getenv("MYSQL_ADDR")
-	mysqlDBName := os.Getenv("MYSQL_DATABASE")
-	mysqlUser := os.Getenv("MYSQL_USER")
-	mysqlPassword := os.Getenv("MYSQL_PASSWORD")
-
-	conn := fmt.Sprintf("%s:%s@tcp(%s)/%s", mysqlUser, mysqlPassword, mysqlAddr, mysqlDBName)
-
-	db, errorDB := sql.Open("mysql", conn)
-	if errorDB != nil {
-		log.Fatal(errorDB)
-	}
-	return db
 }

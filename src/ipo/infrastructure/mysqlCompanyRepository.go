@@ -28,15 +28,18 @@ type companySQL struct {
 	LogoUrl               string `db:"logoUrl"`
 }
 
+// MySQLCompanyRepository is the repository to manage companies
 type MySQLCompanyRepository struct {
 	table string
 	db    *sql.DB
 }
 
+// NewMySQLCompanyRepository returns the repository
 func NewMySQLCompanyRepository(db *sql.DB) MySQLCompanyRepository {
 	return MySQLCompanyRepository{table: "companies", db: db}
 }
 
+// FindByIds returns the companies filtering by companyIds
 func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Company, error) {
 
 	if len(ids) == 0 {
