@@ -1,7 +1,11 @@
 package domain
 
+// CompanyId represents the Company Id
+type CompanyId string
+
 // Company represents the IPO's company
 type Company struct {
+	id                   CompanyId
 	symbol               string
 	name                 string
 	sector               Sector
@@ -10,17 +14,19 @@ type Company struct {
 	phone                string
 	email                string
 	website              string
-	employees            int
+	employees            uint32
 	description          string
-	founded              int
+	founded              uint16
 	ceo                  string
 	fiscalYearEnd        string
 	ipoUrl               string
 	exchangeComissionUrl string
+	logoUrl              string
 }
 
 // HydrateCompany hydrates the company struct
 func HydrateCompany(
+	id CompanyId,
 	symbol string,
 	name string,
 	sector Sector,
@@ -29,15 +35,17 @@ func HydrateCompany(
 	phone string,
 	email string,
 	website string,
-	employees int,
+	employees uint32,
 	description string,
-	founded int,
+	founded uint16,
 	ceo string,
 	fiscalYearEnd string,
 	ipoUrl string,
 	exchangeCommissionUrl string,
+	logoUrl string,
 ) Company {
 	return Company{
+		id,
 		symbol,
 		name,
 		sector,
@@ -53,7 +61,13 @@ func HydrateCompany(
 		fiscalYearEnd,
 		ipoUrl,
 		exchangeCommissionUrl,
+		logoUrl,
 	}
+}
+
+// Id returns the company id as string
+func (c Company) Id() CompanyId {
+	return c.id
 }
 
 // Symbol returns the company symbol string
@@ -79,4 +93,10 @@ func (c Company) Address() string {
 // Country returns the company country as country struct
 func (c Company) Country() Country {
 	return c.country
+}
+
+
+// LogoUrl returns the company country as country struct
+func (c Company) LogoUrl() string {
+	return c.logoUrl
 }

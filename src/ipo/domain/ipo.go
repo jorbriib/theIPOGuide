@@ -2,14 +2,14 @@ package domain
 
 import "time"
 
-// ID represents the IPO Id
-type ID string
+// IpoId represents the IPO Id
+type IpoId string
 
 // Ipo represents the IPO entity
 type Ipo struct {
-	id             ID
-	market         Market
-	company        Company
+	id             IpoId
+	marketId       MarketId
+	companyId      CompanyId
 	priceCentsFrom uint32
 	priceCentsTo   uint32
 	shares         uint32
@@ -18,9 +18,9 @@ type Ipo struct {
 
 // HydrateIpo hydrates the IPO struct
 func HydrateIpo(
-	id ID,
-	market Market,
-	company Company,
+	id IpoId,
+	marketId MarketId,
+	companyId CompanyId,
 	priceCentsFrom uint32,
 	priceCentsTo uint32,
 	shares uint32,
@@ -28,8 +28,8 @@ func HydrateIpo(
 ) Ipo {
 	return Ipo{
 		id,
-		market,
-		company,
+		marketId,
+		companyId,
 		priceCentsFrom,
 		priceCentsTo,
 		shares,
@@ -37,19 +37,19 @@ func HydrateIpo(
 	}
 }
 
-// ID returns the IPO id as string
-func (i Ipo) Id() ID {
+// IpoId returns the IPO id as string
+func (i Ipo) Id() IpoId {
 	return i.id
 }
 
 // Market returns the IPO market as struct
-func (i Ipo) Market() Market {
-	return i.market
+func (i Ipo) MarketId() MarketId {
+	return i.marketId
 }
 
 // Company returns the IPO market as struct
-func (i Ipo) Company() Company {
-	return i.company
+func (i Ipo) CompanyId() CompanyId {
+	return i.companyId
 }
 
 // PriceCentsFrom returns the IPO price from as unsigned integer
@@ -70,9 +70,4 @@ func (i Ipo) Shares() uint32 {
 // ExpectedDate returns the IPO expected date as Time
 func (i Ipo) ExpectedDate() *time.Time {
 	return i.expectedDate
-}
-
-// ToString returns a string representation of a IPO
-func (i Ipo) ToString() string {
-	return i.company.name + " (" + i.company.symbol + ") in " + i.market.name
 }

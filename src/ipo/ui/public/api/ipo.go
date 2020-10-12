@@ -14,26 +14,47 @@ func NewController(service application.Service) Controller {
 	return Controller{service: service}
 }
 
-type GetIpoResponse struct {
+type GetIpoJsonResponse struct {
 	CompanyName string `json:"companyName"`
 	MarketName  string `json:"marketName"`
 }
 
-type GetIposResponse []GetIpoResponse
+type GetIposJsonResponse []GetIpoJsonResponse
 
 func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
-	query := application.NewGetIposQuery()
-	ipos, _ := c.service.GetIPOs(query)
-
-	response := make([]GetIpoResponse, len(ipos))
-	for k, ipo := range ipos {
-		response[k] = GetIpoResponse{CompanyName: ipo.Company().Name(), MarketName: ipo.Market().Name()}
-	}
-	
-    enableCors(&writer)
+	enableCors(&writer)
 	writer.Header().Set("Content-Type", "application/json; charset=UTF-8")
+
+	query := application.NewGetIposQuery()
+	response, err := c.service.GetIPOs(query)
+	if err != nil {
+		writer.WriteHeader(http.StatusInternalServerError)
+	}
+
+	ipos, markets, companies := response.Get()
+
+	jsonResponse := make([]GetIpoJsonResponse, len(ipos))
+	for k, ipo := range ipos {
+		companyName := ""
+		for _, company := range companies{
+			if company.Id() == ipo.CompanyId(){
+				companyName = company.Name()
+				break
+			}
+		}
+
+		marketName := ""
+		for _, market := range markets{
+			if market.Id() == ipo.MarketId(){
+				marketName = market.Name()
+				break
+			}
+		}
+		jsonResponse[k] = GetIpoJsonResponse{CompanyName: companyName, MarketName: marketName}
+	}
+
 	writer.WriteHeader(http.StatusOK)
-	err := json.NewEncoder(writer).Encode(response)
+	err = json.NewEncoder(writer).Encode(jsonResponse)
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
 	}

@@ -20,8 +20,10 @@ func TestGetIpos(t *testing.T) {
 	assertion := assert.New(t)
 	db := getDbTest()
 
-	repository := infrastructure.NewMySQLIpoRepository(db)
-	service := application.NewService(repository)
+	ipoRepository := infrastructure.NewMySQLIpoRepository(db)
+	marketRepository := infrastructure.NewMySQLMarketRepository(db)
+	companyRepository := infrastructure.NewMySQLCompanyRepository(db)
+	service := application.NewService(ipoRepository, marketRepository, companyRepository)
 	controller := ipo_public_api.NewController(service)
 
 	req := httptest.NewRequest("GET", "/v1/ipos", nil)
@@ -36,8 +38,6 @@ func TestGetIpos(t *testing.T) {
 	assertion.JSONEq("[{\"companyName\":\"Pinterest\",\"marketName\":\"Nasdaq\"}]", string(body))
 
 }
-
-
 
 func getDbTest() *sql.DB {
 	mysqlAddr := os.Getenv("MYSQL_ADDR")

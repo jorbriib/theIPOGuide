@@ -1,19 +1,29 @@
 package domain
 
+// MarketId represents the Market Id
+type MarketId string
+
 // Market represents the market entity
 type Market struct {
-	code    string
-	name    string
+	id       MarketId
+	code     string
+	name     string
 	currency Currency
 }
 
 // HydrateMarket hydrates the market struct
-func HydrateMarket(code string, name string, currency Currency) Market {
+func HydrateMarket(id MarketId, code string, name string, currency Currency) Market {
 	return Market{
-		code:    code,
-		name:    name,
-		currency: currency,
+		id,
+		code,
+		name,
+		currency,
 	}
+}
+
+// Id returns the market id as string
+func (m Market) Id() MarketId {
+	return m.id
 }
 
 // Code returns the market code as string
@@ -27,6 +37,6 @@ func (m Market) Name() string {
 }
 
 /// Currency returns the market currency struct
-func (m Market) Currency() Currency{
+func (m Market) Currency() Currency {
 	return m.currency
 }

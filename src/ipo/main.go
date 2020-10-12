@@ -18,8 +18,10 @@ func main() {
 
 	db := getDB()
 
-	repository := infrastructure.NewMySQLIpoRepository(db)
-	service := application.NewService(repository)
+	ipoRepository := infrastructure.NewMySQLIpoRepository(db)
+	marketRepository := infrastructure.NewMySQLMarketRepository(db)
+	companyRepository := infrastructure.NewMySQLCompanyRepository(db)
+	service := application.NewService(ipoRepository, marketRepository, companyRepository)
 	controller := ipo_public_api.NewController(service)
 	_ = r.Get("/v1/ipos", controller.GetIpos)
 
