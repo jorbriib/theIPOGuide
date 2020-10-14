@@ -37,7 +37,7 @@ type GetIposResponse struct {
 	companies []domain.Company
 }
 
-func (r GetIposResponse) Get() ([]domain.Ipo, []domain.Market, []domain.Company){
+func (r GetIposResponse) Get() ([]domain.Ipo, []domain.Market, []domain.Company) {
 	return r.ipos, r.markets, r.companies
 }
 
@@ -58,7 +58,7 @@ func (h IpoService) GetIPOs(query GetIposQuery) (*GetIposResponse, error) {
 	marketIds := make([]domain.MarketId, len(mapMarketIds))
 	i := 0
 	for _, marketId := range mapMarketIds {
-		marketIds[i] =marketId
+		marketIds[i] = marketId
 		i++
 	}
 	markets, err := h.marketRepository.FindByIds(marketIds)

@@ -69,6 +69,7 @@ ALTER TABLE companies
 CREATE TABLE ipos
 (
     uuid             BINARY(16) PRIMARY KEY,
+    alias            VARCHAR(128) NOT NULL,
     market_id        BINARY(16)         NOT NULL,
     company_id       BINARY(16)         NOT NULL,
     price_cents_from MEDIUMINT UNSIGNED NULL DEFAULT NULL,
@@ -79,6 +80,8 @@ CREATE TABLE ipos
     updated_at       TIMESTAMP               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+ALTER TABLE ipos
+    ADD CONSTRAINT unique_ipos_alias UNIQUE KEY (alias);
 ALTER TABLE ipos
     ADD CONSTRAINT foreign_ipos_market FOREIGN KEY (market_id)
         REFERENCES markets (uuid) ON UPDATE CASCADE ON DELETE RESTRICT;
@@ -114,9 +117,10 @@ VALUES (UUID_TO_BIN('c2b71e7b-f9f9-4293-8271-77a4ce70c6f0', true), 'PINS', 'Pint
         'http://nasdaq.com/pins', 'http://sec.com/pins/',
         '/assets/images/pinterest-logo.jpg');
 
-INSERT INTO ipos (uuid, market_id, company_id, price_cents_from, price_cents_to, shares, expected_date, created_at,
+INSERT INTO ipos (uuid, alias, market_id, company_id, price_cents_from, price_cents_to, shares, expected_date, created_at,
                   updated_at)
 VALUES (UUID_TO_BIN('28e29e39-06e1-4935-8d43-09fdf62ba7dc', true),
+        'pinterest',
         UUID_TO_BIN('a9da11f6-bb30-47a0-9f27-b52510f1cc6a', true),
         UUID_TO_BIN('c2b71e7b-f9f9-4293-8271-77a4ce70c6f0', true),
         2450,

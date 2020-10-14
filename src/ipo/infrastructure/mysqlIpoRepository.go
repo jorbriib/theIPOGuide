@@ -9,6 +9,7 @@ import (
 
 type ipoSQL struct {
 	Id             string `db:"id"`
+	Alias		   string `db:"alias"`
 	MarketId       string `db:"marketId"`
 	CompanyId      string `db:"companyId"`
 	PriceCentsFrom uint32 `db:"priceCentsFrom"`
@@ -29,7 +30,7 @@ func NewMySQLIpoRepository(db *sql.DB) MySQLIpoRepository {
 func (r MySQLIpoRepository) Find() ([]domain.Ipo, error) {
 
 	query := `
-    SELECT BIN_TO_UUID(i.uuid) AS id, BIN_TO_UUID(i.market_id) AS marketId, BIN_TO_UUID(i.company_id) AS companyId, 
+    SELECT BIN_TO_UUID(i.uuid) AS id, i.alias as alias, BIN_TO_UUID(i.market_id) AS marketId, BIN_TO_UUID(i.company_id) AS companyId, 
            i.price_cents_from AS priceCentsFrom, i.price_cents_to AS priceCentsTo, 
            i.shares as shares, i.expected_date as expectedDate
 	FROM ipos i
@@ -47,6 +48,7 @@ func (r MySQLIpoRepository) Find() ([]domain.Ipo, error) {
 
 		_ = rows.Scan(
 			&ipoSql.Id,
+			&ipoSql.Alias,
 			&ipoSql.MarketId,
 			&ipoSql.CompanyId,
 			&ipoSql.PriceCentsFrom,
@@ -63,6 +65,7 @@ func (r MySQLIpoRepository) Find() ([]domain.Ipo, error) {
 		}
 		ipo := domain.HydrateIpo(
 			domain.IpoId(ipoSql.Id),
+			ipoSql.Alias,
 			domain.MarketId(ipoSql.MarketId),
 			domain.CompanyId(ipoSql.CompanyId),
 			ipoSql.PriceCentsFrom,

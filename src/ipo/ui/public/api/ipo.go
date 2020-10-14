@@ -15,11 +15,12 @@ func NewController(service application.Service) Controller {
 }
 
 type IpoJsonResponse struct {
-	Company *CompanyJsonResponse `json:"company"`
-	Market  *MarketJsonResponse  `json:"market"`
-	PriceFrom string `json:"priceFrom"`
-	PriceTo string `json:"priceTo"`
-	ExpectedDate string `json:"expectedDate"`
+	Alias        string               `json:"alias"`
+	Company      *CompanyJsonResponse `json:"company"`
+	Market       *MarketJsonResponse  `json:"market"`
+	PriceFrom    string               `json:"priceFrom"`
+	PriceTo      string               `json:"priceTo"`
+	ExpectedDate string               `json:"expectedDate"`
 }
 
 type CompanyJsonResponse struct {
@@ -27,7 +28,7 @@ type CompanyJsonResponse struct {
 	Name    string `json:"name"`
 	Sector  string `json:"sector"`
 	Country string `json:"country"`
-	Logo string `json:"logo"`
+	Logo    string `json:"logo"`
 }
 
 type MarketJsonResponse struct {
@@ -74,8 +75,8 @@ func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
 			}
 		}
 
-
 		jsonResponse[k] = IpoJsonResponse{
+			ipo.Alias(),
 			companyJsonResponse,
 			marketJsonResponse,
 			priceFrom,

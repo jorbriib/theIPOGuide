@@ -8,6 +8,7 @@ type IpoId string
 // Ipo represents the IPO entity
 type Ipo struct {
 	id             IpoId
+	alias		   string
 	marketId       MarketId
 	companyId      CompanyId
 	priceCentsFrom uint32
@@ -19,6 +20,7 @@ type Ipo struct {
 // HydrateIpo hydrates the IPO struct
 func HydrateIpo(
 	id IpoId,
+	alias string,
 	marketId MarketId,
 	companyId CompanyId,
 	priceCentsFrom uint32,
@@ -28,6 +30,7 @@ func HydrateIpo(
 ) Ipo {
 	return Ipo{
 		id,
+		alias,
 		marketId,
 		companyId,
 		priceCentsFrom,
@@ -40,6 +43,11 @@ func HydrateIpo(
 // IpoId returns the IPO id as string
 func (i Ipo) Id() IpoId {
 	return i.id
+}
+
+// Alias returns the IPO alias as string
+func (i Ipo) Alias() string {
+	return i.alias
 }
 
 // Market returns the IPO market as struct

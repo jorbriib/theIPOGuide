@@ -54,6 +54,6 @@ func TestGetIpos(t *testing.T) {
 
 	assertion.Equal(http.StatusOK, resp.StatusCode)
 	assertion.Equal("application/json; charset=UTF-8", resp.Header.Get("Content-Type"))
-	assertion.JSONEq("[{\"companyName\":\"Pinterest\",\"marketName\":\"Nasdaq\"}]", string(body))
+	assertion.JSONEq("[\n  {\n    \"alias\": \"pinterest\",\n    \"company\": {\n      \"symbol\": \"PINS\",\n      \"name\": \"Pinterest\",\n      \"sector\": \"Communication Services\",\n      \"country\": \"USA\",\n      \"logo\": \"/assets/images/pinterest-logo.jpg\"\n    },\n    \"market\": {\n      \"name\": \"Nasdaq\"\n    },\n    \"priceFrom\": \"$24.5\",\n    \"priceTo\": \"$25.8\",\n    \"expectedDate\": \"2020-10-10 00:00:00 +0000 UTC\"\n  }\n]", string(body))
 
 }

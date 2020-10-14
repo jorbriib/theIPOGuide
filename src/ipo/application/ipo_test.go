@@ -38,8 +38,8 @@ func TestService_GetIPOs_FailsWhenMarketRepositoryReturnsError(t *testing.T) {
 	assertion := assert.New(t)
 
 	expectedReturn := []domain.Ipo{
-		domain.HydrateIpo("1-ipo-id", "1-market-id", "1-company-id", 0, 0, 0, nil),
-		domain.HydrateIpo("2-ipo-id", "2-market-id", "2-company-id", 0, 0, 0, nil),
+		domain.HydrateIpo("1-ipo-id", "1-alias","1-market-id", "1-company-id", 0, 0, 0, nil),
+		domain.HydrateIpo("2-ipo-id", "2-alias","2-market-id", "2-company-id", 0, 0, 0, nil),
 	}
 
 	r := IpoRepositoryMock{}
@@ -66,9 +66,9 @@ func TestService_GetIPOs_FailsWhenCompanyRepositoryReturnsError(t *testing.T) {
 	assertion := assert.New(t)
 
 	expectedIpoReturn := []domain.Ipo{
-		domain.HydrateIpo("1-ipo-id", "1-market-id", "1-company-id", 0, 0, 0, nil),
-		domain.HydrateIpo("2-ipo-id", "2-market-id", "2-company-id", 0, 0, 0, nil),
-		domain.HydrateIpo("3-ipo-id", "2-market-id", "3-company-id", 0, 0, 0, nil),
+		domain.HydrateIpo("1-ipo-id", "1-alias","1-market-id", "1-company-id", 0, 0, 0, nil),
+		domain.HydrateIpo("2-ipo-id", "2-alias","2-market-id", "2-company-id", 0, 0, 0, nil),
+		domain.HydrateIpo("3-ipo-id", "3-alias","2-market-id", "3-company-id", 0, 0, 0, nil),
 	}
 
 	expectedMarketReturn := []domain.Market{
@@ -106,9 +106,9 @@ func TestService_GetIPOs(t *testing.T) {
 	assertion := assert.New(t)
 
 	expectedIpoReturn := []domain.Ipo{
-		domain.HydrateIpo("1-ipo-id", "1-market-id", "1-company-id", 0, 0, 0, nil),
-		domain.HydrateIpo("2-ipo-id", "2-market-id", "2-company-id", 0, 0, 0, nil),
-		domain.HydrateIpo("3-ipo-id", "2-market-id", "3-company-id", 0, 0, 0, nil),
+		domain.HydrateIpo("1-ipo-id", "1-alias","1-market-id", "1-company-id", 0, 0, 0, nil),
+		domain.HydrateIpo("2-ipo-id", "2-alias","2-market-id", "2-company-id", 0, 0, 0, nil),
+		domain.HydrateIpo("3-ipo-id", "3-alias","2-market-id", "3-company-id", 0, 0, 0, nil),
 	}
 
 	expectedMarketReturn := []domain.Market{
