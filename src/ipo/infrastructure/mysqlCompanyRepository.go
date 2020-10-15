@@ -3,6 +3,7 @@ package infrastructure
 import (
 	"bytes"
 	"database/sql"
+	"errors"
 	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
 	"strings"
 )
@@ -38,6 +39,19 @@ type MySQLCompanyRepository struct {
 func NewMySQLCompanyRepository(db *sql.DB) MySQLCompanyRepository {
 	return MySQLCompanyRepository{table: "companies", db: db}
 }
+
+// GetById returns a company by id
+func (r MySQLCompanyRepository) GetById(id domain.CompanyId) (*domain.Company, error) {
+	ipos, err := r.FindByIds([]domain.CompanyId{id})
+	if err != nil{
+		return nil, err
+	}
+	if len(ipos) < 1{
+		return nil, errors.New("company not found")
+	}
+	return &ipos[0], nil
+}
+
 
 // FindByIds returns the companies filtering by companyIds
 func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Company, error) {
@@ -128,3 +142,4 @@ func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Comp
 
 	return result, nil
 }
+

@@ -12,6 +12,28 @@ func TestNewMySQLMarketRepository(t *testing.T) {
 	assert.NotNil(t, r)
 }
 
+func TestMySQLMarketRepository_GetById(t *testing.T) {
+	r := NewMySQLMarketRepository(db)
+
+	id := domain.MarketId("47a0bb30-a9da-11f6-9f27-b52510f1cc6a")
+
+	response, err := r.GetById(id)
+
+	assert.Nil(t, err)
+	assert.Equal(t, id, response.Id())
+}
+
+func TestMySQLMarketRepository_GetById_ReturnsErrorWhenNotFound(t *testing.T) {
+	r := NewMySQLMarketRepository(db)
+
+	id := domain.MarketId("1293f9f9-c2b7-1e7b-8271-77a4ce70c6f0")
+
+	response, err := r.GetById(id)
+
+	assert.Error(t, err)
+	assert.Nil(t, response)
+}
+
 func TestMySQLMarketRepository_FindByIds_ReturnsSliceLength0_WhenNoMarketIds(t *testing.T) {
 	r := NewMySQLMarketRepository(db)
 

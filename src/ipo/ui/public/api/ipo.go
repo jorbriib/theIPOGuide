@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"github.com/golossus/routing"
 	"github.com/jorbriib/theIPOGuide/src/ipo/application"
 	"net/http"
 )
@@ -45,6 +46,7 @@ func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
 	response, err := c.service.GetIPOs(query)
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	ipos, markets, companies := response.Get()
@@ -83,6 +85,53 @@ func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
 			priceTo,
 			ipo.ExpectedDate().String(),
 		}
+	}
+
+	writer.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(writer).Encode(jsonResponse)
+	if err != nil {
+		writer.WriteHeader(http.StatusInternalServerError)
+	}
+}
+
+func (c Controller) GetIpo(writer http.ResponseWriter, request *http.Request) {
+	enableCors(&writer)
+	writer.Header().Set("Content-Type", "application/json; charset=UTF-8")
+
+	bag := routing.GetURLParameters(request)
+	alias, err := bag.GetByName("alias")
+	if err != nil{
+		writer.WriteHeader(http.StatusUnprocessableEntity)
+	}
+
+	query := application.NewGetIpoQuery(alias)
+	response, err := c.service.GetIPO(query)
+	if err != nil {
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	ipo, market, company := response.Get()
+
+	companyJsonResponse := &CompanyJsonResponse{}
+	companyJsonResponse.Symbol = company.Symbol()
+	companyJsonResponse.Name = company.Name()
+	companyJsonResponse.Sector = company.Sector().Name()
+	companyJsonResponse.Country = company.Country().Name()
+	companyJsonResponse.Logo = company.LogoUrl()
+
+	marketJsonResponse := &MarketJsonResponse{}
+	marketJsonResponse.Name = market.Name()
+	priceFrom := market.Currency().DisplayFromCents(ipo.PriceCentsFrom())
+	priceTo := market.Currency().DisplayFromCents(ipo.PriceCentsTo())
+
+	jsonResponse := IpoJsonResponse{
+		ipo.Alias(),
+		companyJsonResponse,
+		marketJsonResponse,
+		priceFrom,
+		priceTo,
+		ipo.ExpectedDate().String(),
 	}
 
 	writer.WriteHeader(http.StatusOK)

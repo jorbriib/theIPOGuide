@@ -3,6 +3,7 @@ package infrastructure
 import (
 	"bytes"
 	"database/sql"
+	"errors"
 	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
 	"strings"
 )
@@ -23,6 +24,18 @@ type MySQLMarketRepository struct {
 
 func NewMySQLMarketRepository(db *sql.DB) MySQLMarketRepository {
 	return MySQLMarketRepository{table: "markets", db: db}
+}
+
+// GetById returns a market by id
+func (r MySQLMarketRepository) GetById(id domain.MarketId) (*domain.Market, error) {
+	markets, err := r.FindByIds([]domain.MarketId{id})
+	if err != nil{
+		return nil, err
+	}
+	if len(markets) < 1{
+		return nil, errors.New("market not found")
+	}
+	return &markets[0], nil
 }
 
 func (r MySQLMarketRepository) FindByIds(ids []domain.MarketId) ([]domain.Market, error) {

@@ -58,3 +58,25 @@ func TestMySQLCompanyRepository_FindByIds(t *testing.T) {
 	assert.Equal(t, 1, len(response))
 	assert.Equal(t, ids[0], response[0].Id())
 }
+
+func TestMySQLCompanyRepository_GetById(t *testing.T) {
+	r := NewMySQLCompanyRepository(db)
+
+	id := domain.CompanyId("4293f9f9-c2b7-1e7b-8271-77a4ce70c6f0")
+
+	response, err := r.GetById(id)
+
+	assert.Nil(t, err)
+	assert.Equal(t, id, response.Id())
+}
+
+func TestMySQLCompanyRepository_GetById_ReturnsErrorWhenNotFound(t *testing.T) {
+	r := NewMySQLCompanyRepository(db)
+
+	id := domain.CompanyId("1293f9f9-c2b7-1e7b-8271-77a4ce70c6f0")
+
+	response, err := r.GetById(id)
+
+	assert.Error(t, err)
+	assert.Nil(t, response)
+}

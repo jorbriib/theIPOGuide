@@ -24,6 +24,7 @@ func main() {
 	service := application.NewService(ipoRepository, marketRepository, companyRepository)
 	controller := ipo_public_api.NewController(service)
 	_ = r.Get("/v1/ipos", controller.GetIpos)
+	_ = r.Get("/v1/ipos/{alias}", controller.GetIpo)
 
 	fmt.Println("Server listening")
 	errServer := http.ListenAndServe(":80", &r)
