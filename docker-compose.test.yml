@@ -6,11 +6,9 @@ services:
       target: test
     volumes:
       - ./src/ipo:/src
-      - ./docker/wait_for_mysql.sh:/src/wait_for_mysql.sh
     working_dir: /src
     entrypoint: >
-      sh -c "sh /src/wait_for_mysql.sh
-      && go test ./..."
+      sh -c "go test ./..."
     env_file:
       - src/ipo/.env.test
     depends_on:

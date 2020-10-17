@@ -7,7 +7,7 @@ import (
 	"github.com/golossus/routing"
 	"github.com/jorbriib/theIPOGuide/src/ipo/application"
 	"github.com/jorbriib/theIPOGuide/src/ipo/infrastructure"
-	ipo_public_api "github.com/jorbriib/theIPOGuide/src/ipo/ui/public/api"
+	"github.com/jorbriib/theIPOGuide/src/ipo/ui/public/api"
 	"log"
 	"net/http"
 	"os"
@@ -22,15 +22,23 @@ func main() {
 	marketRepository := infrastructure.NewMySQLMarketRepository(db)
 	companyRepository := infrastructure.NewMySQLCompanyRepository(db)
 	service := application.NewService(ipoRepository, marketRepository, companyRepository)
-	controller := ipo_public_api.NewController(service)
-	_ = r.Get("/v1/ipos", controller.GetIpos)
-	_ = r.Get("/v1/ipos/{alias}", controller.GetIpo)
+	controller := api.NewController(service)
+
+	_ = r.Get("/v1/ipos", api.ContentTypeMiddleware(api.EnableCorsMiddleware(controller.GetIpos)))
+	_ = r.Get("/v1/ipos/{alias}", api.ContentTypeMiddleware(api.EnableCorsMiddleware(controller.GetIpo)))
+
+	_ = r.Get("/v1/{notFound}", api.ContentTypeMiddleware(api.EnableCorsMiddleware(notFound)))
+	_ = r.Get("/{notFound}", api.ContentTypeMiddleware(api.EnableCorsMiddleware(notFound)))
 
 	fmt.Println("Server listening")
 	errServer := http.ListenAndServe(":80", &r)
 	if errServer != nil {
 		log.Fatal(errServer)
 	}
+}
+
+func notFound(writer http.ResponseWriter, _ *http.Request) {
+	writer.WriteHeader(http.StatusNotFound)
 }
 
 

@@ -39,8 +39,6 @@ type MarketJsonResponse struct {
 type GetIposJsonResponse []IpoJsonResponse
 
 func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
-	enableCors(&writer)
-	writer.Header().Set("Content-Type", "application/json; charset=UTF-8")
 
 	query := application.NewGetIposQuery()
 	response, err := c.service.GetIPOs(query)
@@ -95,8 +93,6 @@ func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
 }
 
 func (c Controller) GetIpo(writer http.ResponseWriter, request *http.Request) {
-	enableCors(&writer)
-	writer.Header().Set("Content-Type", "application/json; charset=UTF-8")
 
 	bag := routing.GetURLParameters(request)
 	alias, err := bag.GetByName("alias")
@@ -149,8 +145,4 @@ func (c Controller) GetIpo(writer http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
 	}
-}
-
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }
