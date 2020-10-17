@@ -3,7 +3,6 @@ package infrastructure
 import (
 	"bytes"
 	"database/sql"
-	"errors"
 	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
 	"strings"
 )
@@ -33,7 +32,7 @@ func (r MySQLMarketRepository) GetById(id domain.MarketId) (*domain.Market, erro
 		return nil, err
 	}
 	if len(markets) < 1{
-		return nil, errors.New("market not found")
+		return nil, nil
 	}
 	return &markets[0], nil
 }

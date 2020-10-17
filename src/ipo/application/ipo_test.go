@@ -1,7 +1,8 @@
-package application
+package application_test
 
 import (
 	"errors"
+	"github.com/jorbriib/theIPOGuide/src/ipo/application"
 	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -13,7 +14,7 @@ func TestNewService(t *testing.T) {
 	r := IpoRepositoryMock{}
 	mr := MarketRepositoryMock{}
 	cr := CompanyRepositoryMock{}
-	service := NewService(r, mr, cr)
+	service := application.NewService(r, mr, cr)
 	assertion.NotNil(service)
 }
 
@@ -26,8 +27,8 @@ func TestService_GetIPOs_FailsWhenIpoRepositoryReturnsError(t *testing.T) {
 	mr := MarketRepositoryMock{}
 	cr := CompanyRepositoryMock{}
 
-	service := NewService(r, mr, cr)
-	query := NewGetIposQuery()
+	service := application.NewService(r, mr, cr)
+	query := application.NewGetIposQuery()
 	response, err := service.GetIPOs(query)
 
 	assertion.Nil(response)
@@ -45,17 +46,17 @@ func TestService_GetIPOs_FailsWhenMarketRepositoryReturnsError(t *testing.T) {
 	r := IpoRepositoryMock{}
 	r.On("Find").Return(expectedIpoReturn, nil)
 
-	expectedMarketIdInput := []domain.MarketId{
-		domain.MarketId("1-market-id"),
-		domain.MarketId("2-market-id"),
-	}
+	expectedMarketIdInput := make([]domain.MarketId, 2)
+	expectedMarketIdInput[0] = "1-market-id"
+	expectedMarketIdInput[1] = "2-market-id"
+
 	mr := MarketRepositoryMock{}
 	mr.On("FindByIds", expectedMarketIdInput).Return([]domain.Market{}, errors.New("repository error"))
 
 	cr := CompanyRepositoryMock{}
 
-	service := NewService(r, mr, cr)
-	query := NewGetIposQuery()
+	service := application.NewService(r, mr, cr)
+	query := application.NewGetIposQuery()
 	response, err := service.GetIPOs(query)
 
 	assertion.Nil(response)
@@ -81,19 +82,20 @@ func TestService_GetIPOs_FailsWhenCompanyRepositoryReturnsError(t *testing.T) {
 	expectedMarketIdInput := make([]domain.MarketId, 2)
 	expectedMarketIdInput[0] = "1-market-id"
 	expectedMarketIdInput[1] = "2-market-id"
+
 	mr := MarketRepositoryMock{}
 	mr.On("FindByIds", expectedMarketIdInput).Return(expectedMarketReturn, nil)
 
-	expectedCompanyIdInput := []domain.CompanyId{
-		domain.CompanyId("1-company-id"),
-		domain.CompanyId("2-company-id"),
-		domain.CompanyId("3-company-id"),
-	}
+	expectedCompanyIdInput := make([]domain.CompanyId, 3)
+	expectedCompanyIdInput[0] = domain.CompanyId("1-company-id")
+	expectedCompanyIdInput[1] = domain.CompanyId("2-company-id")
+	expectedCompanyIdInput[2] = domain.CompanyId("3-company-id")
+
 	cr := CompanyRepositoryMock{}
 	cr.On("FindByIds", expectedCompanyIdInput).Return([]domain.Company{}, errors.New("repository error"))
 
-	service := NewService(r, mr, cr)
-	query := NewGetIposQuery()
+	service := application.NewService(r, mr, cr)
+	query := application.NewGetIposQuery()
 	response, err := service.GetIPOs(query)
 
 	assertion.Nil(response)
@@ -147,8 +149,8 @@ func TestService_GetIPOs(t *testing.T) {
 	cr := CompanyRepositoryMock{}
 	cr.On("FindByIds", expectedCompanyIdInput).Return(expectedCompanyReturn, nil)
 
-	service := NewService(r, mr, cr)
-	query := NewGetIposQuery()
+	service := application.NewService(r, mr, cr)
+	query := application.NewGetIposQuery()
 	response, err := service.GetIPOs(query)
 
 	assertion.NotNil(response)
@@ -171,8 +173,8 @@ func TestService_GetIPO_FailsWhenIpoRepositoryReturnsError(t *testing.T) {
 	mr := MarketRepositoryMock{}
 	cr := CompanyRepositoryMock{}
 
-	service := NewService(r, mr, cr)
-	query := NewGetIpoQuery(alias)
+	service := application.NewService(r, mr, cr)
+	query := application.NewGetIpoQuery(alias)
 	response, err := service.GetIPO(query)
 
 	assertion.Nil(response)
@@ -195,8 +197,8 @@ func TestService_GetIPO_FailsWhenMarketRepositoryReturnsError(t *testing.T) {
 
 	cr := CompanyRepositoryMock{}
 
-	service := NewService(r, mr, cr)
-	query := NewGetIpoQuery(alias)
+	service := application.NewService(r, mr, cr)
+	query := application.NewGetIpoQuery(alias)
 	response, err := service.GetIPO(query)
 
 	assertion.Nil(response)
@@ -223,13 +225,34 @@ func TestService_GetIPO_FailsWhenCompanyRepositoryReturnsError(t *testing.T) {
 	cr := CompanyRepositoryMock{}
 	cr.On("GetById", expectedCompanyIdInput).Return(&domain.Company{}, errors.New("repository error"))
 
-	service := NewService(r, mr, cr)
-	query := NewGetIpoQuery(alias)
+	service := application.NewService(r, mr, cr)
+	query := application.NewGetIpoQuery(alias)
 	response, err := service.GetIPO(query)
 
 	assertion.Nil(response)
 	assertion.NotNil(err)
 }
+
+
+func TestService_GetIPO_ReturnsNilWhenCompanyRepositoryReturnsNil(t *testing.T) {
+
+	assertion := assert.New(t)
+	alias := "pinterest"
+
+	r := IpoRepositoryMock{}
+	r.On("GetByAlias", alias).Return(nil, nil).Once()
+
+	mr := MarketRepositoryMock{}
+	cr := CompanyRepositoryMock{}
+
+	service := application.NewService(r, mr, cr)
+	query := application.NewGetIpoQuery(alias)
+	response, err := service.GetIPO(query)
+
+	assertion.Nil(response)
+	assertion.Nil(err)
+}
+
 
 func TestService_GetIPO(t *testing.T) {
 	assertion := assert.New(t)
@@ -255,8 +278,8 @@ func TestService_GetIPO(t *testing.T) {
 	cr := CompanyRepositoryMock{}
 	cr.On("GetById", expectedCompanyIdInput).Return(&expectedCompanyReturn, nil)
 
-	service := NewService(r, mr, cr)
-	query := NewGetIpoQuery(alias)
+	service := application.NewService(r, mr, cr)
+	query := application.NewGetIpoQuery(alias)
 	response, err := service.GetIPO(query)
 
 	assertion.NotNil(response)
@@ -270,7 +293,7 @@ func TestService_GetIPO(t *testing.T) {
 
 func TestNewGetIposQuery(t *testing.T) {
 	assertion := assert.New(t)
-	query := NewGetIposQuery()
+	query := application.NewGetIposQuery()
 	assertion.NotNil(query)
 }
 
@@ -278,9 +301,9 @@ func TestNewGetIpoQuery(t *testing.T) {
 	assertion := assert.New(t)
 	alias := "pinterest"
 
-	query := NewGetIpoQuery(alias)
+	query := application.NewGetIpoQuery(alias)
 	assertion.NotNil(query)
-	assertion.Equal(alias, query.alias)
+	assertion.Equal(alias, query.Alias())
 }
 
 type IpoRepositoryMock struct {
@@ -294,6 +317,9 @@ func (r IpoRepositoryMock) Find() ([]domain.Ipo, error) {
 
 func (r IpoRepositoryMock) GetByAlias(alias string) (*domain.Ipo, error) {
 	args := r.Called(alias)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
 	return args.Get(0).(*domain.Ipo), args.Error(1)
 }
 

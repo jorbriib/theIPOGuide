@@ -1,16 +1,17 @@
-package domain
+package domain_test
 
 import (
+	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestHydrateCompany(t *testing.T) {
 	assertion := assert.New(t)
-	sector := HydrateSector("Communication")
-	country := HydrateCountry("US", "USA")
-	company := HydrateCompany(
-		CompanyId("uuid"),
+	sector := domain.HydrateSector("Communication")
+	country := domain.HydrateCountry("US", "USA")
+	company := domain.HydrateCompany(
+		domain.CompanyId("uuid"),
 		"PINS",
 		"Pinterest",
 		sector,
@@ -34,10 +35,10 @@ func TestHydrateCompany(t *testing.T) {
 
 func TestCompany_Id(t *testing.T) {
 	assertion := assert.New(t)
-	sector := HydrateSector("Communication")
-	country := HydrateCountry("US", "USA")
-	company := HydrateCompany(
-		CompanyId("uuid"),
+	sector := domain.HydrateSector("Communication")
+	country := domain.HydrateCountry("US", "USA")
+	company := domain.HydrateCompany(
+		domain.CompanyId("uuid"),
 		"PINS",
 		"Pinterest",
 		sector,
@@ -55,15 +56,15 @@ func TestCompany_Id(t *testing.T) {
 		"http://commission.com",
 		"http://logo.com",
 	)
-	assertion.Equal(CompanyId("uuid"), company.Id())
+	assertion.Equal(domain.CompanyId("uuid"), company.Id())
 }
 
 func TestCompany_Symbol(t *testing.T) {
 	assertion := assert.New(t)
-	sector := HydrateSector("Communication")
-	country := HydrateCountry("US", "USA")
-	company := HydrateCompany(
-		CompanyId("uuid"),
+	sector := domain.HydrateSector("Communication")
+	country := domain.HydrateCountry("US", "USA")
+	company := domain.HydrateCompany(
+		domain.CompanyId("uuid"),
 		"PINS",
 		"Pinterest",
 		sector,
@@ -86,10 +87,10 @@ func TestCompany_Symbol(t *testing.T) {
 
 func TestCompany_Name(t *testing.T) {
 	assertion := assert.New(t)
-	sector := HydrateSector("Communication")
-	country := HydrateCountry("US", "USA")
-	company := HydrateCompany(
-		CompanyId("uuid"),
+	sector := domain.HydrateSector("Communication")
+	country := domain.HydrateCountry("US", "USA")
+	company := domain.HydrateCompany(
+		domain.CompanyId("uuid"),
 		"PINS",
 		"Pinterest",
 		sector,
@@ -112,10 +113,10 @@ func TestCompany_Name(t *testing.T) {
 
 func TestCompany_Sector(t *testing.T) {
 	assertion := assert.New(t)
-	sector := HydrateSector("Communication")
-	country := HydrateCountry("US", "USA")
-	company := HydrateCompany(
-		CompanyId("uuid"),
+	sector := domain.HydrateSector("Communication")
+	country := domain.HydrateCountry("US", "USA")
+	company := domain.HydrateCompany(
+		domain.CompanyId("uuid"),
 		"PINS",
 		"Pinterest",
 		sector,
@@ -138,10 +139,10 @@ func TestCompany_Sector(t *testing.T) {
 
 func TestCompany_Country(t *testing.T) {
 	assertion := assert.New(t)
-	sector := HydrateSector("Communication")
-	country := HydrateCountry("US", "USA")
-	company := HydrateCompany(
-		CompanyId("uuid"),
+	sector := domain.HydrateSector("Communication")
+	country := domain.HydrateCountry("US", "USA")
+	company := domain.HydrateCompany(
+		domain.CompanyId("uuid"),
 		"PINS",
 		"Pinterest",
 		sector,
@@ -164,10 +165,10 @@ func TestCompany_Country(t *testing.T) {
 
 func TestCompany_Address(t *testing.T) {
 	assertion := assert.New(t)
-	sector := HydrateSector("Communication")
-	country := HydrateCountry("US", "USA")
-	company := HydrateCompany(
-		CompanyId("uuid"),
+	sector := domain.HydrateSector("Communication")
+	country := domain.HydrateCountry("US", "USA")
+	company := domain.HydrateCompany(
+		domain.CompanyId("uuid"),
 		"PINS",
 		"Pinterest",
 		sector,
@@ -190,10 +191,10 @@ func TestCompany_Address(t *testing.T) {
 
 func TestCompany_LogoUrl(t *testing.T) {
 	assertion := assert.New(t)
-	sector := HydrateSector("Communication")
-	country := HydrateCountry("US", "USA")
-	company := HydrateCompany(
-		CompanyId("uuid"),
+	sector := domain.HydrateSector("Communication")
+	country := domain.HydrateCountry("US", "USA")
+	company := domain.HydrateCompany(
+		domain.CompanyId("uuid"),
 		"PINS",
 		"Pinterest",
 		sector,

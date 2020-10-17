@@ -92,9 +92,14 @@ type GetIpoQuery struct {
 	alias string
 }
 
+// Get returns the response data
+func (q GetIpoQuery) Alias() string {
+	return q.alias
+}
+
 // NewGetIpoQuery returns the query used by GetIPO method
 func NewGetIpoQuery(alias string) GetIpoQuery {
-	return GetIpoQuery{ alias }
+	return GetIpoQuery{alias}
 }
 
 // GetIpoResponse is the response from GetIPO method
@@ -114,6 +119,9 @@ func (h IpoService) GetIPO(query GetIpoQuery) (*GetIpoResponse, error) {
 	ipo, err := h.ipoRepository.GetByAlias(query.alias)
 	if err != nil {
 		return nil, err
+	}
+	if ipo == nil {
+		return nil, nil
 	}
 
 	market, err := h.marketRepository.GetById(ipo.MarketId())

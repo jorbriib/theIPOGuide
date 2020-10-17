@@ -1,13 +1,14 @@
-package api
+package api_test
 
 import (
 	"github.com/jorbriib/theIPOGuide/src/ipo/application"
+	ipo_public_api "github.com/jorbriib/theIPOGuide/src/ipo/ui/public/api"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"testing"
 )
 
-type ServiceMock struct{
+type ServiceMock struct {
 	mock.Mock
 }
 
@@ -25,7 +26,7 @@ func TestNewController(t *testing.T) {
 	assertion := assert.New(t)
 
 	s := ServiceMock{}
-	service := NewController(s)
+	service := ipo_public_api.NewController(s)
 
 	assertion.NotNil(service)
 }

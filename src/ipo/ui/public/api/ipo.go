@@ -100,7 +100,7 @@ func (c Controller) GetIpo(writer http.ResponseWriter, request *http.Request) {
 
 	bag := routing.GetURLParameters(request)
 	alias, err := bag.GetByName("alias")
-	if err != nil{
+	if err != nil {
 		writer.WriteHeader(http.StatusUnprocessableEntity)
 	}
 
@@ -110,20 +110,30 @@ func (c Controller) GetIpo(writer http.ResponseWriter, request *http.Request) {
 		writer.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	if response == nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
 
 	ipo, market, company := response.Get()
 
 	companyJsonResponse := &CompanyJsonResponse{}
-	companyJsonResponse.Symbol = company.Symbol()
-	companyJsonResponse.Name = company.Name()
-	companyJsonResponse.Sector = company.Sector().Name()
-	companyJsonResponse.Country = company.Country().Name()
-	companyJsonResponse.Logo = company.LogoUrl()
+	if company != nil {
+		companyJsonResponse.Symbol = company.Symbol()
+		companyJsonResponse.Name = company.Name()
+		companyJsonResponse.Sector = company.Sector().Name()
+		companyJsonResponse.Country = company.Country().Name()
+		companyJsonResponse.Logo = company.LogoUrl()
+	}
 
 	marketJsonResponse := &MarketJsonResponse{}
-	marketJsonResponse.Name = market.Name()
-	priceFrom := market.Currency().DisplayFromCents(ipo.PriceCentsFrom())
-	priceTo := market.Currency().DisplayFromCents(ipo.PriceCentsTo())
+	var priceFrom string
+	var priceTo string
+	if market != nil {
+		marketJsonResponse.Name = market.Name()
+		priceFrom = market.Currency().DisplayFromCents(ipo.PriceCentsFrom())
+		priceTo = market.Currency().DisplayFromCents(ipo.PriceCentsTo())
+	}
 
 	jsonResponse := IpoJsonResponse{
 		ipo.Alias(),

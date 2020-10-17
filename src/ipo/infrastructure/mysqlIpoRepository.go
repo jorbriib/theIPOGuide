@@ -40,7 +40,7 @@ func (r MySQLIpoRepository) GetByAlias(alias string) (*domain.Ipo, error) {
 	row := r.db.QueryRow(query, alias)
 
 	ipoSql := &ipoSQL{}
-	_ = row.Scan(
+	err := row.Scan(
 		&ipoSql.Id,
 		&ipoSql.Alias,
 		&ipoSql.MarketId,
@@ -50,6 +50,12 @@ func (r MySQLIpoRepository) GetByAlias(alias string) (*domain.Ipo, error) {
 		&ipoSql.Shares,
 		&ipoSql.ExpectedDate,
 	)
+	if err == sql.ErrNoRows{
+		return nil, nil
+	}
+	if err != nil{
+		return nil, err
+	}
 
 	layout := "2006-01-02"
 	timeExpectedDate, err := time.Parse(layout, ipoSql.ExpectedDate)

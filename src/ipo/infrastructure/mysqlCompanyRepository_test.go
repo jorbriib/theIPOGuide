@@ -1,10 +1,11 @@
-package infrastructure
+package infrastructure_test
 
 import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
+	"github.com/jorbriib/theIPOGuide/src/ipo/infrastructure"
 	"github.com/stretchr/testify/assert"
 	"log"
 	"os"
@@ -32,12 +33,12 @@ func TestMain(m *testing.M) {
 }
 
 func TestNewMySQLCompanyRepository(t *testing.T) {
-	r := NewMySQLCompanyRepository(db)
+	r := infrastructure.NewMySQLCompanyRepository(db)
 	assert.NotNil(t, r)
 }
 
 func TestMySQLCompanyRepository_FindByIds_ReturnsSliceLength0_WhenNoCompanyIds(t *testing.T) {
-	r := NewMySQLCompanyRepository(db)
+	r := infrastructure.NewMySQLCompanyRepository(db)
 
 	var ids []domain.CompanyId
 	response, err := r.FindByIds(ids)
@@ -47,7 +48,7 @@ func TestMySQLCompanyRepository_FindByIds_ReturnsSliceLength0_WhenNoCompanyIds(t
 }
 
 func TestMySQLCompanyRepository_FindByIds(t *testing.T) {
-	r := NewMySQLCompanyRepository(db)
+	r := infrastructure.NewMySQLCompanyRepository(db)
 
 	ids := []domain.CompanyId{
 		domain.CompanyId("4293f9f9-c2b7-1e7b-8271-77a4ce70c6f0"),
@@ -60,7 +61,7 @@ func TestMySQLCompanyRepository_FindByIds(t *testing.T) {
 }
 
 func TestMySQLCompanyRepository_GetById(t *testing.T) {
-	r := NewMySQLCompanyRepository(db)
+	r := infrastructure.NewMySQLCompanyRepository(db)
 
 	id := domain.CompanyId("4293f9f9-c2b7-1e7b-8271-77a4ce70c6f0")
 
@@ -70,13 +71,13 @@ func TestMySQLCompanyRepository_GetById(t *testing.T) {
 	assert.Equal(t, id, response.Id())
 }
 
-func TestMySQLCompanyRepository_GetById_ReturnsErrorWhenNotFound(t *testing.T) {
-	r := NewMySQLCompanyRepository(db)
+func TestMySQLCompanyRepository_GetById_ReturnsNilWhenNotFound(t *testing.T) {
+	r := infrastructure.NewMySQLCompanyRepository(db)
 
 	id := domain.CompanyId("1293f9f9-c2b7-1e7b-8271-77a4ce70c6f0")
 
 	response, err := r.GetById(id)
 
-	assert.Error(t, err)
+	assert.Nil(t, err)
 	assert.Nil(t, response)
 }

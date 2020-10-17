@@ -3,7 +3,6 @@ package infrastructure
 import (
 	"bytes"
 	"database/sql"
-	"errors"
 	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
 	"strings"
 )
@@ -47,7 +46,7 @@ func (r MySQLCompanyRepository) GetById(id domain.CompanyId) (*domain.Company, e
 		return nil, err
 	}
 	if len(ipos) < 1{
-		return nil, errors.New("company not found")
+		return nil, nil
 	}
 	return &ipos[0], nil
 }
