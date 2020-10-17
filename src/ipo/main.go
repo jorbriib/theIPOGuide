@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 func main() {
@@ -18,20 +19,44 @@ func main() {
 
 	db := getDB()
 
+	corsOrigin := os.Getenv("CORS_ORIGIN")
+	throttleLimit := os.Getenv("THROTTLE_LIMIT")
+	throttleLimitFloat, err := strconv.ParseFloat(throttleLimit,64)
+	if err != nil {
+		panic(err)
+	}
+	throttleBucket := os.Getenv("THROTTLE_BUCKET")
+	throttleBucketInt, err := strconv.Atoi(throttleBucket)
+	if err != nil {
+		panic(err)
+	}
+
 	ipoRepository := infrastructure.NewMySQLIpoRepository(db)
 	marketRepository := infrastructure.NewMySQLMarketRepository(db)
 	companyRepository := infrastructure.NewMySQLCompanyRepository(db)
 	service := application.NewService(ipoRepository, marketRepository, companyRepository)
 	controller := api.NewController(service)
 
-	_ = r.Get("/v1/ipos", api.ContentTypeMiddleware(api.EnableCorsMiddleware(controller.GetIpos)))
-	_ = r.Get("/v1/ipos/{alias}", api.ContentTypeMiddleware(api.EnableCorsMiddleware(controller.GetIpo)))
+	_ = r.Get("/v1/ipos", controller.GetIpos)
+	_ = r.Get("/v1/ipos/{alias}", controller.GetIpo)
 
-	_ = r.Get("/v1/{notFound}", api.ContentTypeMiddleware(api.EnableCorsMiddleware(notFound)))
-	_ = r.Get("/{notFound}", api.ContentTypeMiddleware(api.EnableCorsMiddleware(notFound)))
+	_ = r.Get("/v1/{notFound}", notFound)
+	_ = r.Get("/{notFound}", notFound)
 
 	fmt.Println("Server listening")
-	errServer := http.ListenAndServe(":80", &r)
+	errServer := http.ListenAndServe(":80",
+		api.ContentTypeMiddleware(
+			"application/json; charset=UTF-8",
+			api.EnableCorsMiddleware(
+				corsOrigin,
+				api.ThrottleMiddleware(
+					throttleLimitFloat,
+					throttleBucketInt,
+					&r,
+				),
+			),
+		),
+	)
 	if errServer != nil {
 		log.Fatal(errServer)
 	}

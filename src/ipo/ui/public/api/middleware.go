@@ -1,19 +1,36 @@
 package api
 
-import "net/http"
+import (
+	"golang.org/x/time/rate"
+	"net/http"
+)
 
-func ContentTypeMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+func ContentTypeMiddleware(contentType string, next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", contentType)
 
 		next.ServeHTTP(w, r)
-	}
+	})
 }
 
-func EnableCorsMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
+func EnableCorsMiddleware(origin string, next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", origin)
 
 		next.ServeHTTP(w, r)
-	}
+	})
+}
+
+var limiter *rate.Limiter
+func ThrottleMiddleware(limit float64, bucket int, next http.Handler) http.Handler {
+	limiter = rate.NewLimiter(rate.Limit(limit), bucket)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		if limiter.Allow() == false {
+			http.Error(w, http.StatusText(429), http.StatusTooManyRequests)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
