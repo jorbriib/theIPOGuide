@@ -8,14 +8,14 @@ import (
 )
 
 type ipoSQL struct {
-	Id             string `db:"id"`
-	Alias          string `db:"alias"`
-	MarketId       string `db:"marketId"`
-	CompanyId      string `db:"companyId"`
-	PriceCentsFrom uint32 `db:"priceCentsFrom"`
-	PriceCentsTo   uint32 `db:"priceCentsTo"`
-	Shares         uint32 `db:"shares"`
-	ExpectedDate   string `db:"expectedDate"`
+	Id             string        `db:"id"`
+	Alias          string        `db:"alias"`
+	MarketId       string        `db:"marketId"`
+	CompanyId      string        `db:"companyId"`
+	PriceCentsFrom uint32        `db:"priceCentsFrom"`
+	PriceCentsTo   sql.NullInt32 `db:"priceCentsTo"`
+	Shares         uint32        `db:"shares"`
+	ExpectedDate   string        `db:"expectedDate"`
 }
 
 type MySQLIpoRepository struct {
@@ -50,10 +50,10 @@ func (r MySQLIpoRepository) GetByAlias(alias string) (*domain.Ipo, error) {
 		&ipoSql.Shares,
 		&ipoSql.ExpectedDate,
 	)
-	if err == sql.ErrNoRows{
+	if err == sql.ErrNoRows {
 		return nil, nil
 	}
-	if err != nil{
+	if err != nil {
 		return nil, err
 	}
 
@@ -63,13 +63,18 @@ func (r MySQLIpoRepository) GetByAlias(alias string) (*domain.Ipo, error) {
 		fmt.Println(err)
 		return nil, err
 	}
+
+	var priceTo uint32
+	if ipoSql.PriceCentsTo.Valid {
+		priceTo = uint32(ipoSql.PriceCentsTo.Int32)
+	}
 	ipo := domain.HydrateIpo(
 		domain.IpoId(ipoSql.Id),
 		ipoSql.Alias,
 		domain.MarketId(ipoSql.MarketId),
 		domain.CompanyId(ipoSql.CompanyId),
 		ipoSql.PriceCentsFrom,
-		ipoSql.PriceCentsTo,
+		priceTo,
 		ipoSql.Shares,
 		&timeExpectedDate,
 	)
@@ -84,6 +89,7 @@ func (r MySQLIpoRepository) Find() ([]domain.Ipo, error) {
            i.price_cents_from AS priceCentsFrom, i.price_cents_to AS priceCentsTo, 
            i.shares as shares, i.expected_date as expectedDate
 	FROM ipos i
+	ORDER BY i.expected_date DESC
   `
 
 	rows, err := r.db.Query(query)
@@ -96,7 +102,7 @@ func (r MySQLIpoRepository) Find() ([]domain.Ipo, error) {
 	for rows.Next() {
 		ipoSql := &ipoSQL{}
 
-		_ = rows.Scan(
+		err = rows.Scan(
 			&ipoSql.Id,
 			&ipoSql.Alias,
 			&ipoSql.MarketId,
@@ -106,6 +112,10 @@ func (r MySQLIpoRepository) Find() ([]domain.Ipo, error) {
 			&ipoSql.Shares,
 			&ipoSql.ExpectedDate,
 		)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
 
 		layout := "2006-01-02"
 		timeExpectedDate, err := time.Parse(layout, ipoSql.ExpectedDate)
@@ -113,13 +123,18 @@ func (r MySQLIpoRepository) Find() ([]domain.Ipo, error) {
 			fmt.Println(err)
 			continue
 		}
+
+		var priceTo uint32
+		if ipoSql.PriceCentsTo.Valid {
+			priceTo = uint32(ipoSql.PriceCentsTo.Int32)
+		}
 		ipo := domain.HydrateIpo(
 			domain.IpoId(ipoSql.Id),
 			ipoSql.Alias,
 			domain.MarketId(ipoSql.MarketId),
 			domain.CompanyId(ipoSql.CompanyId),
 			ipoSql.PriceCentsFrom,
-			ipoSql.PriceCentsTo,
+			priceTo,
 			ipoSql.Shares,
 			&timeExpectedDate,
 		)

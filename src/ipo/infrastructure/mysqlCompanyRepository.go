@@ -3,6 +3,7 @@ package infrastructure
 import (
 	"bytes"
 	"database/sql"
+	"fmt"
 	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
 	"strings"
 )
@@ -16,7 +17,7 @@ type companySQL struct {
 	CountryCode           string `db:"countryCode"`
 	CountryName           string `db:"countryName"`
 	Phone                 string `db:"phone"`
-	Email                 string `db:"email"`
+	Email                 sql.NullString `db:"email"`
 	Website               string `db:"website"`
 	Employees             uint32 `db:"employees"`
 	Description           string `db:"description"`
@@ -92,7 +93,7 @@ func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Comp
 	for rows.Next() {
 		companySql := &companySQL{}
 
-		_ = rows.Scan(
+		err = rows.Scan(
 			&companySql.Id,
 			&companySql.Symbol,
 			&companySql.Name,
@@ -112,10 +113,18 @@ func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Comp
 			&companySql.ExchangeCommissionUrl,
 			&companySql.LogoUrl,
 		)
+		if err != nil{
+			fmt.Println(err)
+			continue
+		}
 
 		sector := domain.HydrateSector(companySql.SectorName)
 		country := domain.HydrateCountry(companySql.CountryCode, companySql.CountryName)
 
+		var email string
+		if companySql.Email.Valid {
+			email = companySql.Email.String
+		}
 		company := domain.HydrateCompany(
 			domain.CompanyId(companySql.Id),
 			companySql.Symbol,
@@ -124,7 +133,7 @@ func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Comp
 			companySql.Address,
 			country,
 			companySql.Phone,
-			companySql.Email,
+			email,
 			companySql.Website,
 			companySql.Employees,
 			companySql.Description,
