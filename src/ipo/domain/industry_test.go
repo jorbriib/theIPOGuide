@@ -6,15 +6,15 @@ import (
 	"testing"
 )
 
-func TestHydrateSector(t *testing.T) {
+func TestHydrateIndustry(t *testing.T) {
 	assertion := assert.New(t)
-	sector := domain.HydrateSector("Sector")
+	sector := domain.HydrateIndustry("Industry")
 	assertion.NotNil(sector)
 }
 
-func TestSector_Name(t *testing.T) {
+func TestIndustry_Name(t *testing.T) {
 	assertion := assert.New(t)
-	sector := domain.HydrateSector("Sector")
+	sector := domain.HydrateIndustry("Industry")
 
-	assertion.Equal("Sector", sector.Name())
+	assertion.Equal("Industry", sector.Name())
 }

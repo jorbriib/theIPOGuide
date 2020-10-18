@@ -15,16 +15,16 @@ func NewController(service application.Service) Controller {
 	return Controller{service: service}
 }
 
-type IpoJsonResponse struct {
-	Alias        string               `json:"alias"`
-	Company      *CompanyJsonResponse `json:"company"`
-	Market       *MarketJsonResponse  `json:"market"`
-	PriceFrom    string               `json:"priceFrom"`
-	PriceTo      string               `json:"priceTo"`
-	ExpectedDate string               `json:"expectedDate"`
+type IpoListJsonResponse struct {
+	Alias        string                   `json:"alias"`
+	Company      *CompanyListJsonResponse `json:"company"`
+	Market       *MarketJsonResponse      `json:"market"`
+	PriceFrom    string                   `json:"priceFrom"`
+	PriceTo      string                   `json:"priceTo"`
+	ExpectedDate string                   `json:"expectedDate"`
 }
 
-type CompanyJsonResponse struct {
+type CompanyListJsonResponse struct {
 	Symbol  string `json:"symbol"`
 	Name    string `json:"name"`
 	Sector  string `json:"sector"`
@@ -36,7 +36,7 @@ type MarketJsonResponse struct {
 	Name string `json:"name"`
 }
 
-type GetIposJsonResponse []IpoJsonResponse
+type GetIposJsonResponse []IpoListJsonResponse
 
 func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
 
@@ -49,9 +49,9 @@ func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
 
 	ipos, markets, companies := response.Get()
 
-	jsonResponse := make([]IpoJsonResponse, len(ipos))
+	jsonResponse := make([]IpoListJsonResponse, len(ipos))
 	for k, ipo := range ipos {
-		companyJsonResponse := &CompanyJsonResponse{}
+		companyJsonResponse := &CompanyListJsonResponse{}
 		for _, company := range companies {
 			if company.Id() == ipo.CompanyId() {
 				companyJsonResponse.Symbol = company.Symbol()
@@ -70,12 +70,14 @@ func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
 			if market.Id() == ipo.MarketId() {
 				marketJsonResponse.Name = market.Name()
 				priceFrom = market.Currency().DisplayFromCents(ipo.PriceCentsFrom())
-				priceTo = market.Currency().DisplayFromCents(ipo.PriceCentsTo())
+				if ipo.PriceCentsTo() != 0 {
+					priceTo = market.Currency().DisplayFromCents(ipo.PriceCentsTo())
+				}
 				break
 			}
 		}
 
-		jsonResponse[k] = IpoJsonResponse{
+		jsonResponse[k] = IpoListJsonResponse{
 			ipo.Alias(),
 			companyJsonResponse,
 			marketJsonResponse,
@@ -90,6 +92,41 @@ func (c Controller) GetIpos(writer http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
 	}
+}
+
+type IpoViewJsonResponse struct {
+	Alias        string                   `json:"alias"`
+	Company      *CompanyViewJsonResponse `json:"company"`
+	Market       *MarketJsonResponse      `json:"market"`
+	PriceFrom    string                   `json:"priceFrom"`
+	PriceTo      string                   `json:"priceTo"`
+	Shares       uint32                   `json:"shares"`
+	ExpectedDate string                   `json:"expectedDate"`
+}
+
+type CompanyViewJsonResponse struct {
+	Symbol                string `json:"symbol"`
+	Name                  string `json:"name"`
+	Sector                string `json:"sector"`
+	Industry              string `json:"industry"`
+	Address               string `json:"address"`
+	Country               string `json:"country"`
+	Phone                 string `json:"phone"`
+	Email                 string `json:"email"`
+	Website               string `json:"website"`
+	Description           string `json:"description"`
+	Facebook              string `json:"facebook"`
+	Twitter               string `json:"twitter"`
+	Linkedin              string `json:"linkedin"`
+	Pinterest             string `json:"pinterest"`
+	Instagram             string `json:"instagram"`
+	Employees             uint32 `json:"employees"`
+	Founded               uint16 `json:"founded"`
+	Ceo                   string `json:"ceo"`
+	FiscalYearEnd         string `json:"fiscalYearEnd"`
+	IpoUrl                string `json:"ipoUrl"`
+	ExchangeCommissionUrl string `json:"exchangeCommissionUrl"`
+	Logo                  string `json:"logo"`
 }
 
 func (c Controller) GetIpo(writer http.ResponseWriter, request *http.Request) {
@@ -113,12 +150,35 @@ func (c Controller) GetIpo(writer http.ResponseWriter, request *http.Request) {
 
 	ipo, market, company := response.Get()
 
-	companyJsonResponse := &CompanyJsonResponse{}
+	companyJsonResponse := &CompanyViewJsonResponse{}
 	if company != nil {
 		companyJsonResponse.Symbol = company.Symbol()
 		companyJsonResponse.Name = company.Name()
+		companyJsonResponse.Description = company.Description()
+		companyJsonResponse.Employees = company.Employees()
+
 		companyJsonResponse.Sector = company.Sector().Name()
+		companyJsonResponse.Industry = company.Industry().Name()
+
+		companyJsonResponse.Address = company.Address()
 		companyJsonResponse.Country = company.Country().Name()
+
+		companyJsonResponse.Phone = company.Phone()
+		companyJsonResponse.Email = company.Email()
+		companyJsonResponse.Website = company.Website()
+
+		companyJsonResponse.Facebook = company.Facebook()
+		companyJsonResponse.Twitter = company.Twitter()
+		companyJsonResponse.Linkedin = company.Linkedin()
+		companyJsonResponse.Pinterest = company.Pinterest()
+		companyJsonResponse.Instagram = company.Instagram()
+
+		companyJsonResponse.Ceo = company.Ceo()
+		companyJsonResponse.Founded = company.Founded()
+		companyJsonResponse.FiscalYearEnd = company.FiscalYearEnd()
+		companyJsonResponse.IpoUrl = company.IpoUrl()
+		companyJsonResponse.ExchangeCommissionUrl = company.ExchangeCommissionUrl()
+
 		companyJsonResponse.Logo = company.LogoUrl()
 	}
 
@@ -128,15 +188,18 @@ func (c Controller) GetIpo(writer http.ResponseWriter, request *http.Request) {
 	if market != nil {
 		marketJsonResponse.Name = market.Name()
 		priceFrom = market.Currency().DisplayFromCents(ipo.PriceCentsFrom())
-		priceTo = market.Currency().DisplayFromCents(ipo.PriceCentsTo())
+		if ipo.PriceCentsTo() != 0 {
+			priceTo = market.Currency().DisplayFromCents(ipo.PriceCentsTo())
+		}
 	}
 
-	jsonResponse := IpoJsonResponse{
+	jsonResponse := IpoViewJsonResponse{
 		ipo.Alias(),
 		companyJsonResponse,
 		marketJsonResponse,
 		priceFrom,
 		priceTo,
+		ipo.Shares(),
 		ipo.ExpectedDate().String(),
 	}
 

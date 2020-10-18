@@ -1,6 +1,7 @@
 package application
 
 import (
+	"fmt"
 	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
 )
 
@@ -45,8 +46,10 @@ func (r GetIposResponse) Get() ([]domain.Ipo, []domain.Market, []domain.Company)
 
 // GetIPOS obtains IPOs and related data
 func (h IpoService) GetIPOs(query GetIposQuery) (*GetIposResponse, error) {
+
 	ipos, err := h.ipoRepository.Find()
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
@@ -65,6 +68,7 @@ func (h IpoService) GetIPOs(query GetIposQuery) (*GetIposResponse, error) {
 	}
 	markets, err := h.marketRepository.FindByIds(marketIds)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
@@ -77,6 +81,7 @@ func (h IpoService) GetIPOs(query GetIposQuery) (*GetIposResponse, error) {
 
 	companies, err := h.companyRepository.FindByIds(companyIds)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
@@ -118,6 +123,7 @@ func (r GetIpoResponse) Get() (*domain.Ipo, *domain.Market, *domain.Company) {
 func (h IpoService) GetIPO(query GetIpoQuery) (*GetIpoResponse, error) {
 	ipo, err := h.ipoRepository.GetByAlias(query.alias)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 	if ipo == nil {
@@ -126,11 +132,13 @@ func (h IpoService) GetIPO(query GetIpoQuery) (*GetIpoResponse, error) {
 
 	market, err := h.marketRepository.GetById(ipo.MarketId())
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
 	company, err := h.companyRepository.GetById(ipo.CompanyId())
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
