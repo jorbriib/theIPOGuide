@@ -4,7 +4,7 @@ module.exports = {
   entry: ["./src/index.js"],
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, "../public"),
+    path: path.resolve(__dirname, "../public/"),
   },
   devtool: "source-map",
   module: {
@@ -31,7 +31,6 @@ module.exports = {
     require("./plugins/chunks2Json"),
     require("./plugins/copy"),
     require("./plugins/html"),
-
   ],
   resolve: require("./rules/resolve"),
 };

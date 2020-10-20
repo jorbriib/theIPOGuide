@@ -26,6 +26,7 @@ export default function useListIpos(client = Client) {
 
 function Ipo(ipo) {
   return {
+    alias: ipo.alias,
     companySymbol: ipo.companySymbol,
     companyName: ipo.companyName,
     companySector: ipo.companySector,

@@ -35,7 +35,7 @@ const Footer = () => {
                 <div className="footer-bottom--content">
                   <NavLink to="/" className="footer-logo">
                     <img
-                      src="./assets/images/logo-black.png"
+                      src="/assets/images/logo-black.png"
                       alt="theIPOguide"
                     />
                   </NavLink>

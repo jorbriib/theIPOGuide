@@ -16,6 +16,7 @@ export const fetchIPOs = async () => {
 
 export function Ipo(ipo) {
   return {
+    alias: ipo.alias,
     companySymbol: ipo.company.symbol,
     companyName: ipo.company.name,
     companySector: ipo.company.sector,

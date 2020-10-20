@@ -1,6 +1,6 @@
 const app = {
   home: () => "/",
-  login: () => "/login",
+  ipo: (alias) => `/ipo/${alias}`,
 };
 
 export default {

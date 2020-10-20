@@ -2,12 +2,13 @@ import React, { Fragment } from "react";
 
 import Header from "../../components/layout/Header";
 import Footer from "../../components/layout/Footer";
-import List from "../../components/container/List";
-import useListIpos from "./useListIpos";
-import { BreadcrumbWrapper } from "../../components/elements/Breadcrumbs";
+import useViewIpo from "./useViewIpo";
+import { BreadcrumbSingle } from "../../components/elements/Breadcrumbs";
+import Report from "../../components/elements/Report/Report";
+import View from "../../components/container/View";
 
-const ListIpos = () => {
-  const { status, ipos } = useListIpos();
+const ViewIpo = (alias) => {
+  const { status, ipo } = useViewIpo(alias.alias);
 
   const backgroundImage = {
     backgroundImage: "url('/assets/images/wallstreet-bull.jpg')",
@@ -21,7 +22,7 @@ const ListIpos = () => {
   return (
     <Fragment>
       {/* Header section start */}
-      <section className="header-breadcrumb bgimage overlay overlay--dark">
+      <section className="listing-details-wrapper bgimage">
         <div className="bg_image_holder" style={backgroundImage}>
           <img
             src="/assets/images/wallstreet-bull.jpg"
@@ -32,14 +33,21 @@ const ListIpos = () => {
           <Header class="menu--light" />
         </div>
         {/* <!-- ends: .mainmenu-wrapper --> */}
-        <BreadcrumbWrapper title="Find your IPO and invest" onlyTitle={true} />
+        <div className="listing-info content_above">
+          <div className="container">
+            <div className="row">
+              <BreadcrumbSingle ipo={ipo} />
+            </div>
+          </div>
+        </div>
       </section>
       {/* Header section end */}
 
-      <List list={ipos} categories={[]} />
+      <View ipo={ipo} similars={[]} />
+      <Report />
       <Footer />
     </Fragment>
   );
 };
 
-export default ListIpos;
+export default ViewIpo;

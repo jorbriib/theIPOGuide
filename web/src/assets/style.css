@@ -3286,6 +3286,7 @@ p {
 .atbd_author_info_widget .atbd_avatar_wrapper .atbd_review_avatar img {
   -webkit-border-radius: 20rem;
           border-radius: 20rem;
+    max-width:60px;
 }
 
 .atbd_author_info_widget .atbd_avatar_wrapper .atbd_name_time {
@@ -8811,5 +8812,9 @@ p {
     padding: 10px 0;
   }
 }
-
+@media (min-width: 992px) {
+  .no-desktop {
+    display: none;
+  }
+}
 /*# sourceMappingURL=maps/style.css.map */

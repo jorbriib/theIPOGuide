@@ -7,6 +7,7 @@ const CardList = ({ list }) => {
       {Object.values(list).map((ipo, key) => {
         const {
           companyName,
+          alias,
           companyCountry,
           companySector,
           companyLogo,
@@ -20,7 +21,7 @@ const CardList = ({ list }) => {
               <article className="atbd_single_listing_wrapper">
                 <figure className="atbd_listing_thumbnail_area">
                   <div className="atbd_listing_image">
-                    <NavLink to={"/company" + companyName}>
+                    <NavLink to={"/ipo/" + alias}>
                       <img src={companyLogo} alt={companyName} />
                     </NavLink>
                   </div>
@@ -30,9 +31,7 @@ const CardList = ({ list }) => {
                 <div className="atbd_listing_info">
                   <div className="atbd_content_upper">
                     <h4 className="atbd_listing_title">
-                      <NavLink to={"/company" + companyName}>
-                        {companyName}
-                      </NavLink>
+                      <NavLink to={"/ipo/" + alias}>{companyName}</NavLink>
                     </h4>
                     <div className="atbd_listing_data_list">
                       <ul>
@@ -58,7 +57,7 @@ const CardList = ({ list }) => {
                   <div className="atbd_listing_bottom_content">
                     <div className="atbd_content_left">
                       <div className="atbd_listing_category">
-                        <a href=" ">{companySector}</a>
+                        <NavLink to={"/ipo/" + alias}>{companySector}</NavLink>
                       </div>
                     </div>
                   </div>
