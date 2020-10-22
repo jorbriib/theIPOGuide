@@ -23,27 +23,49 @@ func main() {
 	throttleLimit := os.Getenv("THROTTLE_LIMIT")
 	throttleLimitFloat, err := strconv.ParseFloat(throttleLimit,64)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	throttleBucket := os.Getenv("THROTTLE_BUCKET")
 	throttleBucketInt, err := strconv.Atoi(throttleBucket)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
+	}
+
+	recaptchaSiteUrl := os.Getenv("RECAPTCHA_SITE_URL")
+	recaptchaSecret := os.Getenv("RECAPTCHA_SECRET")
+
+	emailHost := os.Getenv("EMAIL_HOST")
+	emailFrom := os.Getenv("EMAIL_FROM")
+	emailTo := os.Getenv("EMAIL_TO")
+	emailPassword := os.Getenv("EMAIL_PASSWORD")
+	emailPort := os.Getenv("EMAIL_PORT")
+	emailPortInt, err := strconv.Atoi(emailPort)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	ipoRepository := infrastructure.NewMySQLIpoRepository(db)
 	marketRepository := infrastructure.NewMySQLMarketRepository(db)
 	companyRepository := infrastructure.NewMySQLCompanyRepository(db)
+
 	service := application.NewService(ipoRepository, marketRepository, companyRepository)
 	controller := api.NewController(service)
 
 	_ = r.Get("/v1/ipos", controller.GetIpos)
 	_ = r.Get("/v1/ipos/{alias}", controller.GetIpo)
 
+	smtpEmailService :=  infrastructure.NewSmtpEmailService(emailHost, emailFrom, emailTo, emailPassword, emailPortInt)
+	reportService := application.NewReportService(smtpEmailService)
+	reportController := api.NewReportController(reportService)
+	_ = r.Post(
+		"/v1/report",
+		api.VerifyRecaptcha(recaptchaSiteUrl, recaptchaSecret, reportController.SendReport),
+	)
+
 	_ = r.Get("/v1/{notFound}", notFound)
 	_ = r.Get("/{notFound}", notFound)
 
-	fmt.Println("Server listening")
+	log.Println("Server listening")
 	errServer := http.ListenAndServe(":80",
 		api.ContentTypeMiddleware(
 			"application/json; charset=UTF-8",

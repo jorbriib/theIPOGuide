@@ -8812,6 +8812,11 @@ p {
     padding: 10px 0;
   }
 }
+
+.error-message{
+  color: #f36d6d;
+}
+
 @media (min-width: 992px) {
   .no-desktop {
     display: none;

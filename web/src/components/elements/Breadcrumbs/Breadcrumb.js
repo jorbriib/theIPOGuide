@@ -116,7 +116,7 @@ export function BreadcrumbSingle({ ipo }) {
                     Twitter
                   </a>
                 </li>
-                <li class="no-desktop">
+                <li className="no-desktop">
                   <a
                     href={
                       "whatsapp://send?text=" +
@@ -150,7 +150,6 @@ export function BreadcrumbSingle({ ipo }) {
             </div>
             {/* <!--Ends social share--> */}
           </div>
-          {/* <!-- Report Abuse--> */}
           <div className="atbd_action atbd_report">
             <div className="action_button">
               <a
@@ -158,10 +157,9 @@ export function BreadcrumbSingle({ ipo }) {
                 data-toggle="modal"
                 data-target="#atbdp-report-abuse-modal"
               >
-                <span className="la la-flag-o"></span> Report
+                <span className="la la-flag-o"></span> Feedback
               </a>
             </div>
-            {/* <!-- Modal (report abuse form) --> */}
           </div>
         </div>
         {/* <!-- ends: .atbd_listing_action_area --> */}
