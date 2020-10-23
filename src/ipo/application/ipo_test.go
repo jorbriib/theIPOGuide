@@ -6,6 +6,7 @@ import (
 	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"sort"
 	"testing"
 )
 
@@ -117,19 +118,19 @@ func TestService_GetIPOs(t *testing.T) {
 	expectedCompanyReturn := make([]domain.Company, 3)
 	expectedCompanyReturn[0] = domain.HydrateCompany(
 		"1-company-id", "", "",
-		domain.HydrateSector(""), "", domain.HydrateCountry("", ""), "",
-		"", "", 0, "", 2000,
-		"", "", "", "", "")
+		domain.HydrateSector(""), domain.HydrateIndustry(""), "", domain.HydrateCountry("", ""), "",
+		"", "", 0, "", "",
+		"", "", "", "", 2000, "", "", "", "", "")
 	expectedCompanyReturn[1] = domain.HydrateCompany(
 		"2-company-id", "", "",
-		domain.HydrateSector(""), "", domain.HydrateCountry("", ""), "",
-		"", "", 0, "", 2000,
-		"", "", "", "", "")
+		domain.HydrateSector(""), domain.HydrateIndustry(""), "", domain.HydrateCountry("", ""), "",
+		"", "", 0, "", "",
+		"", "", "", "", 2000, "", "", "", "", "")
 	expectedCompanyReturn[2] = domain.HydrateCompany(
 		"3-company-id", "", "",
-		domain.HydrateSector(""), "", domain.HydrateCountry("", ""), "",
-		"", "", 0, "", 2000,
-		"", "", "", "", "")
+		domain.HydrateSector(""), domain.HydrateIndustry(""), "", domain.HydrateCountry("", ""), "",
+		"", "", 0, "", "",
+		"", "", "", "", 2000, "", "", "", "", "")
 
 	r := IpoRepositoryMock{}
 	r.On("Find").Return(expectedIpoReturn, nil)
@@ -263,9 +264,9 @@ func TestService_GetIPO(t *testing.T) {
 
 	expectedCompanyReturn := domain.HydrateCompany(
 		"1-company-id", "", "",
-		domain.HydrateSector(""), "", domain.HydrateCountry("", ""), "",
-		"", "", 0, "", 2000,
-		"", "", "", "", "")
+		domain.HydrateSector(""), domain.HydrateIndustry(""), "", domain.HydrateCountry("", ""), "",
+		"", "", 0, "", "",
+		"", "", "", "", 2000, "", "", "", "", "")
 
 	r := IpoRepositoryMock{}
 	r.On("GetByAlias", alias).Return(&expectedIpoReturn, nil)
@@ -328,6 +329,9 @@ type MarketRepositoryMock struct {
 }
 
 func (r MarketRepositoryMock) FindByIds(ids []domain.MarketId) ([]domain.Market, error) {
+	sort.SliceStable(ids, func(i, j int) bool{
+		return ids[i] < ids[j]
+	})
 	args := r.Called(ids)
 	return args.Get(0).([]domain.Market), args.Error(1)
 }
@@ -342,6 +346,9 @@ type CompanyRepositoryMock struct {
 }
 
 func (r CompanyRepositoryMock) FindByIds(ids []domain.CompanyId) ([]domain.Company, error) {
+	sort.SliceStable(ids, func(i, j int) bool{
+		return ids[i] < ids[j]
+	})
 	args := r.Called(ids)
 	return args.Get(0).([]domain.Company), args.Error(1)
 }

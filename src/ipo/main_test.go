@@ -55,6 +55,6 @@ func TestGetIpos(t *testing.T) {
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	assertion.Equal(http.StatusOK, resp.StatusCode)
-	assertion.JSONEq("[{\"alias\": \"pinterest\",\"company\": {\"symbol\": \"PINS\",\"name\": \"Pinterest\",\"sector\": \"Communication Services\",\"country\": \"USA\",\"logo\": \"/assets/images/pinterest-logo.jpg\"},\"market\": {\"name\": \"Nasdaq\"},\"priceFrom\": \"$24.5\",\"priceTo\": \"$25.8\",\"expectedDate\": \"2020-10-10 00:00:00 +0000 UTC\"}]", string(body))
+	assertion.JSONEq("[{\"alias\": \"pinterest\",\"company\": {\"symbol\": \"PINS\",\"name\": \"Pinterest\",\"sector\": \"Communication Services\",\"country\": \"United States of America\",\"logo\": \"/assets/images/pinterest-logo.jpg\"},\"market\": {\"name\": \"Nasdaq Global\"},\"priceFrom\": \"$22\",\"priceTo\": \"\",\"expectedDate\": \"2019-04-18 00:00:00 +0000 UTC\"}]", string(body))
 
 }
