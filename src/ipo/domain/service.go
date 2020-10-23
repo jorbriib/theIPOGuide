@@ -1,5 +1,5 @@
 package domain
 
 type EmailService interface {
-	Send(report Report) error
+	Send(to string, subject string, body string) error
 }

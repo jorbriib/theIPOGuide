@@ -23,7 +23,7 @@ func TestService_GetIPOs_FailsWhenIpoRepositoryReturnsError(t *testing.T) {
 	assertion := assert.New(t)
 
 	r := IpoRepositoryMock{}
-	r.On("Find").Return([]domain.Ipo{}, errors.New("repository error"))
+		r.On("Find").Return([]domain.Ipo{}, errors.New("repository error"))
 
 	mr := MarketRepositoryMock{}
 	cr := CompanyRepositoryMock{}

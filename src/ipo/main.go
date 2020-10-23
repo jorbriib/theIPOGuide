@@ -10,6 +10,7 @@ import (
 	"github.com/jorbriib/theIPOGuide/src/ipo/ui/public/api"
 	"log"
 	"net/http"
+	"net/smtp"
 	"os"
 	"strconv"
 )
@@ -34,15 +35,7 @@ func main() {
 	recaptchaSiteUrl := os.Getenv("RECAPTCHA_SITE_URL")
 	recaptchaSecret := os.Getenv("RECAPTCHA_SECRET")
 
-	emailHost := os.Getenv("EMAIL_HOST")
-	emailFrom := os.Getenv("EMAIL_FROM")
-	emailTo := os.Getenv("EMAIL_TO")
-	emailPassword := os.Getenv("EMAIL_PASSWORD")
-	emailPort := os.Getenv("EMAIL_PORT")
-	emailPortInt, err := strconv.Atoi(emailPort)
-	if err != nil {
-		log.Fatal(err)
-	}
+
 
 	ipoRepository := infrastructure.NewMySQLIpoRepository(db)
 	marketRepository := infrastructure.NewMySQLMarketRepository(db)
@@ -54,7 +47,8 @@ func main() {
 	_ = r.Get("/v1/ipos", controller.GetIpos)
 	_ = r.Get("/v1/ipos/{alias}", controller.GetIpo)
 
-	smtpEmailService :=  infrastructure.NewSmtpEmailService(emailHost, emailFrom, emailTo, emailPassword, emailPortInt)
+	emailConfig := emailConfig()
+	smtpEmailService :=  infrastructure.NewSmtpEmailService(emailConfig, smtp.SendMail)
 	reportService := application.NewReportService(smtpEmailService)
 	reportController := api.NewReportController(reportService)
 	_ = r.Post(
@@ -102,4 +96,19 @@ func getDB() *sql.DB {
 		log.Fatal(errorDB)
 	}
 	return db
+}
+
+
+func emailConfig() infrastructure.EmailConfig {
+	emailHost := os.Getenv("EMAIL_HOST")
+	emailFrom := os.Getenv("EMAIL_FROM")
+	emailTo := os.Getenv("EMAIL_TO")
+	emailPassword := os.Getenv("EMAIL_PASSWORD")
+	emailPort := os.Getenv("EMAIL_PORT")
+	emailPortInt, err := strconv.Atoi(emailPort)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return infrastructure.NewEmailConfig(emailHost, emailPortInt, emailFrom, emailPassword, emailFrom, emailTo)
 }

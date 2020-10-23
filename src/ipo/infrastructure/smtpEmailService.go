@@ -2,36 +2,47 @@ package infrastructure
 
 import (
 	"fmt"
-	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
 	"net/smtp"
 )
 
-// SmtpEmailService is the needed data to send an email
-type SmtpEmailService struct {
-	emailHost     string
-	emailFrom     string
-	emailTo       string
-	emailPassword string
-	emailPort     int
+type EmailConfig struct {
+	serverHost      string
+	serverPort      int
+	username        string
+	password        string
+	sender          string
+	defaultReceiver string
 }
 
-// NewSmtpEmailService creates a SmtpEmailService struct
-func NewSmtpEmailService(emailHost string, emailFrom string, emailTo string, emailPassword string, emailPort int) SmtpEmailService {
-	return SmtpEmailService{emailHost: emailHost, emailFrom: emailFrom, emailTo: emailTo, emailPassword: emailPassword, emailPort: emailPort}
+// smtpEmailService is the needed data to send an email
+type SmtpEmailService struct {
+	conf EmailConfig
+	send func(string, smtp.Auth, string, []string, []byte) error
+}
+
+// NewSmtpEmailService creates a smtpEmailService struct
+func NewEmailConfig(serverHost string, serverPort int, username string, password string, sender string, defaultReceiver string) EmailConfig {
+	return EmailConfig{serverHost: serverHost, serverPort: serverPort, username: username, password: password, sender: sender, defaultReceiver: defaultReceiver}
+}
+
+// NewSmtpEmailService creates a smtpEmailService struct
+func NewSmtpEmailService(conf EmailConfig, send func(string, smtp.Auth, string, []string, []byte) error) SmtpEmailService {
+	return SmtpEmailService{conf, send}
 }
 
 // Send sends the report to the email
-func (s SmtpEmailService) Send(report domain.Report) error {
-	emailAuth := smtp.PlainAuth("", s.emailFrom, s.emailPassword, s.emailHost)
-	emailBody := fmt.Sprintf("We have a new report in %s: %s", report.Url(), report.Message())
-	subject := "The IPO guide report"
+func (s SmtpEmailService) Send(to string, subject string, body string) error {
+	if to == "" {
+		to = s.conf.defaultReceiver
+	}
+	emailAuth := smtp.PlainAuth("", s.conf.username, s.conf.password, s.conf.serverHost)
 
-	msg := "From: " + s.emailFrom + "\n" +
-		"To: " + s.emailTo + "\n" +
+	msg := "From: " + s.conf.sender + "\n" +
+		"To: " + to + "\n" +
 		"Subject: " + subject + "\n\n" +
-		emailBody
+		body
 
-	addr := fmt.Sprintf("%s:%d", s.emailHost, s.emailPort)
+	addr := fmt.Sprintf("%s:%d", s.conf.serverHost, s.conf.serverPort)
 
-	return smtp.SendMail(addr, emailAuth, s.emailFrom, []string{s.emailTo}, []byte(msg))
+	return s.send(addr, emailAuth, s.conf.sender, []string{to}, []byte(msg))
 }
