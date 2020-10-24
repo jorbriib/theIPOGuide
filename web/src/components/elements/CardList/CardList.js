@@ -1,6 +1,8 @@
 import React, { Fragment } from "react";
 import { NavLink } from "react-router-dom";
 
+import pageRoutes from "../../../pageRoutes";
+
 const CardList = ({ list }) => {
   return (
     <Fragment>
@@ -21,7 +23,7 @@ const CardList = ({ list }) => {
               <article className="atbd_single_listing_wrapper">
                 <figure className="atbd_listing_thumbnail_area">
                   <div className="atbd_listing_image">
-                    <NavLink to={"/ipo/" + alias}>
+                    <NavLink to={pageRoutes.ipo(alias)}>
                       <img src={companyLogo} alt={companyName} />
                     </NavLink>
                   </div>
@@ -31,7 +33,9 @@ const CardList = ({ list }) => {
                 <div className="atbd_listing_info">
                   <div className="atbd_content_upper">
                     <h4 className="atbd_listing_title">
-                      <NavLink to={"/ipo/" + alias}>{companyName}</NavLink>
+                      <NavLink to={pageRoutes.ipo(alias)}>
+                        {companyName}
+                      </NavLink>
                     </h4>
                     <div className="atbd_listing_data_list">
                       <ul>
@@ -57,7 +61,9 @@ const CardList = ({ list }) => {
                   <div className="atbd_listing_bottom_content">
                     <div className="atbd_content_left">
                       <div className="atbd_listing_category">
-                        <NavLink to={"/ipo/" + alias}>{companySector}</NavLink>
+                        <NavLink to={pageRoutes.ipo(alias)}>
+                          {companySector}
+                        </NavLink>
                       </div>
                     </div>
                   </div>

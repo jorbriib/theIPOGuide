@@ -1770,23 +1770,23 @@ p {
 }
 
 .section-padding-strict {
-  padding: 6.66667rem 0;
+  padding: 5.66667rem 0;
 }
 
 .section-padding {
-  padding: 6.06667rem 0 6.66667rem;
+  padding: 5.06667rem 0 5.66667rem;
 }
 
 .section-padding-two {
-  padding: 6.06667rem 0 4.66667rem;
+  padding: 5.06667rem 0 4.66667rem;
 }
 
 .section-padding-1_7 {
-  padding: 6.66667rem 0 4.66667rem;
+  padding: 5.66667rem 0 4.66667rem;
 }
 
 .section-padding--bottom {
-  padding-bottom: 6.66667rem;
+  padding-bottom: 5.66667rem;
 }
 
 /* Gradient BG */
@@ -4494,9 +4494,17 @@ p {
 .atbd_content_module .atbdb_content_module_contents {
   padding: 2rem;
 }
+.directory_listiing_detail_area .atbd_listing_details h1,
+.directory_listiing_detail_area .atbd_listing_details h2,
+.directory_listiing_detail_area .atbd_listing_details h3,
+.directory_listiing_detail_area .atbd_listing_details h4,
+.directory_listiing_detail_area .atbd_listing_details h5{
+  margin-top:2.122rem;
+  margin-bottom:1.122rem;
+}
 
 .directory_listiing_detail_area .atbd_listing_details p {
-  margin: 0;
+  margin-bottom:0.75rem;
 }
 
 .atbd_listing_gallery .gallery-images .slick-arrow {

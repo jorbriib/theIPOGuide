@@ -4,8 +4,6 @@ import { NavLink } from "react-router-dom";
 import pageRoutes from "../../../pageRoutes";
 import { useSimilarListIpos } from "../../../pages/ListIpos/useListIpos";
 
-const noAction = (e) => e.preventDefault();
-
 export function ContactIpo({ ipo }) {
   const {
     companyName,
@@ -144,7 +142,7 @@ export function SimilarIpos({ ipo }) {
                 return (
                   <li key={key}>
                     <div className="atbd_left_img">
-                      <NavLink to={"/ipo/" + value.alias}>
+                      <NavLink to={pageRoutes.ipo(value.alias)}>
                         <img
                           src={value.companyLogo}
                           style={{ width: "45px" }}
@@ -155,7 +153,7 @@ export function SimilarIpos({ ipo }) {
                     <div className="atbd_right_content">
                       <div className="cate_title">
                         <h4>
-                          <NavLink to={"/ipo/" + value.alias}>
+                          <NavLink to={pageRoutes.ipo(value.alias)}>
                             {value.companyName}
                           </NavLink>
                         </h4>

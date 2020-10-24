@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { NavLink } from "react-router-dom";
 
 import NavItem from "../NavItem";
+import pageRoutes from "../../../pageRoutes";
 
 const Header = () => {
   return (
@@ -14,7 +15,7 @@ const Header = () => {
                 <div className="menu-fullwidth">
                   <div className="logo-wrapper order-lg-0 order-sm-1">
                     <div className="logo logo-top">
-                      <NavLink to="/">
+                      <NavLink to={pageRoutes.home()}>
                         <img
                           src="/assets/images/logo.png"
                           alt="logoImage"

@@ -1,6 +1,8 @@
 import React, { Fragment } from "react";
 import { NavLink } from "react-router-dom";
 
+import pageRoutes from "../../../pageRoutes";
+
 const Footer = () => {
   return (
     <Fragment>
@@ -19,7 +21,14 @@ const Footer = () => {
                       <NavLink to="/contact">Conact Us</NavLink>
                     </li>
                     <li className="page-item">
-                      <NavLink to="/policy">Privacy Policy</NavLink>
+                      <NavLink to={pageRoutes.privacyPolicy()}>
+                        Privacy Policy
+                      </NavLink>
+                    </li>
+                    <li className="page-item">
+                      <NavLink to={pageRoutes.termsAndConditions()}>
+                        Terms and Conditions
+                      </NavLink>
                     </li>
                   </ul>
                 </div>
