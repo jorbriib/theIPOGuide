@@ -1,7 +1,7 @@
 package domain
 
 type IpoRepository interface {
-	Find() ([]Ipo, error)
+	Find(marketId MarketId, countryId CountryId, sectorId SectorId, industryId IndustryId, blackList []IpoId, offset int, limit int) ([]Ipo, error)
 	GetByAlias(alias string) (*Ipo, error)
 }
 

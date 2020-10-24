@@ -4,6 +4,7 @@ const IpoFeature = ({ ipo }) => {
   const {
     companySymbol,
     marketName,
+    marketCurrency,
     priceFrom,
     priceTo,
     companyCountry,
@@ -52,7 +53,8 @@ const IpoFeature = ({ ipo }) => {
               </div>
               <div className="atbd_custom_field_content">
                 <p>
-                  {priceFrom} {priceTo && <span>- {priceTo}</span>}
+                  {priceFrom} {priceTo && <span>- {priceTo}</span>}{" "}
+                  {marketCurrency && <span>({marketCurrency})</span>}
                 </p>
               </div>
             </li>

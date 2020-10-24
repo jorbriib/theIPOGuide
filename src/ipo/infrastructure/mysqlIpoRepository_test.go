@@ -38,7 +38,7 @@ func TestMySQLIpoRepository_GetById_ReturnsNilNotFound(t *testing.T) {
 func TestMySQLIpoRepository_Find(t *testing.T) {
 	r := infrastructure.NewMySQLIpoRepository(db)
 
-	response, err := r.Find()
+	response, err := r.Find("", "", "", "", nil, 0, 20)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(response))

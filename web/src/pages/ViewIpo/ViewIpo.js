@@ -9,7 +9,6 @@ import View from "../../components/container/View";
 
 const ViewIpo = (alias) => {
   const { status, ipo } = useViewIpo(alias.alias);
-
   const backgroundImage = {
     backgroundImage: "url('/assets/images/wallstreet-bull.jpg')",
     opacity: 1,
@@ -43,7 +42,7 @@ const ViewIpo = (alias) => {
       </section>
       {/* Header section end */}
 
-      <View ipo={ipo} similars={[]} />
+      <View ipo={ipo} />
       <Report />
       <Footer />
     </Fragment>

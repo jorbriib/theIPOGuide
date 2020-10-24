@@ -5,12 +5,6 @@ import (
 	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
 )
 
-// Service is the interface where the methods are declared
-type Service interface {
-	GetIPOs(query GetIposQuery) (*GetIposResponse, error)
-	GetIPO(query GetIpoQuery) (*GetIpoResponse, error)
-}
-
 // IpoService is the service to manage the IPOs
 type IpoService struct {
 	ipoRepository     domain.IpoRepository
@@ -47,7 +41,7 @@ func (r GetIposResponse) Get() ([]domain.Ipo, []domain.Market, []domain.Company)
 // GetIPOS obtains IPOs and related data
 func (h IpoService) GetIPOs(query GetIposQuery) (*GetIposResponse, error) {
 
-	ipos, err := h.ipoRepository.Find()
+	ipos, err := h.ipoRepository.Find("", "", "", "", nil, 0, 20)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -97,7 +91,7 @@ type GetIpoQuery struct {
 	alias string
 }
 
-// Get returns the response data
+// Alias returns the response data
 func (q GetIpoQuery) Alias() string {
 	return q.alias
 }
@@ -146,5 +140,120 @@ func (h IpoService) GetIPO(query GetIpoQuery) (*GetIpoResponse, error) {
 		ipo,
 		market,
 		company,
+	}, nil
+}
+
+// GetSimilarIposQuery returns a struct
+type GetSimilarIposQuery struct {
+	alias string
+}
+
+// Alias returns the response data
+func (q GetSimilarIposQuery) Alias() string {
+	return q.alias
+}
+
+// NewGetSimilarIposQuery returns the query used by GetIPO method
+func NewGetSimilarIposQuery(alias string) GetSimilarIposQuery {
+	return GetSimilarIposQuery{alias}
+}
+
+// GetIpoResponse is the response from GetIPO method
+type GetSimilarIposResponse struct {
+	ipos      []domain.Ipo
+	markets   []domain.Market
+	companies []domain.Company
+}
+
+// Get returns the response data
+func (r GetSimilarIposResponse) Get() ([]domain.Ipo, []domain.Market, []domain.Company) {
+	return r.ipos, r.markets, r.companies
+}
+
+// GetIPO obtains a IPO and related data
+func (h IpoService) GetSimilarIPOs(query GetSimilarIposQuery) (*GetSimilarIposResponse, error) {
+	ipo, err := h.ipoRepository.GetByAlias(query.alias)
+	if err != nil {
+		return nil, err
+	}
+	if ipo == nil {
+		return nil, nil
+	}
+
+	company, err := h.companyRepository.GetById(ipo.CompanyId())
+	if err != nil {
+		return nil, err
+	}
+	if company == nil {
+		return nil, nil
+	}
+
+	marketId := ipo.MarketId()
+	sectorId := company.Sector().Id()
+
+	blackList := []domain.IpoId{ipo.Id()}
+	similarIpos, err := h.ipoRepository.Find(marketId, "", sectorId, "", blackList, 0, 5)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(similarIpos) < 5 {
+		for _, ipo :=range similarIpos{
+			blackList = append(blackList, ipo.Id())
+		}
+		similarSectorIpos, err := h.ipoRepository.Find("", "", sectorId, "", blackList, 0, 5-len(similarIpos))
+		if err != nil {
+			return nil, err
+		}
+		similarIpos = append(similarIpos, similarSectorIpos...)
+	}
+
+	if len(similarIpos) < 5 {
+		for _, ipo :=range similarIpos{
+			blackList = append(blackList, ipo.Id())
+		}
+		similarMarketIpos, err := h.ipoRepository.Find(marketId, "", "", "", blackList, 0, 5-len(similarIpos))
+		if err != nil {
+			return nil, err
+		}
+		similarIpos = append(similarIpos, similarMarketIpos...)
+	}
+
+	mapMarketIds := make(map[domain.MarketId]domain.MarketId)
+	mapCompanyIds := make(map[domain.CompanyId]domain.CompanyId)
+	for _, ipo := range similarIpos {
+		mapMarketIds[ipo.MarketId()] = ipo.MarketId()
+		mapCompanyIds[ipo.CompanyId()] = ipo.CompanyId()
+	}
+
+	marketIds := make([]domain.MarketId, len(mapMarketIds))
+	i := 0
+	for _, marketId := range mapMarketIds {
+		marketIds[i] = marketId
+		i++
+	}
+	markets, err := h.marketRepository.FindByIds(marketIds)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	companyIds := make([]domain.CompanyId, len(mapCompanyIds))
+	i = 0
+	for _, companyId := range mapCompanyIds {
+		companyIds[i] = companyId
+		i++
+	}
+
+	companies, err := h.companyRepository.FindByIds(companyIds)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	return &GetSimilarIposResponse{
+		ipos:      similarIpos,
+		markets:   markets,
+		companies: companies,
 	}, nil
 }

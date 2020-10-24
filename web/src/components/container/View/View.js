@@ -4,7 +4,7 @@ import IpoDetails from "../../content/Details/Details";
 import IpoFeature from "../../content/Features/Features";
 import { ContactIpo, SimilarIpos } from "../../elements/Widget";
 
-const View = ({ ipo, similars }) => {
+const View = ({ ipo }) => {
   return (
     <section className="directory_listiing_detail_area single_area section-bg section-padding-strict">
       <div className="container">
@@ -17,7 +17,7 @@ const View = ({ ipo, similars }) => {
           <div className="col-lg-4">
             <ContactIpo ipo={ipo} />
 
-            <SimilarIpos list={similars} />
+            <SimilarIpos ipo={ipo} />
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { NavLink } from "react-router-dom";
 
 import pageRoutes from "../../../pageRoutes";
+import { useSimilarListIpos } from "../../../pages/ListIpos/useListIpos";
 
 const noAction = (e) => e.preventDefault();
 
@@ -118,72 +119,48 @@ export function ContactIpo({ ipo }) {
   );
 }
 
-export function SimilarIpos(list) {
+export function SimilarIpos({ ipo }) {
+  const { alias } = ipo;
+  const { similarStatus, similarIpos } = useSimilarListIpos(alias);
+  if (similarStatus !== "ready") {
+    return "";
+  }
+
   return (
     <Fragment>
       <div className="widget atbd_widget widget-card">
         <div className="atbd_widget_title">
           <h4>
-            <span className="la la-list-alt"></span> Similar IPOs
+            <span className="la la-building"></span> Similar IPOs
           </h4>
           <NavLink to={pageRoutes.home()}>View All</NavLink>
         </div>
         {/*<!-- ends: .atbd_widget_title -->*/}
         <div className="atbd_categorized_listings atbd_similar_listings">
           <ul className="listings">
-            {Object.values(list)
+            {Object.values(similarIpos)
               .slice(0, 4)
               .map((value, key) => {
                 return (
                   <li key={key}>
                     <div className="atbd_left_img">
-                      <NavLink to={"listing-details" + value.id}>
+                      <NavLink to={"/ipo/" + value.alias}>
                         <img
-                          src={value.img}
-                          style={{ width: "90px" }}
-                          alt="listingimage"
+                          src={value.companyLogo}
+                          style={{ width: "45px" }}
+                          alt={value.companyName}
                         />
                       </NavLink>
                     </div>
                     <div className="atbd_right_content">
                       <div className="cate_title">
                         <h4>
-                          <NavLink to={"listing-details" + value.id}>
-                            {value.title}
+                          <NavLink to={"/ipo/" + value.alias}>
+                            {value.companyName}
                           </NavLink>
                         </h4>
                       </div>
-                      <p className="listing_value">
-                        <span>$25,800</span>
-                      </p>
-                      <p className="directory_tag">
-                        <span
-                          className="la la-cutlery"
-                          aria-hidden="true"
-                        ></span>
-                        <span>
-                          <NavLink to="/at_demo" onClick={noAction}>
-                            Food & Drink
-                          </NavLink>
-                          <span className="atbd_cat_popup">
-                            +3
-                            <span className="atbd_cat_popup_wrapper">
-                              <span>
-                                <NavLink to="/at_demo" onClick={noAction}>
-                                  Food<span>,</span>
-                                </NavLink>
-                                <NavLink to="/at_demo" onClick={noAction}>
-                                  Others<span>,</span>
-                                </NavLink>
-                                <NavLink to="/at_demo" onClick={noAction}>
-                                  Service<span>,</span>
-                                </NavLink>
-                              </span>
-                            </span>
-                          </span>
-                          {/*<!-- ends: .atbd_cat_popup -->*/}
-                        </span>
-                      </p>
+                      <p className="directory_tag">{value.marketName}</p>
                     </div>
                   </li>
                 );

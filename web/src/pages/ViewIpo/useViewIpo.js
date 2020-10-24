@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import * as Client from "./client";
 
 export default function useViewIpo(alias, client = Client) {
-  const [state, setState] = useState({ status: "idle", ipo: null });
+  const [state, setState] = useState({ status: "idle", ipo: {} });
 
   useEffect(() => {
     async function getIpo(alias) {
@@ -39,6 +39,7 @@ function Ipo(ipo) {
     companyCountry: ipo.companyCountry,
     companyLogo: ipo.companyLogo,
     marketName: ipo.marketName,
+    marketCurrency: ipo.marketCurrency,
     priceFrom: ipo.priceFrom,
     priceTo: ipo.priceTo,
     shares: ipo.shares,

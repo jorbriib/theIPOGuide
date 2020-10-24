@@ -1,9 +1,12 @@
 package infrastructure
 
 import (
+	"bytes"
 	"database/sql"
 	"fmt"
 	"github.com/jorbriib/theIPOGuide/src/ipo/domain"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -82,15 +85,56 @@ func (r MySQLIpoRepository) GetByAlias(alias string) (*domain.Ipo, error) {
 	return &ipo, nil
 }
 
-func (r MySQLIpoRepository) Find() ([]domain.Ipo, error) {
+func (r MySQLIpoRepository) Find(
+	marketId domain.MarketId,
+	countryId domain.CountryId,
+	sectorId domain.SectorId,
+	industryId domain.IndustryId,
+	blackList []domain.IpoId,
+	offset int,
+	limit int,
+) ([]domain.Ipo, error) {
 
 	query := `
     SELECT BIN_TO_UUID(i.uuid) AS id, i.alias as alias, BIN_TO_UUID(i.market_id) AS marketId, BIN_TO_UUID(i.company_id) AS companyId, 
            i.price_cents_from AS priceCentsFrom, i.price_cents_to AS priceCentsTo, 
            i.shares as shares, i.expected_date as expectedDate
-	FROM ipos i
-	ORDER BY i.expected_date DESC
-  `
+	FROM ipos i  
+`
+	if countryId != "" || sectorId != "" || industryId != "" {
+		query = query + " INNER JOIN companies c ON c.uuid = i.company_id "
+		if countryId != "" {
+			query = query + " AND c.country_id = UUID_TO_BIN('" + string(countryId) + "') "
+		}
+		if sectorId != "" {
+			query = query + " AND c.sector_id = UUID_TO_BIN('" + string(sectorId) + "') "
+		}
+		if industryId != "" {
+			query = query + " AND c.industry_id = UUID_TO_BIN('" + string(industryId) + "') "
+		}
+	}
+
+	if marketId != "" || len(blackList) > 0 {
+		query = query + " WHERE 1 = 1 "
+		if marketId != "" {
+			query = query + " AND i.market_id = UUID_TO_BIN('" + string(marketId) + "') "
+		}
+		if len(blackList) > 0 {
+			var uuidToBinQuery bytes.Buffer
+			inQuery := make([]string, len(blackList))
+			for k, id := range blackList {
+
+				uuidToBinQuery.WriteString("UUID_TO_BIN('")
+				uuidToBinQuery.WriteString(string(id))
+				uuidToBinQuery.WriteString("')")
+				inQuery[k] = uuidToBinQuery.String()
+				uuidToBinQuery.Reset()
+			}
+			query = query + " AND i.uuid NOT IN ("+strings.Join(inQuery, ",")+") "
+		}
+	}
+
+	query = query + `ORDER BY i.expected_date DESC LIMIT ` + strconv.Itoa(offset) + `, ` + strconv.Itoa(limit)
 
 	rows, err := r.db.Query(query)
 	if err != nil {

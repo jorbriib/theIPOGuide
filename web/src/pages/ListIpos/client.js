@@ -14,6 +14,18 @@ export const fetchIPOs = async () => {
   }
 };
 
+export const fetchSimilarIPOs = async (alias) => {
+  try {
+    const response = await axios.get(`${API_URL}/ipos/${alias}/similar`);
+    return {
+      ipos: response.data.map(Ipo),
+    };
+  } catch (error) {
+    const status = error.response && error.response.status;
+    return { error: status || error.message };
+  }
+};
+
 export function Ipo(ipo) {
   return {
     alias: ipo.alias,

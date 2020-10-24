@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 import Header from "../../components/layout/Header";
 import Footer from "../../components/layout/Footer";
 import List from "../../components/container/List";
-import useListIpos from "./useListIpos";
+import { useListIpos } from "./useListIpos";
 import { BreadcrumbWrapper } from "../../components/elements/Breadcrumbs";
 
 const ListIpos = () => {

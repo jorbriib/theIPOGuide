@@ -8,13 +8,9 @@ import (
 
 func TestHydrateIndustry(t *testing.T) {
 	assertion := assert.New(t)
-	sector := domain.HydrateIndustry("Industry")
+	sector := domain.HydrateIndustry("1-1", "Industry")
 	assertion.NotNil(sector)
-}
 
-func TestIndustry_Name(t *testing.T) {
-	assertion := assert.New(t)
-	sector := domain.HydrateIndustry("Industry")
-
+	assertion.Equal(domain.IndustryId("1-1"), sector.Id())
 	assertion.Equal("Industry", sector.Name())
 }

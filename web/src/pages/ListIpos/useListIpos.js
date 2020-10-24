@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import * as Client from "./client";
 
-export default function useListIpos(client = Client) {
+export function useListIpos(client = Client) {
   const [state, setState] = useState({ status: "idle", ipos: [] });
 
   useEffect(() => {
@@ -21,6 +21,28 @@ export default function useListIpos(client = Client) {
   return {
     status: state.status,
     ipos: state.ipos.map(Ipo),
+  };
+}
+
+export function useSimilarListIpos(alias, client = Client) {
+  const [state, setState] = useState({ status: "idle", ipos: [] });
+
+  useEffect(() => {
+    async function getSimilarIpos() {
+      const { error, ipos = [] } = await client.fetchSimilarIPOs(alias);
+      if (error) {
+        setState((prevState) => ({ ...prevState, status: "ready" }));
+        return;
+      }
+      setState({ status: "ready", ipos });
+    }
+    if (alias) {
+      getSimilarIpos(alias);
+    }
+  }, [alias, client]);
+  return {
+    similarStatus: state.status,
+    similarIpos: state.ipos.map(Ipo),
   };
 }
 

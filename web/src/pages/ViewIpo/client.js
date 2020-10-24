@@ -30,6 +30,7 @@ export function Ipo(ipo) {
     shares: ipo.shares,
     expectedDate: new Date(ipo.expectedDate),
     marketName: ipo.market.name,
+    marketCurrency: ipo.market.currency,
     companyPhone: ipo.company.phone,
     companyEmail: ipo.company.email,
     companyWeb: ipo.company.website,

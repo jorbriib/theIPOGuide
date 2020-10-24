@@ -12,9 +12,12 @@ type companySQL struct {
 	Id                    string         `db:"id"`
 	Symbol                string         `db:"symbol"`
 	Name                  string         `db:"name"`
+	SectorId              string         `db:"sectorId"`
 	SectorName            string         `db:"sectorName"`
+	IndustryId            string         `db:"industryId"`
 	IndustryName          string         `db:"industryName"`
 	Address               string         `db:"address"`
+	CountryId             string         `db:"countryId"`
 	CountryCode           string         `db:"countryCode"`
 	CountryName           string         `db:"countryName"`
 	Phone                 string         `db:"phone"`
@@ -78,8 +81,8 @@ func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Comp
 
 	query := `
     SELECT BIN_TO_UUID(c.uuid) AS id, c.symbol as symbol, c.name as name,
-	s.name as sectorName, i.name as industryName,
-	c.address as address, ct.code as countryCode, ct.name as countryName,
+	BIN_TO_UUID(s.uuid) as sectorId, s.name as sectorName, BIN_TO_UUID(i.uuid) as industryId, i.name as industryName,
+	c.address as address, BIN_TO_UUID(ct.uuid) as countryId, ct.code as countryCode, ct.name as countryName,
 	c.phone as phone, c.email as email, c.website as website, c.employees as employees,
 	c.facebook as facebook, c.twitter as twitter, c.linkedin as linkedin, c.pinterest as pinterest, c.instagram as instagram,
 	c.description as description, c.founded as founded, c.ceo as ceo, c.fiscal_year_end as fiscalYearEnd,
@@ -105,9 +108,12 @@ func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Comp
 			&companySql.Id,
 			&companySql.Symbol,
 			&companySql.Name,
+			&companySql.SectorId,
 			&companySql.SectorName,
+			&companySql.IndustryId,
 			&companySql.IndustryName,
 			&companySql.Address,
+			&companySql.CountryId,
 			&companySql.CountryCode,
 			&companySql.CountryName,
 			&companySql.Phone,
@@ -132,9 +138,9 @@ func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Comp
 			continue
 		}
 
-		sector := domain.HydrateSector(companySql.SectorName)
-		industry := domain.HydrateIndustry(companySql.IndustryName)
-		country := domain.HydrateCountry(companySql.CountryCode, companySql.CountryName)
+		sector := domain.HydrateSector(domain.SectorId(companySql.SectorId), companySql.SectorName)
+		industry := domain.HydrateIndustry(domain.IndustryId(companySql.IndustryId), companySql.IndustryName)
+		country := domain.HydrateCountry(domain.CountryId(companySql.CountryId), companySql.CountryCode, companySql.CountryName)
 
 		var email string
 		if companySql.Email.Valid {

@@ -1,14 +1,23 @@
 package domain
 
+// CountryId represents the Country Id
+type CountryId string
+
 // Country represents the company's country
-type Country struct{
+type Country struct {
+	id   CountryId
 	code string
 	name string
 }
 
 // HydrateCountry hydrates the country struct
-func HydrateCountry(code string, name string) Country {
-	return Country{code: code, name: name}
+func HydrateCountry(id CountryId, code string, name string) Country {
+	return Country{id: id, code: code, name: name}
+}
+
+// Id returns the country code as string
+func (c Country) Id() CountryId {
+	return c.id
 }
 
 // Code returns the country code as string

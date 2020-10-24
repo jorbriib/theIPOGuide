@@ -8,20 +8,10 @@ import (
 
 func TestHydrateCountry(t *testing.T) {
 	assertion := assert.New(t)
-	country := domain.HydrateCountry("US", "USA")
+	country := domain.HydrateCountry("1-1", "US", "USA")
 	assertion.NotNil(country)
-}
 
-func TestCountry_Symbol(t *testing.T) {
-	assertion := assert.New(t)
-	country := domain.HydrateCountry("US", "USA")
-
+	assertion.Equal(domain.CountryId("1-1"), country.Id())
 	assertion.Equal("US", country.Code())
-}
-
-func TestCountry_Name(t *testing.T) {
-	assertion := assert.New(t)
-	country := domain.HydrateCountry("US", "USA")
-
 	assertion.Equal("USA", country.Name())
 }

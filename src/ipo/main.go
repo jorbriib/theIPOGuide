@@ -46,6 +46,7 @@ func main() {
 
 	_ = r.Get("/v1/ipos", controller.GetIpos)
 	_ = r.Get("/v1/ipos/{alias}", controller.GetIpo)
+	_ = r.Get("/v1/ipos/{alias}/similar", controller.GetSimilarIpos)
 
 	emailConfig := emailConfig()
 	smtpEmailService :=  infrastructure.NewSmtpEmailService(emailConfig, smtp.SendMail)
