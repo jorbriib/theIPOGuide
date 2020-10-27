@@ -1,7 +1,7 @@
 CREATE TABLE sectors
 (
     uuid  BINARY(16) PRIMARY KEY,
-    alias VARCHAR(128) NOT NULL,
+    alias VARCHAR(255) NOT NULL,
     name  VARCHAR(255) NOT NULL
 );
 ALTER TABLE sectors
@@ -10,7 +10,7 @@ ALTER TABLE sectors
 CREATE TABLE industries
 (
     uuid  BINARY(16) PRIMARY KEY,
-    alias VARCHAR(128) NOT NULL,
+    alias VARCHAR(255) NOT NULL,
     name  VARCHAR(255) NOT NULL
 );
 ALTER TABLE industries
@@ -19,7 +19,7 @@ ALTER TABLE industries
 CREATE TABLE currencies
 (
     uuid    BINARY(16) PRIMARY KEY,
-    code    VARCHAR(3)   NOT NULL,
+    code    CHAR(3)   NOT NULL,
     name    VARCHAR(255) NOT NULL,
     display VARCHAR(32)  NOT NULL
 );
@@ -29,7 +29,7 @@ ALTER TABLE currencies
 CREATE TABLE countries
 (
     uuid BINARY(16) PRIMARY KEY,
-    code VARCHAR(3)   NOT NULL,
+    code CHAR(3)   NOT NULL,
     name VARCHAR(255) NOT NULL
 
 );

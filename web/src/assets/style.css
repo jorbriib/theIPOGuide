@@ -4494,11 +4494,11 @@ p {
 .atbd_content_module .atbdb_content_module_contents {
   padding: 2rem;
 }
-.directory_listiing_detail_area .atbd_listing_details h1,
-.directory_listiing_detail_area .atbd_listing_details h2,
-.directory_listiing_detail_area .atbd_listing_details h3,
-.directory_listiing_detail_area .atbd_listing_details h4,
-.directory_listiing_detail_area .atbd_listing_details h5{
+.directory_listiing_detail_area .atbd_listing_details .atbdb_content_module_contents h1,
+.directory_listiing_detail_area .atbd_listing_details .atbdb_content_module_contents h2,
+.directory_listiing_detail_area .atbd_listing_details .atbdb_content_module_contents h3,
+.directory_listiing_detail_area .atbd_listing_details .atbdb_content_module_contents h4,
+.directory_listiing_detail_area .atbd_listing_details .atbdb_content_module_contents h5{
   margin-top:2.122rem;
   margin-bottom:1.122rem;
 }

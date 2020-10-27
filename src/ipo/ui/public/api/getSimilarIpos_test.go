@@ -11,8 +11,8 @@ import (
 func TestNewController(t *testing.T) {
 	assertion := assert.New(t)
 
-	s := application.IpoService{}
-	service := ipo_public_api.NewController(s)
+	s := application.GetSimilarIposService{}
+	service := ipo_public_api.NewGetSimilarIposController(s)
 
-	assertion.IsType(ipo_public_api.Controller{}, service)
+	assertion.IsType(ipo_public_api.GetSimilarIposController{}, service)
 }

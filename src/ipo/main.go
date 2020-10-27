@@ -16,13 +16,15 @@ import (
 )
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+
 	r := routing.NewRouter()
 
 	db := getDB()
 
 	corsOrigin := os.Getenv("CORS_ORIGIN")
 	throttleLimit := os.Getenv("THROTTLE_LIMIT")
-	throttleLimitFloat, err := strconv.ParseFloat(throttleLimit,64)
+	throttleLimitFloat, err := strconv.ParseFloat(throttleLimit, 64)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,26 +37,35 @@ func main() {
 	recaptchaSiteUrl := os.Getenv("RECAPTCHA_SITE_URL")
 	recaptchaSecret := os.Getenv("RECAPTCHA_SECRET")
 
-
-
 	ipoRepository := infrastructure.NewMySQLIpoRepository(db)
 	marketRepository := infrastructure.NewMySQLMarketRepository(db)
 	companyRepository := infrastructure.NewMySQLCompanyRepository(db)
+	countryRepository := infrastructure.NewMySQLCountryRepository(db)
+	sectorRepository := infrastructure.NewMySQLSectorRepository(db)
 
-	service := application.NewService(ipoRepository, marketRepository, companyRepository)
-	controller := api.NewController(service)
+	getIposService := application.NewGetIposService(ipoRepository, marketRepository, companyRepository, countryRepository, sectorRepository)
+	getIposController := api.NewGetIposController(getIposService)
+	_ = r.Get("/v1/ipos", getIposController.Run)
 
-	_ = r.Get("/v1/ipos", controller.GetIpos)
-	_ = r.Get("/v1/ipos/{alias}", controller.GetIpo)
-	_ = r.Get("/v1/ipos/{alias}/similar", controller.GetSimilarIpos)
+	getRelatedIposService := application.NewGetRelatedIposService(marketRepository, countryRepository, sectorRepository)
+	getRelatedIposController := api.NewGetRelatedIposController(getRelatedIposService)
+	_ = r.Get("/v1/ipos/relations", getRelatedIposController.Run)
+
+	getIpoService := application.NewGetIpoService(ipoRepository, marketRepository, companyRepository)
+	getIpoController := api.NewGetIpoController(getIpoService)
+	_ = r.Get("/v1/ipos/{alias}", getIpoController.Run)
+
+	getSimilarIposService := application.NewGetSimilarIposService(ipoRepository, marketRepository, companyRepository)
+	getSimilarIpoController := api.NewGetSimilarIposController(getSimilarIposService)
+	_ = r.Get("/v1/ipos/{alias}/similar", getSimilarIpoController.Run)
 
 	emailConfig := emailConfig()
-	smtpEmailService :=  infrastructure.NewSmtpEmailService(emailConfig, smtp.SendMail)
-	reportService := application.NewReportService(smtpEmailService)
-	reportController := api.NewReportController(reportService)
+	smtpEmailService := infrastructure.NewSmtpEmailService(emailConfig, smtp.SendMail)
+	reportService := application.NewSendReportService(smtpEmailService)
+	reportController := api.NewSendReportController(reportService)
 	_ = r.Post(
 		"/v1/report",
-		api.VerifyRecaptcha(recaptchaSiteUrl, recaptchaSecret, reportController.SendReport),
+		api.VerifyRecaptcha(recaptchaSiteUrl, recaptchaSecret, reportController.Run),
 	)
 
 	_ = r.Get("/v1/{notFound}", notFound)
@@ -83,7 +94,6 @@ func notFound(writer http.ResponseWriter, _ *http.Request) {
 	writer.WriteHeader(http.StatusNotFound)
 }
 
-
 func getDB() *sql.DB {
 	mysqlAddr := os.Getenv("MYSQL_ADDR")
 	mysqlDBName := os.Getenv("MYSQL_DATABASE")
@@ -98,7 +108,6 @@ func getDB() *sql.DB {
 	}
 	return db
 }
-
 
 func emailConfig() infrastructure.EmailConfig {
 	emailHost := os.Getenv("EMAIL_HOST")

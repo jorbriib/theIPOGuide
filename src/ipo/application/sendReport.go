@@ -6,12 +6,12 @@ import (
 )
 
 // ReportService is the service to send reports
-type ReportService struct {
+type SendReportService struct {
 	emailService     domain.EmailService
 }
 
-func NewReportService(service domain.EmailService) ReportService{
-	return ReportService{service}
+func NewSendReportService(service domain.EmailService) SendReportService{
+	return SendReportService{service}
 }
 
 // SendReportCommand is the command to send a report
@@ -20,8 +20,8 @@ type SendReportCommand struct {
 	Message string
 }
 
-// SendReport sends the report to the email
-func (s *ReportService) SendReport(command SendReportCommand) error {
+// Run sends the report to the email
+func (s *SendReportService) Run(command SendReportCommand) error {
 	report := domain.NewReport(command.Url, command.Message)
 
 	emailBody := fmt.Sprintf("We have a new report in %s: %s", report.Url(), report.Message())

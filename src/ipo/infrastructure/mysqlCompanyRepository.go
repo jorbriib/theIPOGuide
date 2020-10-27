@@ -13,8 +13,10 @@ type companySQL struct {
 	Symbol                string         `db:"symbol"`
 	Name                  string         `db:"name"`
 	SectorId              string         `db:"sectorId"`
+	SectorAlias           string         `db:"sectorAlias"`
 	SectorName            string         `db:"sectorName"`
 	IndustryId            string         `db:"industryId"`
+	IndustryAlias         string         `db:"industryAlias"`
 	IndustryName          string         `db:"industryName"`
 	Address               string         `db:"address"`
 	CountryId             string         `db:"countryId"`
@@ -81,7 +83,8 @@ func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Comp
 
 	query := `
     SELECT BIN_TO_UUID(c.uuid) AS id, c.symbol as symbol, c.name as name,
-	BIN_TO_UUID(s.uuid) as sectorId, s.name as sectorName, BIN_TO_UUID(i.uuid) as industryId, i.name as industryName,
+	BIN_TO_UUID(s.uuid) as sectorId, s.alias as sectorAlias,  s.name as sectorName, 
+	BIN_TO_UUID(i.uuid) as industryId,  i.alias as industryAlias, i.name as industryName,
 	c.address as address, BIN_TO_UUID(ct.uuid) as countryId, ct.code as countryCode, ct.name as countryName,
 	c.phone as phone, c.email as email, c.website as website, c.employees as employees,
 	c.facebook as facebook, c.twitter as twitter, c.linkedin as linkedin, c.pinterest as pinterest, c.instagram as instagram,
@@ -109,8 +112,10 @@ func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Comp
 			&companySql.Symbol,
 			&companySql.Name,
 			&companySql.SectorId,
+			&companySql.SectorAlias,
 			&companySql.SectorName,
 			&companySql.IndustryId,
+			&companySql.IndustryAlias,
 			&companySql.IndustryName,
 			&companySql.Address,
 			&companySql.CountryId,
@@ -138,8 +143,8 @@ func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Comp
 			continue
 		}
 
-		sector := domain.HydrateSector(domain.SectorId(companySql.SectorId), companySql.SectorName)
-		industry := domain.HydrateIndustry(domain.IndustryId(companySql.IndustryId), companySql.IndustryName)
+		sector := domain.HydrateSector(domain.SectorId(companySql.SectorId), companySql.SectorAlias, companySql.SectorName)
+		industry := domain.HydrateIndustry(domain.IndustryId(companySql.IndustryId), companySql.IndustryAlias, companySql.IndustryName)
 		country := domain.HydrateCountry(domain.CountryId(companySql.CountryId), companySql.CountryCode, companySql.CountryName)
 
 		var email string

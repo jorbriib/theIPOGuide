@@ -95,3 +95,90 @@ func (r MySQLMarketRepository) FindByIds(ids []domain.MarketId) ([]domain.Market
 
 	return result, nil
 }
+
+func (r MySQLMarketRepository) All() ([]domain.Market, error) {
+	query := `
+    SELECT BIN_TO_UUID(m.uuid) AS id, m.code as code, m.name as name,
+	c.code as currencyCode, c.name as currencyName, c.display as currencyDisplay
+	FROM markets m
+	INNER JOIN currencies c ON c.uuid = m.currency_id`
+
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = rows.Close() }()
+
+	var result []domain.Market
+	for rows.Next() {
+		marketSql := &marketSQL{}
+
+		_ = rows.Scan(
+			&marketSql.Id,
+			&marketSql.Code,
+			&marketSql.Name,
+			&marketSql.CurrencyCode,
+			&marketSql.CurrencyName,
+			&marketSql.CurrencyDisplay,
+		)
+
+		currency := domain.HydrateCurrency(marketSql.CurrencyCode, marketSql.CurrencyName, marketSql.CurrencyDisplay)
+		market := domain.HydrateMarket(
+			domain.MarketId(marketSql.Id),
+			marketSql.Code,
+			marketSql.Name,
+			currency,
+		)
+
+		result = append(result, market)
+	}
+
+	return result, nil
+}
+
+
+func (r MySQLMarketRepository) FindByCodes(codes []string) ([]domain.Market, error) {
+	args := make([]interface{}, len(codes))
+	for i, id := range codes {
+		args[i] = id
+	}
+
+	query := `
+    SELECT BIN_TO_UUID(m.uuid) AS id, m.code as code, m.name as name,
+	c.code as currencyCode, c.name as currencyName, c.display as currencyDisplay
+	FROM markets m
+	INNER JOIN currencies c ON c.uuid = m.currency_id
+	WHERE m.code IN (?`+strings.Repeat(",?", len(args)-1)+`)`
+
+	rows, err := r.db.Query(query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = rows.Close() }()
+
+	var result []domain.Market
+	for rows.Next() {
+		marketSql := &marketSQL{}
+
+		_ = rows.Scan(
+			&marketSql.Id,
+			&marketSql.Code,
+			&marketSql.Name,
+			&marketSql.CurrencyCode,
+			&marketSql.CurrencyName,
+			&marketSql.CurrencyDisplay,
+		)
+
+		currency := domain.HydrateCurrency(marketSql.CurrencyCode, marketSql.CurrencyName, marketSql.CurrencyDisplay)
+		market := domain.HydrateMarket(
+			domain.MarketId(marketSql.Id),
+			marketSql.Code,
+			marketSql.Name,
+			currency,
+		)
+
+		result = append(result, market)
+	}
+
+	return result, nil
+}

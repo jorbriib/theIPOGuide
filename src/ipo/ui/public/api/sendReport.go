@@ -7,23 +7,19 @@ import (
 	"net/http"
 )
 
-// ReportController is the struct to send reports
-type ReportController struct {
-	service application.ReportService
+// SendReportController is the struct to send reports
+type SendReportController struct {
+	service application.SendReportService
 }
 
-// ErrorMessage is the error message to send to the clients
-type ErrorMessage struct {
-	Message string `json:"message"`
+
+// NewSendReportController returns a SendReportController struct
+func NewSendReportController(service application.SendReportService) SendReportController {
+	return SendReportController{service: service}
 }
 
-// NewReportController returns a ReportController struct
-func NewReportController(service application.ReportService) ReportController {
-	return ReportController{service: service}
-}
-
-// SendFeedback sends the report to the email
-func (c ReportController) SendReport(writer http.ResponseWriter, request *http.Request) {
+// SendReport sends the report to the email
+func (c SendReportController) Run(writer http.ResponseWriter, request *http.Request) {
 
 	url := request.FormValue("url")
 	message := request.FormValue("message")
@@ -40,7 +36,7 @@ func (c ReportController) SendReport(writer http.ResponseWriter, request *http.R
 		Url:     url,
 		Message: message,
 	}
-	err := c.service.SendReport(command)
+	err := c.service.Run(command)
 
 	if err != nil {
 		log.Println(err)

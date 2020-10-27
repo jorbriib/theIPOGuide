@@ -12,9 +12,9 @@ import (
 func TestNewReportService(t *testing.T) {
 	assertion := assert.New(t)
 	es := EmailServiceMock{}
-	service := application.NewReportService(es)
+	service := application.NewSendReportService(es)
 	assertion.NotNil(service)
-	assertion.IsType(application.ReportService{}, service)
+	assertion.IsType(application.SendReportService{}, service)
 }
 
 func TestReportService_SendReport(t *testing.T) {
@@ -30,7 +30,7 @@ func TestReportService_SendReport(t *testing.T) {
 
 	es.On("Send", "", subject, emailBody).Return(nil)
 
-	service := application.NewReportService(es)
+	service := application.NewSendReportService(es)
 
 	command := application.SendReportCommand{
 		Url:     "http://www.url.com",

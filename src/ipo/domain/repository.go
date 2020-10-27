@@ -1,16 +1,30 @@
 package domain
 
 type IpoRepository interface {
-	Find(marketId MarketId, countryId CountryId, sectorId SectorId, industryId IndustryId, blackList []IpoId, offset int, limit int) ([]Ipo, error)
+	Find(marketIds []MarketId, countryIds []CountryId, sectorIds []SectorId, industryIds []IndustryId, blackList []IpoId, offset uint, limit uint) ([]Ipo, error)
+	Count(marketIds []MarketId, countryIds []CountryId, sectorIds []SectorId, industryIds []IndustryId, blackList []IpoId) (uint, error)
 	GetByAlias(alias string) (*Ipo, error)
-}
-
-type MarketRepository interface {
-	FindByIds([]MarketId) ([]Market, error)
-	GetById(MarketId) (*Market, error)
 }
 
 type CompanyRepository interface {
 	FindByIds([]CompanyId) ([]Company, error)
 	GetById(CompanyId) (*Company, error)
+}
+
+
+type MarketRepository interface {
+	All() ([]Market, error)
+	FindByIds([]MarketId) ([]Market, error)
+	GetById(MarketId) (*Market, error)
+	FindByCodes(codes []string) ([]Market, error)
+}
+
+type SectorRepository interface {
+	All() ([]Sector, error)
+	FindByAliases(aliases []string) ([]Sector, error)
+}
+
+type CountryRepository interface {
+	All() ([]Country, error)
+	FindByCodes(codes []string) ([]Country, error)
 }

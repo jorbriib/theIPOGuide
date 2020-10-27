@@ -1,5 +1,5 @@
 package application_test
-
+/*
 import (
 	"errors"
 	"github.com/jorbriib/theIPOGuide/src/ipo/application"
@@ -357,3 +357,4 @@ func (r CompanyRepositoryMock) GetById(id domain.CompanyId) (*domain.Company, er
 	args := r.Called(id)
 	return args.Get(0).(*domain.Company), args.Error(1)
 }
+*/
