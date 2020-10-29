@@ -26,7 +26,7 @@ const Report = () => {
     setErrorMessage("");
 
     if (!message) {
-      showError("Forms.ErrorMessages.EmptyReportMessage");
+      showError("Forms.ErrorMessages.EmptyMessage");
       return;
     }
 
@@ -94,7 +94,7 @@ const Report = () => {
                 <div className="form-group has-error">
                   <p>
                     We try to have the most accurate data for you, but sometimes
-                    we fail :( Please share with us your concerns or
+                    we fail :( Please, share with us your concerns or
                     improvements:
                   </p>
                   <label

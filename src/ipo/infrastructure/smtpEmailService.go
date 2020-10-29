@@ -2,8 +2,13 @@ package infrastructure
 
 import (
 	"fmt"
+	"net"
 	"net/smtp"
+	"regexp"
+	"strings"
 )
+
+var emailRegex = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 
 type EmailConfig struct {
 	serverHost      string
@@ -45,4 +50,20 @@ func (s SmtpEmailService) Send(to string, subject string, body string) error {
 	addr := fmt.Sprintf("%s:%d", s.conf.serverHost, s.conf.serverPort)
 
 	return s.send(addr, emailAuth, s.conf.sender, []string{to}, []byte(msg))
+}
+
+// IsValid checks if email is valid
+func (s SmtpEmailService) IsValid(email string) bool {
+	if len(email) < 3 && len(email) > 254 {
+		return false
+	}
+	if !emailRegex.MatchString(email) {
+		return false
+	}
+	parts := strings.Split(email, "@")
+	mx, err := net.LookupMX(parts[1])
+	if err != nil || len(mx) == 0 {
+		return false
+	}
+	return true
 }

@@ -169,3 +169,27 @@ export function SimilarIpos({ ipo }) {
     </Fragment>
   );
 }
+
+export function WidgetContactInfo() {
+  return (
+    <Fragment>
+      <div className="widget-body atbd_author_info_widget">
+        <div className="atbd_widget_contact_info">
+          <ul>
+            <li>
+              <span className="la la-envelope"></span>
+              <span className="atbd_info">info@theipoguide.com</span>
+            </li>
+            <li>
+              <span className="la la-globe"></span>
+              <NavLink to={pageRoutes.home()} className="atbd_info">
+                theIPOguide.com
+              </NavLink>
+            </li>
+          </ul>
+        </div>
+      </div>
+      {/*<!-- ends: .widget-body --> */}
+    </Fragment>
+  );
+}

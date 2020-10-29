@@ -18,17 +18,15 @@ const Footer = () => {
                       <NavLink to="/about">About Us</NavLink>
                     </li>
                     <li className="page-item">
-                      <NavLink to="/contact">Conact Us</NavLink>
+                      <a href={pageRoutes.contact()}>Contact Us</a>
                     </li>
                     <li className="page-item">
-                      <NavLink to={pageRoutes.privacyPolicy()}>
-                        Privacy Policy
-                      </NavLink>
+                      <a href={pageRoutes.privacyPolicy()}>Privacy Policy</a>
                     </li>
                     <li className="page-item">
-                      <NavLink to={pageRoutes.termsAndConditions()}>
+                      <a href={pageRoutes.termsAndConditions()}>
                         Terms and Conditions
-                      </NavLink>
+                      </a>
                     </li>
                   </ul>
                 </div>
@@ -48,7 +46,9 @@ const Footer = () => {
                       alt="theIPOguide"
                     />
                   </NavLink>
-                  <p className="m-0 copy-text">©2020 theIPOGuide</p>
+                  <p className="m-0 copy-text">
+                    ©{new Date().getFullYear()} theIPOGuide
+                  </p>
                 </div>
               </div>
             </div>

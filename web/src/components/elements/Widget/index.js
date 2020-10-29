@@ -1,1 +1,1 @@
-export { ContactIpo, SimilarIpos } from "./Widget";
+export { ContactIpo, SimilarIpos, WidgetContactInfo } from "./Widget";

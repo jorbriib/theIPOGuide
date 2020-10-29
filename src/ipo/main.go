@@ -43,6 +43,9 @@ func main() {
 	countryRepository := infrastructure.NewMySQLCountryRepository(db)
 	sectorRepository := infrastructure.NewMySQLSectorRepository(db)
 
+	emailConfig := emailConfig()
+	smtpEmailService := infrastructure.NewSmtpEmailService(emailConfig, smtp.SendMail)
+
 	getIposService := application.NewGetIposService(ipoRepository, marketRepository, companyRepository, countryRepository, sectorRepository)
 	getIposController := api.NewGetIposController(getIposService)
 	_ = r.Get("/v1/ipos", getIposController.Run)
@@ -63,13 +66,18 @@ func main() {
 	getSimilarIpoController := api.NewGetSimilarIposController(getSimilarIposService)
 	_ = r.Get("/v1/ipos/{alias}/similar", getSimilarIpoController.Run)
 
-	emailConfig := emailConfig()
-	smtpEmailService := infrastructure.NewSmtpEmailService(emailConfig, smtp.SendMail)
 	reportService := application.NewSendReportService(smtpEmailService)
 	reportController := api.NewSendReportController(reportService)
 	_ = r.Post(
 		"/v1/report",
 		api.VerifyRecaptcha(recaptchaSiteUrl, recaptchaSecret, reportController.Run),
+	)
+
+	contactFormService := application.NewSendContactFormService(smtpEmailService)
+	contactController := api.NewSendContactFormController(contactFormService)
+	_ = r.Post(
+		"/v1/contact",
+		api.VerifyRecaptcha(recaptchaSiteUrl, recaptchaSecret, contactController.Run),
 	)
 
 	_ = r.Get("/v1/{notFound}", notFound)

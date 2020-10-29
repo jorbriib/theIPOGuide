@@ -8,6 +8,7 @@ import pageRoutes from "./pageRoutes";
 import ViewIpo from "./pages/ViewIpo";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
+import Contact from "./pages/Contact/Contact";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           exact
           render={({ match }) => <ViewIpo alias={match.params.alias} />}
         />
+        <Route path={pageRoutes.contact()} exact component={Contact} />
         <Route
           path={pageRoutes.privacyPolicy()}
           exact

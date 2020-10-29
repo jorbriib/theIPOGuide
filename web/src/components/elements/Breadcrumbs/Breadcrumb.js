@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import pageRoutes from "../../../pageRoutes";
 
-export function BreadcrumbWrapper({ title, onlyTitle }) {
+export function BreadcrumbWrapper({ title, onlyTitle, subtitle }) {
   return (
     <Fragment>
       <div className="breadcrumb-wrapper content_above">
@@ -24,6 +24,13 @@ export function BreadcrumbWrapper({ title, onlyTitle }) {
                       >
                         {title}
                       </li>
+                    </ol>
+                  </nav>
+                )}
+                {subtitle && (
+                  <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                      <li className="breadcrumb-item active">{subtitle}</li>
                     </ol>
                   </nav>
                 )}
