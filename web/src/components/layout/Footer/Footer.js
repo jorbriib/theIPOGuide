@@ -1,12 +1,11 @@
 import React, { Fragment } from "react";
-import { NavLink } from "react-router-dom";
 
 import pageRoutes from "../../../pageRoutes";
 
 const Footer = () => {
   return (
     <Fragment>
-      <footer className="footer-three footer-grey p-top-95">
+      <footer className="footer-three footer-grey p-top-65">
         <div className="footer-top p-bottom-25">
           <div className="container">
             <div className="row">

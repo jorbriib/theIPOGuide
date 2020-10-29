@@ -1,10 +1,15 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 
 import CardList from "../../elements/CardList/CardList";
 import Sidebar from "../../Sidebar";
 import Pagination from "../../elements/Pagination";
 
 const List = ({ list, onSubmit, total, page, onPage }) => {
+  const [isMobileFilterOpened, setIsMobileFilterOpened] = useState(false);
+  const onMobileFilter = (event) => {
+    event.preventDefault();
+    setIsMobileFilterOpened(true);
+  };
   return (
     <Fragment>
       <section className="all-listing-wrapper section-bg">
@@ -22,7 +27,7 @@ const List = ({ list, onSubmit, total, page, onPage }) => {
                 >
                   <div className="dropdown">
                     <a
-                      className="action-btn dropdown-toggle"
+                      className="action-btn dropdown-toggle header_sort-by"
                       href=" "
                       role="button"
                       id="dropdownMenuLink2"
@@ -47,6 +52,13 @@ const List = ({ list, onSubmit, total, page, onPage }) => {
                         Latest IPOs
                       </a>
                     </div>
+                    <button
+                      className="action-btn dropdown-toggle header_filter-by"
+                      onClick={onMobileFilter}
+                      role="button"
+                    >
+                      Filter by
+                    </button>
                   </div>
                 </div>
               </div>
@@ -55,7 +67,11 @@ const List = ({ list, onSubmit, total, page, onPage }) => {
             <div className="col-lg-12 listing-items">
               <div className="row">
                 <div className="col-lg-4 order-lg-0 order-1 mt-5 mt-lg-0">
-                  <Sidebar onSubmit={onSubmit} />
+                  <Sidebar
+                    onSubmit={onSubmit}
+                    isMobileFilterOpened={isMobileFilterOpened}
+                    setIsMobileFilterOpened={setIsMobileFilterOpened}
+                  />
                 </div>{" "}
                 {/* wiget */}
                 <div className="col-lg-8 order-lg-1 order-0">

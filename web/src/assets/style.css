@@ -3645,6 +3645,7 @@ p {
   color: #fff;
 }
 
+
 /* sidebar video widget */
 .atbdp-video figure {
   position: relative;
@@ -4448,9 +4449,6 @@ p {
   margin-bottom: 2rem;
 }
 
-.atbd_content_module:last-child {
-  margin-bottom: 0;
-}
 
 .atbd_content_module .atbd_content_module__tittle_area {
   padding: 2rem;
@@ -5987,6 +5985,19 @@ p {
   position: relative;
 }
 
+.offcanvas-menu .offcanvas-menu__search {
+  color: #fff;
+  padding: 0.86667rem;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 1.33333rem;
+  margin-right: 2rem;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
+
 .offcanvas-menu .offcanvas-menu__user {
   color: #fff;
   padding: 0.86667rem;
@@ -7373,6 +7384,10 @@ p {
   padding: 6.66667rem 0;
 }
 
+.btn-group-sidebar{
+  display:none;
+}
+
 .all-listing-wrapper .atbd_generic_header {
   background: #fff;
   margin-bottom: 2rem;
@@ -7400,6 +7415,11 @@ p {
 
 .all-listing-wrapper .atbd_generic_header_title p {
   margin: 0;
+}
+
+.all-listing-wrapper .atbd_generic_header .header_filter-by{
+  display:none;
+  background-color: #FFF;
 }
 
 .all-listing-wrapper .atbd_listing_action_btn .view-mode {
@@ -8427,6 +8447,7 @@ p {
     -webkit-flex: 1;
         -ms-flex: 1;
             flex: 1;
+    max-width:350px; /*temporally*/
   }
   .author-area {
     -webkit-box-flex: 2;
@@ -8451,10 +8472,10 @@ p {
     width: 10%;
   }
   .menu-right .search-wrapper, .menu-right .author-area {
-    display: none;
+    /*display: none; //temporally*/
   }
   .offcanvas-menu {
-    display: block !important;
+    display: none;
   }
   .category-place-single {
     width: 49%;
@@ -8497,6 +8518,14 @@ p {
   }
   .top-menu-area .menu-fullwidth .menu-right .search-wrapper, .top-menu-area .menu-fullwidth .menu-right .author-area {
     display: none;
+  }
+  .top-menu-area .menu-fullwidth .menu-right .search-wrapper.float{
+    display:block;
+    left:0;
+    right:0;
+    position:absolute;
+    z-index:10;
+    margin-right:0;
   }
   .top-menu-area .menu-fullwidth .logo-wrapper {
     position: absolute;
@@ -8613,6 +8642,37 @@ p {
   .post-author {
     padding: 2rem;
   }
+  .listings-sidebar{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color:#FFF;
+    z-index:11;
+  }
+  .listings-sidebar.active{
+    display:block;
+  }
+
+  .all-listing-wrapper{
+    padding: 2.66667rem 0;
+  }
+
+
+  .all-listing-wrapper .atbd_generic_header .header_sort-by{
+    display:none;
+  }
+
+  .all-listing-wrapper .atbd_generic_header .header_filter-by{
+    display:inline-flex;
+  }
+  .btn-group-sidebar{
+    margin:40px 0;
+    display:block;
+  }
+
 }
 
 @media (max-width: 767.98px) {
@@ -8782,12 +8842,7 @@ p {
 }
 
 @media (max-width: 400px) {
-  .all-listing-wrapper .atbd_generic_header {
-    display: block;
-  }
-  .all-listing-wrapper .atbd_generic_header .btn-toolbar {
-    margin-top: 1rem;
-  }
+
   .atbd_contact_information_module .atbd_contact_info ul li {
     display: block;
     margin-bottom: 1.33333rem;

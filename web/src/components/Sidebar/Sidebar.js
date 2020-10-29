@@ -4,19 +4,34 @@ import { withRouter } from "react-router-dom";
 
 import { useRelationIpos } from "../../pages/ListIpos/useListIpos";
 
-const Sidebar = ({ onSubmit, history }) => {
+const Sidebar = ({
+  onSubmit,
+  isMobileFilterOpened,
+  setIsMobileFilterOpened,
+  history,
+}) => {
   const { status, markets, countries, sectors } = useRelationIpos();
   const params = queryString.parse(history.location.search);
   const selectedMarkets = params.markets ? params.markets.split(",") : [];
   const selectedCountries = params.countries ? params.countries.split(",") : [];
   const selectedSectors = params.sectors ? params.sectors.split(",") : [];
 
+  const closeMobileFilter = (event) => {
+    event.preventDefault();
+    setIsMobileFilterOpened(false);
+  };
+
+  let listingSidebarClassNames = "listings-sidebar";
+  if (isMobileFilterOpened) {
+    listingSidebarClassNames = listingSidebarClassNames + " active";
+  }
+
   if (status !== "ready") {
     return "";
   }
 
   return (
-    <div className="listings-sidebar">
+    <div className={listingSidebarClassNames}>
       <div className="search-area default-ad-search">
         <form action="#">
           {Object.values(markets).length > 0 && (
@@ -128,6 +143,15 @@ const Sidebar = ({ onSubmit, history }) => {
               </div>
             </div>
           )}
+          <div className="form-group btn-group-sidebar">
+            <button
+              type="button"
+              onClick={closeMobileFilter}
+              className="btn btn-primary btn-sm"
+            >
+              Close
+            </button>
+          </div>
         </form>
       </div>
     </div>

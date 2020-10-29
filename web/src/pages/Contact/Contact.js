@@ -136,7 +136,7 @@ const Contact = () => {
         />
       </section>
       {/* Header section end */}
-      <section className="contact-area section-bg p-top-100 p-bottom-70">
+      <section className="contact-area section-bg p-top-60 p-bottom-40">
         <div className="container">
           <div className="row">
             <div className="col-lg-8">

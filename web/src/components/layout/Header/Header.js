@@ -55,7 +55,6 @@ const Header = () => {
                   </div>
                   <div className="menu-right order-lg-2 order-sm-2">
                     <SearchByText />
-                    {/*<!-- ends: .search-wrapper -->*/}
                   </div>
                   {/*<!-- ends: .menu-right -->*/}
                 </div>
