@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import NavItem from "../NavItem";
 import pageRoutes from "../../../pageRoutes";
+import SearchByText from "../../elements/SearchByText/SearchByText";
 
 const Header = () => {
   return (
@@ -53,41 +54,7 @@ const Header = () => {
                     </div>
                   </div>
                   <div className="menu-right order-lg-2 order-sm-2">
-                    <div className="search-wrapper">
-                      <div className="nav_right_module search_module">
-                        <span className="icon-left" id="basic-addon9">
-                          <i className="la la-search"></i>
-                        </span>
-                        <div className="search_area">
-                          <form action="/">
-                            <div className="input-group input-group-light">
-                              <input
-                                type="text"
-                                className="form-control search_field top-search-field"
-                                placeholder="What are you looking for?"
-                                autoComplete="off"
-                              />
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                      <div className="search-categories">
-                        <ul className="list-unstyled">
-                          <li>
-                            <a href="/">
-                              <span className="la la-glass bg-danger"></span>{" "}
-                              Find IPOs
-                            </a>
-                          </li>
-                          <li>
-                            <a href="/login">
-                              <span className="la la-glass bg-danger"></span>{" "}
-                              Login
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                    <SearchByText />
                     {/*<!-- ends: .search-wrapper -->*/}
                   </div>
                   {/*<!-- ends: .menu-right -->*/}

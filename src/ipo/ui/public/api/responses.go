@@ -5,6 +5,9 @@ type GetIposJsonResponse struct {
 	List  []IpoListJsonResponse `json:"list"`
 }
 
+type SearchByTextJsonResponse struct {
+	List  []IpoListJsonResponse `json:"list"`
+}
 type IpoListJsonResponse struct {
 	Alias        string                   `json:"alias"`
 	Company      *CompanyListJsonResponse `json:"company"`

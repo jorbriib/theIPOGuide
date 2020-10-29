@@ -47,6 +47,10 @@ func main() {
 	getIposController := api.NewGetIposController(getIposService)
 	_ = r.Get("/v1/ipos", getIposController.Run)
 
+	searchByTextService := application.NewSearchByTextService(ipoRepository, marketRepository, companyRepository, countryRepository, sectorRepository)
+	searchByTextController := api.NewSearchByTextController(searchByTextService)
+	_ = r.Get("/v1/ipos/search", searchByTextController.Run)
+
 	getRelatedIposService := application.NewGetRelatedIposService(marketRepository, countryRepository, sectorRepository)
 	getRelatedIposController := api.NewGetRelatedIposController(getRelatedIposService)
 	_ = r.Get("/v1/ipos/relations", getRelatedIposController.Run)

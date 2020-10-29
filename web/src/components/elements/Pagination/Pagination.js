@@ -2,7 +2,7 @@ import React from "react";
 
 import constants from "./../../../constants";
 
-const Pagination = ({ total, page, onPage }) => {
+const Pagination = ({ total, page }) => {
   const currentUrlParams = new URLSearchParams(window.location.search);
 
   const perPage = constants.perPage;

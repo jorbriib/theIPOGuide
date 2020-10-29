@@ -3,6 +3,7 @@ package domain
 type IpoRepository interface {
 	Find(marketIds []MarketId, countryIds []CountryId, sectorIds []SectorId, industryIds []IndustryId, blackList []IpoId, offset uint, limit uint) ([]Ipo, error)
 	Count(marketIds []MarketId, countryIds []CountryId, sectorIds []SectorId, industryIds []IndustryId, blackList []IpoId) (uint, error)
+	SearchByText(text string) ([]Ipo, error)
 	GetByAlias(alias string) (*Ipo, error)
 }
 
