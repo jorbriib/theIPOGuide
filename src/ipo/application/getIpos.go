@@ -92,7 +92,7 @@ func (h GetIposService) Run(query GetIposQuery) (*GetIposResponse, error) {
 	}
 
 	offset := query.page * defaultLimit
-	ipos, err := h.ipoRepository.Find(selectedMarketIds, selectedCountryIds, selectedSectorIds, []domain.IndustryId{}, []domain.IpoId{}, offset, defaultLimit)
+	ipos, err := h.ipoRepository.Find(selectedMarketIds, selectedCountryIds, selectedSectorIds, []domain.IndustryId{}, []domain.IpoId{}, "", offset, defaultLimit)
 	if err != nil {
 		log.Println(err)
 		return nil, err

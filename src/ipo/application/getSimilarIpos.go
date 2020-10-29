@@ -70,7 +70,13 @@ func (h GetSimilarIposService) Run(query GetSimilarIposQuery) (*GetSimilarIposRe
 	sectorId := company.Sector().Id()
 
 	blackList := []domain.IpoId{ipo.Id()}
-	similarIpos, err := h.ipoRepository.Find([]domain.MarketId{marketId}, []domain.CountryId{}, []domain.SectorId{sectorId}, []domain.IndustryId{}, blackList, 0, 5)
+	similarIpos, err := h.ipoRepository.Find(
+		[]domain.MarketId{marketId},
+		[]domain.CountryId{},
+		[]domain.SectorId{sectorId},
+		[]domain.IndustryId{},
+		blackList,
+		"random", 0, 5)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +85,13 @@ func (h GetSimilarIposService) Run(query GetSimilarIposQuery) (*GetSimilarIposRe
 		for _, ipo := range similarIpos {
 			blackList = append(blackList, ipo.Id())
 		}
-		similarSectorIpos, err := h.ipoRepository.Find([]domain.MarketId{}, []domain.CountryId{}, []domain.SectorId{sectorId}, []domain.IndustryId{}, blackList, 0, uint(5-len(similarIpos)))
+		similarSectorIpos, err := h.ipoRepository.Find(
+			[]domain.MarketId{},
+			[]domain.CountryId{},
+			[]domain.SectorId{sectorId},
+			[]domain.IndustryId{},
+			blackList,
+			"random",0, uint(5-len(similarIpos)))
 		if err != nil {
 			return nil, err
 		}
@@ -90,7 +102,13 @@ func (h GetSimilarIposService) Run(query GetSimilarIposQuery) (*GetSimilarIposRe
 		for _, ipo := range similarIpos {
 			blackList = append(blackList, ipo.Id())
 		}
-		similarMarketIpos, err := h.ipoRepository.Find([]domain.MarketId{marketId}, []domain.CountryId{}, []domain.SectorId{}, []domain.IndustryId{}, blackList, 0, uint(5-len(similarIpos)))
+		similarMarketIpos, err := h.ipoRepository.Find(
+			[]domain.MarketId{marketId},
+			[]domain.CountryId{},
+			[]domain.SectorId{},
+			[]domain.IndustryId{},
+			blackList,
+			"random",0, uint(5-len(similarIpos)))
 		if err != nil {
 			return nil, err
 		}

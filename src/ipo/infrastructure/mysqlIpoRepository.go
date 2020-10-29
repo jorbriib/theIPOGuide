@@ -70,6 +70,7 @@ func (r MySQLIpoRepository) Find(
 	sectorIds []domain.SectorId,
 	industryIds []domain.IndustryId,
 	blackList []domain.IpoId,
+	sortBy string,
 	offset uint,
 	limit uint,
 ) ([]domain.Ipo, error) {
@@ -80,7 +81,7 @@ func (r MySQLIpoRepository) Find(
            i.shares as shares, i.expected_date as expectedDate
 	FROM ipos i  
 `
-	query = r.prepareQuery(marketIds, countryIds, sectorIds, industryIds, blackList, offset, limit, query)
+	query = r.prepareQuery(marketIds, countryIds, sectorIds, industryIds, blackList, sortBy, offset, limit, query)
 
 	rows, err := r.db.Query(query)
 	if err != nil {
@@ -128,7 +129,7 @@ func (r MySQLIpoRepository) Count(
     SELECT COUNT(*) 
 	FROM ipos i  
 `
-	query = r.prepareQuery(marketIds, countryIds, sectorIds, industryIds, blackList, 0, 0, query)
+	query = r.prepareQuery(marketIds, countryIds, sectorIds, industryIds, blackList, "", 0, 0, query)
 	row := r.db.QueryRow(query)
 
 	err := row.Scan(&count)
@@ -186,7 +187,7 @@ func (r MySQLIpoRepository) SearchByText(text string) ([]domain.Ipo, error) {
 	return result, nil
 }
 
-func (r MySQLIpoRepository) prepareQuery(marketIds []domain.MarketId, countryIds []domain.CountryId, sectorIds []domain.SectorId, industryIds []domain.IndustryId, blackList []domain.IpoId, offset uint, limit uint, query string) string {
+func (r MySQLIpoRepository) prepareQuery(marketIds []domain.MarketId, countryIds []domain.CountryId, sectorIds []domain.SectorId, industryIds []domain.IndustryId, blackList []domain.IpoId, sortBy string, offset uint, limit uint, query string) string {
 	if len(countryIds) != 0 || len(sectorIds) != 0 || len(industryIds) != 0 {
 		query = query + " INNER JOIN companies c ON c.uuid = i.company_id "
 
@@ -261,7 +262,15 @@ func (r MySQLIpoRepository) prepareQuery(marketIds []domain.MarketId, countryIds
 		}
 	}
 
-	query = query + ` ORDER BY i.expected_date DESC `
+	switch sortBy {
+	case "random":
+		query = query + ` ORDER BY RAND() `
+		break
+	default:
+		query = query + ` ORDER BY i.expected_date DESC `
+
+	}
+
 	if limit > 0 {
 		query = query + ` LIMIT ` + strconv.Itoa(int(offset)) + `, ` + strconv.Itoa(int(limit))
 	}
