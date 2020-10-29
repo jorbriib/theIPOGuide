@@ -30,7 +30,10 @@ export function BreadcrumbWrapper({ title, onlyTitle, subtitle }) {
                 {subtitle && (
                   <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
-                      <li className="breadcrumb-item active">{subtitle}</li>
+                      <li
+                        className="breadcrumb-item active"
+                        dangerouslySetInnerHTML={{ __html: subtitle }}
+                      />
                     </ol>
                   </nav>
                 )}

@@ -1,13 +1,47 @@
-import React from "react";
+import React, { Fragment } from "react";
+
+import Header from "../../components/layout/Header";
+import Footer from "../../components/layout/Footer";
 
 const NotFound = () => {
+  const backgroundImage = {
+    backgroundImage: "url('/assets/images/wallstreet-bull.jpg')",
+    opacity: 1,
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>the IPO guide</h1>
-        <p>Page not found</p>
-      </header>
-    </div>
+    <Fragment>
+      <section className="intro-wrapper bgimage overlay overlay--dark">
+        <div className="bg_image_holder" style={backgroundImage}>
+          <img
+            src="/assets/images/wallstreet-bull.jpg"
+            alt="404 Page not found"
+          />
+        </div>
+        <div className="mainmenu-wrapper">
+          <Header class="menu--light" />
+        </div>
+        {/* <!-- ends: .mainmenu-wrapper --> */}
+
+        <div className="not_found_area">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-8 offset-lg-2">
+                <div className="not_found_title_area">
+                  <h2 className="title">404 Page not found</h2>
+                  <p className="sub_title">
+                    Check if you typed the address correctly, go back to your
+                    previous page or try using our site search or menu to find
+                    something specific.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <Footer />
+    </Fragment>
   );
 };
 

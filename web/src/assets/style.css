@@ -7124,6 +7124,8 @@ p {
   overflow: hidden;
 }
 
+
+.not_found_area,
 .directory_content_area {
   height: 85%;
   display: -webkit-box;
@@ -7138,11 +7140,13 @@ p {
   z-index: 1;
 }
 
+.not_found_area .not_found_title_area,
 .directory_content_area .search_title_area {
   text-align: center;
   margin-bottom: 2rem;
 }
 
+.not_found_area .not_found_title_area .title,
 .directory_content_area .search_title_area .title {
   color: #fff;
   line-height: 4.13333rem;
@@ -7150,6 +7154,7 @@ p {
   font-weight: 700;
 }
 
+.not_found_area .not_found_title_area, .sub_title,
 .directory_content_area .search_title_area .sub_title {
   font-size: 1.13333rem;
   color: rgba(255, 255, 255, 0.8);
