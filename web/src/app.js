@@ -9,6 +9,7 @@ import ViewIpo from "./pages/ViewIpo";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import Contact from "./pages/Contact/Contact";
+import About from "./pages/About";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           exact
           render={({ match }) => <ViewIpo alias={match.params.alias} />}
         />
+        <Route path={pageRoutes.about()} exact component={About} />
         <Route path={pageRoutes.contact()} exact component={Contact} />
         <Route
           path={pageRoutes.privacyPolicy()}

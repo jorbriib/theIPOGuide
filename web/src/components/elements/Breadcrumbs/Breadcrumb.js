@@ -179,3 +179,25 @@ export function BreadcrumbSingle({ ipo }) {
     </Fragment>
   );
 }
+
+export function BreadCrumbAbout() {
+  return (
+    <Fragment>
+      <div className="about-intro content_above">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-lg-5 col-md-6">
+              <h1>Explore IPOs around the world and invest your money</h1>
+            </div>
+            <div className="col-lg-6 offset-lg-1 col-md-6 offset-md-0 col-sm-8 offset-sm-2">
+              <img
+                src="./assets/images/about-illustration.png"
+                alt="About us"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </Fragment>
+  );
+}

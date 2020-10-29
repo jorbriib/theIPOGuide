@@ -1,1 +1,5 @@
-export { BreadcrumbSingle, BreadcrumbWrapper } from "./Breadcrumb";
+export {
+  BreadcrumbSingle,
+  BreadcrumbWrapper,
+  BreadCrumbAbout,
+} from "./Breadcrumb";
