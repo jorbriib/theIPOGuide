@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
+import { Helmet } from "react-helmet";
 
 import Header from "../../components/layout/Header";
 import Footer from "../../components/layout/Footer";
 import { BreadcrumbWrapper } from "../../components/elements/Breadcrumbs";
-import pageRoutes from "../../pageRoutes";
 
 const TermsAndConditions = () => {
   const backgroundImage = {
@@ -13,6 +13,11 @@ const TermsAndConditions = () => {
 
   return (
     <Fragment>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>My Title</title>
+        <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       {/* Header section start */}
       <section className="header-breadcrumb bgimage overlay overlay--dark">
         <div className="bg_image_holder" style={backgroundImage}>
@@ -343,10 +348,14 @@ const TermsAndConditions = () => {
                     or that the material on the website is kept up to date.
                   </p>
 
-                  <h3>
+                  <h3 id="disclaimer">
                     <strong>Disclaimer</strong>
                   </h3>
-
+                  <p>
+                    theIPOguide doesn't recommend any type of purchase or sale
+                    of shares or similar, all data provided in this website is
+                    only for informational purposes.
+                  </p>
                   <p>
                     To the maximum extent permitted by applicable law, we
                     exclude all representations, warranties and conditions

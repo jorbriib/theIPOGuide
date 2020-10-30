@@ -13,6 +13,11 @@ const View = ({ ipo }) => {
             <IpoDetails ipo={ipo} />
 
             <IpoFeature ipo={ipo} />
+            <small>
+              theIPOguide doesn't recommend any type of purchase or sale of
+              shares or similar, all data provided in this website is only for
+              informational purposes.
+            </small>
           </div>
           <div className="col-lg-4">
             <ContactIpo ipo={ipo} />

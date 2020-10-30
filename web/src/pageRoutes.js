@@ -5,6 +5,7 @@ const app = {
   contact: () => "/contact",
   privacyPolicy: () => "/privacy-policy",
   termsAndConditions: () => "/terms-and-conditions",
+  disclaimer: () => "/terms-and-conditions#disclaimer",
 };
 
 export default {

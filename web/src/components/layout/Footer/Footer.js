@@ -67,7 +67,7 @@ const Footer = () => {
                   </p>
                   <ul className="list-unstyled lng-list">
                     <li>
-                      <a href={pageRoutes.termsAndConditions()}>Disclaimer</a>
+                      <a href={pageRoutes.disclaimer()}>Disclaimer</a>
                     </li>
                   </ul>
                 </div>
