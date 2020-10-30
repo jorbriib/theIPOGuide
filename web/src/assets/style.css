@@ -7417,7 +7417,7 @@ p {
   margin: 0;
 }
 
-.all-listing-wrapper .atbd_generic_header .header_filter-by{
+.all-listing-wrapper .atbd_listing_action_btn .action-btn.header_filter-by{
   display:none;
   background-color: #FFF;
 }
@@ -8438,6 +8438,8 @@ p {
   margin: 0 0 1.66667rem;
 }
 
+.grecaptcha-badge { visibility: hidden; }
+
 /* Responsive CSS */
 @media (min-width: 1199px) and (max-width: 1480px) {
   .search-wrapper {
@@ -8665,7 +8667,7 @@ p {
     display:none;
   }
 
-  .all-listing-wrapper .atbd_generic_header .header_filter-by{
+  .all-listing-wrapper .atbd_listing_action_btn .action-btn.header_filter-by{
     display:inline-flex;
   }
   .btn-group-sidebar{
