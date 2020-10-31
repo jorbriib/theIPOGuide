@@ -12,6 +12,8 @@ import {
   ContactResponse,
 } from "../../components/elements/ContactForm";
 import { WidgetContactInfo } from "../../components/elements/Widget";
+import pageRoutes from "../../pageRoutes";
+import CustomHeader from "../../components/elements/CustomHeader";
 
 const Contact = () => {
   const [name, setName] = useState("");
@@ -117,6 +119,11 @@ const Contact = () => {
 
   return (
     <Fragment>
+      <CustomHeader
+        title="Contact us"
+        description="We're here to help and answer any question you might have"
+        url={pageRoutes.contact()}
+      />
       {/* Header section start */}
       <section className="header-breadcrumb bgimage overlay overlay--dark">
         <div className="bg_image_holder" style={backgroundImage}>

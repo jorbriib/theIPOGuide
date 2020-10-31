@@ -1,5 +1,6 @@
 const app = {
   home: () => "/",
+  ipos: () => "/ipos",
   ipo: (alias) => `/ipo/${alias}`,
   about: () => "/about",
   contact: () => "/contact",

@@ -95,6 +95,7 @@ CREATE TABLE ipos
 (
     uuid             BINARY(16) PRIMARY KEY,
     alias            VARCHAR(128)       NOT NULL,
+    intro            VARCHAR(255)       NOT NULL,
     market_id        BINARY(16)         NOT NULL,
     company_id       BINARY(16)         NOT NULL,
     price_cents_from MEDIUMINT UNSIGNED,
@@ -167,9 +168,9 @@ VALUES (UUID_TO_BIN('c2b71e7b-f9f9-4293-8271-77a4ce70c6f0', true), 'PINS', 'Pint
         'https://www.nasdaq.com/market-activity/ipos/overview?dealId=1128643-94122', 'https://sec.report/Ticker/ARRY',
         '/assets/images/array-technologies-logo.jpg');
 
-INSERT INTO ipos (uuid, alias, market_id, company_id, price_cents_from, price_cents_to, shares, expected_date)
+INSERT INTO ipos (uuid, alias, intro, market_id, company_id, price_cents_from, price_cents_to, shares, expected_date)
 VALUES (UUID_TO_BIN('28e29e39-06e1-4935-8d43-09fdf62ba7dc', true),
-        'pinterest',
+        'pinterest', 'Pinterest is a super company',
         UUID_TO_BIN('a9da11f6-bb30-47a0-9f27-b52510f1cc6a', true),
         UUID_TO_BIN('c2b71e7b-f9f9-4293-8271-77a4ce70c6f0', true),
         2200,
@@ -177,7 +178,7 @@ VALUES (UUID_TO_BIN('28e29e39-06e1-4935-8d43-09fdf62ba7dc', true),
         47500000,
         '2019-04-18'),
        (UUID_TO_BIN('410ad8b5-f713-4de1-b67d-3658e4a89723', true),
-        'array-technologies',
+        'array-technologies', '',
         UUID_TO_BIN('a9da11f6-bb30-47a0-9f27-b52510f1cc6a', true),
         UUID_TO_BIN('1da86fb0-44a8-48ed-92c5-ff05f43565a6', true),
         1900,

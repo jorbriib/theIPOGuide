@@ -30,6 +30,7 @@ export default function useViewIpo(alias, client = Client) {
 function Ipo(ipo) {
   return {
     alias: ipo.alias,
+    intro: ipo.intro,
     companySymbol: ipo.companySymbol,
     companyName: ipo.companyName,
     companyDescription: ipo.companyDescription,

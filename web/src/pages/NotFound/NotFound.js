@@ -2,6 +2,8 @@ import React, { Fragment } from "react";
 
 import Header from "../../components/layout/Header";
 import Footer from "../../components/layout/Footer";
+import pageRoutes from "../../pageRoutes";
+import CustomHeader from "../../components/elements/CustomHeader";
 
 const NotFound = () => {
   const backgroundImage = {
@@ -11,6 +13,10 @@ const NotFound = () => {
 
   return (
     <Fragment>
+      <CustomHeader
+        title="404 Page not found"
+        description="Check if you typed the address correctly, go back to your previous page or try using our site search or menu to find something specific."
+      />
       <section className="intro-wrapper bgimage overlay overlay--dark">
         <div className="bg_image_holder" style={backgroundImage}>
           <img

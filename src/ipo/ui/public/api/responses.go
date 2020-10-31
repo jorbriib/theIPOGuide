@@ -43,6 +43,7 @@ type SectorJsonResponse struct {
 
 type IpoViewJsonResponse struct {
 	Alias        string                   `json:"alias"`
+	Intro        string                   `json:"intro"`
 	Company      *CompanyViewJsonResponse `json:"company"`
 	Market       *MarketJsonResponse      `json:"market"`
 	PriceFrom    string                   `json:"priceFrom"`

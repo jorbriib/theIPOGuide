@@ -6,6 +6,8 @@ import useViewIpo from "./useViewIpo";
 import { BreadcrumbSingle } from "../../components/elements/Breadcrumbs";
 import Report from "../../components/elements/Report/Report";
 import View from "../../components/container/View";
+import CustomHeader from "../../components/elements/CustomHeader";
+import pageRoutes from "../../pageRoutes";
 
 const ViewIpo = (alias) => {
   const { status, ipo } = useViewIpo(alias.alias);
@@ -20,6 +22,11 @@ const ViewIpo = (alias) => {
 
   return (
     <Fragment>
+      <CustomHeader
+        title={ipo.companyName + " IPO details view"}
+        description={ipo.intro}
+        url={pageRoutes.ipo(ipo.alias)}
+      />
       {/* Header section start */}
       <section className="listing-details-wrapper bgimage">
         <div className="bg_image_holder" style={backgroundImage}>

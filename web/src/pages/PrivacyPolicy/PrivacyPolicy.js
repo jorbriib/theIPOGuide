@@ -4,6 +4,7 @@ import Header from "../../components/layout/Header";
 import Footer from "../../components/layout/Footer";
 import { BreadcrumbWrapper } from "../../components/elements/Breadcrumbs";
 import pageRoutes from "../../pageRoutes";
+import CustomHeader from "../../components/elements/CustomHeader";
 
 const PrivacyPolicy = () => {
   const backgroundImage = {
@@ -13,6 +14,14 @@ const PrivacyPolicy = () => {
 
   return (
     <Fragment>
+      <CustomHeader
+        title="Privacy Policy"
+        description="At theIPOguide, accessible from theIPOguide.com, one of our
+                    main priorities is the privacy of our visitors. This Privacy
+                    Policy document contains types of information that is
+                    collected and recorded by theIPOguide and how we use it."
+        url={pageRoutes.privacyPolicy()}
+      />
       {/* Header section start */}
       <section className="header-breadcrumb bgimage overlay overlay--dark">
         <div className="bg_image_holder" style={backgroundImage}>

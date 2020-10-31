@@ -1,9 +1,10 @@
 import React, { Fragment } from "react";
-import { Helmet } from "react-helmet";
 
 import Header from "../../components/layout/Header";
 import Footer from "../../components/layout/Footer";
 import { BreadcrumbWrapper } from "../../components/elements/Breadcrumbs";
+import CustomHeader from "../../components/elements/CustomHeader";
+import pageRoutes from "../../pageRoutes";
 
 const TermsAndConditions = () => {
   const backgroundImage = {
@@ -13,11 +14,13 @@ const TermsAndConditions = () => {
 
   return (
     <Fragment>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>My Title</title>
-        <link rel="canonical" href="http://mysite.com/example" />
-      </Helmet>
+      <CustomHeader
+        title="Terms and Conditions"
+        description="These terms and conditions outline the rules and regulations
+                    for the use of theIPOguide's Website, located at
+                    http://theipoguide.com."
+        url={pageRoutes.termsAndConditions()}
+      />
       {/* Header section start */}
       <section className="header-breadcrumb bgimage overlay overlay--dark">
         <div className="bg_image_holder" style={backgroundImage}>

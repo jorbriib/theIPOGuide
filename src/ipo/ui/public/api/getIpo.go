@@ -83,6 +83,7 @@ func (c GetIpoController) Run(writer http.ResponseWriter, request *http.Request)
 
 	jsonResponse := IpoViewJsonResponse{
 		ipo.Alias(),
+		ipo.Intro(),
 		companyJsonResponse,
 		marketJsonResponse,
 		priceFrom,

@@ -7,6 +7,8 @@ import Footer from "../../components/layout/Footer";
 import List from "../../components/container/List";
 import { useListIpos } from "./useListIpos";
 import { BreadcrumbWrapper } from "../../components/elements/Breadcrumbs";
+import pageRoutes from "../../pageRoutes";
+import CustomHeader from "../../components/elements/CustomHeader";
 
 const ListIpos = ({ history }) => {
   const params = queryString.parse(history.location.search);
@@ -113,6 +115,11 @@ const ListIpos = ({ history }) => {
 
   return (
     <Fragment>
+      <CustomHeader
+        title="Find your IPO"
+        description="Find your IPO and invest. The most important IPOs from the most important countries and markets."
+        url={pageRoutes.ipos()}
+      />
       {/* Header section start */}
       <section className="header-breadcrumb bgimage overlay overlay--dark">
         <div className="bg_image_holder" style={backgroundImage}>
