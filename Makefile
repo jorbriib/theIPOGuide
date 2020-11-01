@@ -52,3 +52,7 @@ build:
 ## Runs tests for src using local code
 test:
 	@docker-compose -f docker-compose.test.yml up --abort-on-container-exit
+
+## Build backend docker production image with tag $IMAGE_TAG
+build_prod:
+	docker build --target production -t ${IMAGE_TAG} -f backend/Dockerfile backend

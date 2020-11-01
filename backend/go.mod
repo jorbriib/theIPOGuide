@@ -1,4 +1,4 @@
-module github.com/jorbriib/theIPOGuide/backend/src
+module github.com/jorbriib/theIPOGuide/backend
 
 go 1.15
 
