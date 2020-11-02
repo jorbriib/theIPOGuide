@@ -4,7 +4,6 @@ import { loadReCaptcha } from "react-recaptcha-v3";
 import Header from "../../components/layout/Header";
 import { BreadcrumbWrapper } from "../../components/elements/Breadcrumbs";
 import { formatMessage } from "../../lang";
-import { RECAPTCHA_SITE_KEY } from "../../../config";
 import { sendContactMessage } from "./client";
 import Footer from "../../components/layout/Footer";
 import {
@@ -14,6 +13,7 @@ import {
 import { WidgetContactInfo } from "../../components/elements/Widget";
 import pageRoutes from "../../pageRoutes";
 import CustomHeader from "../../components/elements/CustomHeader";
+import { RECAPTCHA_SITE_KEY } from "../../config";
 
 const Contact = () => {
   const [name, setName] = useState("");

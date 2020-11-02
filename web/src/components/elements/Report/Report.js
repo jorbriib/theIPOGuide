@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { loadReCaptcha, ReCaptcha } from "react-recaptcha-v3";
 
-import { RECAPTCHA_SITE_KEY } from "../../../../config";
+import { RECAPTCHA_SITE_KEY } from "../../../config";
 import { sendReport } from "./client";
 import { formatMessage } from "../../../lang";
 

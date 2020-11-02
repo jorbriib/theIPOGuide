@@ -1,7 +1,7 @@
 import React from "react";
 import { ReCaptcha } from "react-recaptcha-v3";
 
-import { RECAPTCHA_SITE_KEY } from "../../../../config";
+import { RECAPTCHA_SITE_KEY } from "../../../config";
 
 export function ContactForm({
   handleSubmit,

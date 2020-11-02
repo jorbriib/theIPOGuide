@@ -45,14 +45,17 @@ prune:
 	@docker rmi theipoguide_frontend
 	@docker rmi theipoguide_api
 
-## Builds application services images
-build:
-	@docker-compose build
+
 
 ## Runs tests for src using local code
 test:
 	@docker-compose -f docker-compose.test.yml up --abort-on-container-exit
 
-## Build backend docker production image with tag $IMAGE_TAG
+## Builds application services images
+build:
+	@docker-compose build
+
+## Build docker production images with tag $IMAGE_TAG
 build_prod:
-	docker build --target production -t ${IMAGE_TAG} -f backend/Dockerfile backend
+	docker build --target production -t theipoguide_backend_prod -f backend/Dockerfile backend
+	docker build --target production --build-arg APP_URL --build-arg API_URL  --build-arg RECAPTCHA_SITE_KEY -t theipoguide_web_prod -f web/Dockerfile web

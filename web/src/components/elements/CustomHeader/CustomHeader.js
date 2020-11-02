@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 
-import { APP_HOST } from "../../../../config";
+import { APP_HOST } from "../../../config";
 
 const CustomHeader = ({ title, description, url }) => {
   if (url === undefined) {
