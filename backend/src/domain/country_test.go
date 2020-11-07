@@ -1,17 +1,16 @@
 package domain_test
 
 import (
-	"github.com/jorbriib/theIPOGuide/backend/src/domain"
+	. "github.com/jorbriib/theIPOGuide/backend/src/domain"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestHydrateCountry(t *testing.T) {
-	assertion := assert.New(t)
-	country := domain.HydrateCountry("1-1", "US", "USA")
-	assertion.NotNil(country)
+	country := HydrateCountry("1-1", "US", "USA")
+	assert.NotNil(t, country)
 
-	assertion.Equal(domain.CountryId("1-1"), country.Id())
-	assertion.Equal("US", country.Code())
-	assertion.Equal("USA", country.Name())
+	assert.Equal(t, CountryId("1-1"), country.Id())
+	assert.Equal(t, "US", country.Code())
+	assert.Equal(t, "USA", country.Name())
 }

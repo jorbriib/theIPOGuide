@@ -10,3 +10,7 @@ require (
 	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 )
+
+replace (
+    github.com/jorbriib/theIPOGuide/backend/src/domain => ./src/domain
+)
