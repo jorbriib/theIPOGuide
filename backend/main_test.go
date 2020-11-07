@@ -42,19 +42,21 @@ func TestGetIpos(t *testing.T) {
 	ipoRepository := infrastructure.NewMySQLIpoRepository(db)
 	marketRepository := infrastructure.NewMySQLMarketRepository(db)
 	companyRepository := infrastructure.NewMySQLCompanyRepository(db)
-	service := application.NewService(ipoRepository, marketRepository, companyRepository)
-	controller := api.NewController(service)
+	countryRepository := infrastructure.NewMySQLCountryRepository(db)
+	sectorRepository := infrastructure.NewMySQLSectorRepository(db)
+	service := application.NewGetIposService(ipoRepository, marketRepository, companyRepository, countryRepository, sectorRepository)
+	controller := api.NewGetIposController(service)
 
 	r := httptest.NewRequest("GET", "/v1/ipos", nil)
 	w := httptest.NewRecorder()
  
 
-	controller.GetIpos(w, r)
+	controller.Run(w, r)
 
 	resp := w.Result()
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	assertion.Equal(http.StatusOK, resp.StatusCode)
-	assertion.JSONEq("[{\"alias\": \"pinterest\",\"company\": {\"symbol\": \"PINS\",\"name\": \"Pinterest\",\"sector\": \"Communication Services\",\"country\": \"United States of America\",\"logo\": \"/assets/images/pinterest-logo.jpg\"},\"market\": {\"name\": \"Nasdaq Global\"},\"priceFrom\": \"$22\",\"priceTo\": \"\",\"expectedDate\": \"2019-04-18 00:00:00 +0000 UTC\"}]", string(body))
+	assertion.JSONEq("{\"total\":2,\"list\":[{\"alias\":\"array-technologies\",\"company\":{\"symbol\":\"ARRY\",\"name\":\"Array Technologies\",\"sector\":\"Technology\",\"country\":\"United States of America\",\"logo\":\"/assets/images/array-technologies-logo.jpg\"},\"market\":{\"code\":\"NQGB\",\"name\":\"Nasdaq Global\",\"currency\":\"USD\"},\"priceFrom\":\"$19\",\"priceTo\":\"\",\"expectedDate\":\"2020-10-15 00:00:00 +0000 UTC\"},{\"alias\":\"pinterest\",\"company\":{\"symbol\":\"PINS\",\"name\":\"Pinterest\",\"sector\":\"Communication Services\",\"country\":\"United States of America\",\"logo\":\"/assets/images/pinterest-logo.jpg\"},\"market\":{\"code\":\"NQGB\",\"name\":\"Nasdaq Global\",\"currency\":\"USD\"},\"priceFrom\":\"$22\",\"priceTo\":\"\",\"expectedDate\":\"2019-04-18 00:00:00 +0000 UTC\"}]}", string(body))
 
 }

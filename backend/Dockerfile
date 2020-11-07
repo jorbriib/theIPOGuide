@@ -34,4 +34,6 @@ ENTRYPOINT ["air", "-c", "/etc/air/air.conf"]
 
 FROM golang:1.15 as test
 
+WORKDIR /app
+
 RUN apt-get update && apt-get install -y --no-install-recommends mariadb-client

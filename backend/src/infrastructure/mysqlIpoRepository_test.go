@@ -38,9 +38,9 @@ func TestMySQLIpoRepository_GetById_ReturnsNilNotFound(t *testing.T) {
 func TestMySQLIpoRepository_Find(t *testing.T) {
 	r := infrastructure.NewMySQLIpoRepository(db)
 
-	response, err := r.Find("", "", "", "", nil, 0, 20)
+	response, err := r.Find( []domain.MarketId{}, []domain.CountryId{}, []domain.SectorId{}, []domain.IndustryId{}, []domain.IpoId{}, "", 0, 20)
 
 	assert.Nil(t, err)
-	assert.Equal(t, 1, len(response))
-	assert.Equal(t, domain.IpoId("493506e1-28e2-9e39-8d43-09fdf62ba7dc"), response[0].Id())
+	assert.Equal(t, 2, len(response))
+	assert.Equal(t, domain.IpoId("4de1f713-410a-d8b5-b67d-3658e4a89723"), response[0].Id())
 }
