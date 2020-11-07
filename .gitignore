@@ -1,2 +1,11 @@
 .env
 web/public
+.idea
+
+*.tfvars
+**/.terraform/*
+
+*.tfstate
+*.tfstate.*
+
+crash.log
