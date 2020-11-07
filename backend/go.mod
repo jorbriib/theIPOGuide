@@ -13,4 +13,6 @@ require (
 
 replace (
     github.com/jorbriib/theIPOGuide/backend/src/domain => ./src/domain
+    github.com/jorbriib/theIPOGuide/backend/src/application => ./src/application
+
 )

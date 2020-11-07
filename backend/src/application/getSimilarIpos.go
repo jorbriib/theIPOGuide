@@ -26,11 +26,6 @@ type GetSimilarIposQuery struct {
 	alias string
 }
 
-// Alias returns the response data
-func (q GetSimilarIposQuery) Alias() string {
-	return q.alias
-}
-
 // NewGetSimilarIposQuery returns the query used by GetIPO method
 func NewGetSimilarIposQuery(alias string) GetSimilarIposQuery {
 	return GetSimilarIposQuery{alias}
