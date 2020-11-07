@@ -1,8 +1,26 @@
-version: 2 # CircleCI version
+version: 2
 jobs:
-  build:
-    machine: true # Use a Linux VM instead of docker environment
-    working_directory: ~/repo # Default working directory, where your project will be cloned
+  test:
+    machine: true
+    working_directory: ~/repo
     steps:
       - checkout
       - run: make test
+  build:
+    machine: true
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run: make build_prod
+
+workflows:
+  version: 2
+  test_build_deploy:
+    jobs:
+      - test
+      - build:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master

@@ -55,7 +55,6 @@ test:
 build:
 	@docker-compose build
 
-## Build docker production images with tag $IMAGE_TAG
+## Build docker production images with tag
 build_prod:
 	docker build --target production -t theipoguide_backend_prod -f backend/Dockerfile backend
-	docker build --target production --build-arg APP_URL --build-arg API_URL  --build-arg RECAPTCHA_SITE_KEY -t theipoguide_web_prod -f web/Dockerfile web
