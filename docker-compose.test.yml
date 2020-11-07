@@ -3,7 +3,6 @@ services:
   api_test:
     build:
       context: ./backend
-      target: test
     volumes:
       - ./backend:/app
     entrypoint: >
