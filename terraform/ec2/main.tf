@@ -78,3 +78,12 @@ resource "aws_ecr_repository" "ipo-ecr-backend-repo" {
     scan_on_push = false
   }
 }
+
+resource "aws_ecr_repository" "ipo-ecr-migrations-repo" {
+  name                 = "ipo-ecr-migrations-repo"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = false
+  }
+}
