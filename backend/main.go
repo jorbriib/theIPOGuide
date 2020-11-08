@@ -81,6 +81,7 @@ func main() {
 	)
 
 	_ = r.Get("/v1/{notFound}", notFound)
+	_ = r.Get("/healt-check", healthCheck)
 	_ = r.Get("/{notFound}", notFound)
 
 	log.Println("Server listening")
@@ -104,6 +105,10 @@ func main() {
 
 func notFound(writer http.ResponseWriter, _ *http.Request) {
 	writer.WriteHeader(http.StatusNotFound)
+}
+
+func healthCheck(writer http.ResponseWriter, _ *http.Request) {
+	writer.WriteHeader(http.StatusOK)
 }
 
 func getDB() *sql.DB {
