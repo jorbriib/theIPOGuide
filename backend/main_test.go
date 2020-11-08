@@ -37,7 +37,6 @@ func TestMain(m *testing.M) {
 }
 
 func TestGetIpos(t *testing.T) {
-	assertion := assert.New(t)
 
 	ipoRepository := infrastructure.NewMySQLIpoRepository(db)
 	marketRepository := infrastructure.NewMySQLMarketRepository(db)
@@ -56,7 +55,7 @@ func TestGetIpos(t *testing.T) {
 	resp := w.Result()
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	assertion.Equal(http.StatusOK, resp.StatusCode)
-	assertion.JSONEq("{\"total\":2,\"list\":[{\"alias\":\"array-technologies\",\"company\":{\"symbol\":\"ARRY\",\"name\":\"Array Technologies\",\"sector\":\"Technology\",\"country\":\"United States of America\",\"logo\":\"/assets/images/array-technologies-logo.jpg\"},\"market\":{\"code\":\"NQGB\",\"name\":\"Nasdaq Global\",\"currency\":\"USD\"},\"priceFrom\":\"$19\",\"priceTo\":\"\",\"expectedDate\":\"2020-10-15 00:00:00 +0000 UTC\"},{\"alias\":\"pinterest\",\"company\":{\"symbol\":\"PINS\",\"name\":\"Pinterest\",\"sector\":\"Communication Services\",\"country\":\"United States of America\",\"logo\":\"/assets/images/pinterest-logo.jpg\"},\"market\":{\"code\":\"NQGB\",\"name\":\"Nasdaq Global\",\"currency\":\"USD\"},\"priceFrom\":\"$22\",\"priceTo\":\"\",\"expectedDate\":\"2019-04-18 00:00:00 +0000 UTC\"}]}", string(body))
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	assert.JSONEq(t, "{\"total\":2,\"list\":[{\"alias\":\"array-technologies\",\"company\":{\"symbol\":\"ARRY\",\"name\":\"Array Technologies\",\"sector\":\"Technology\",\"country\":\"United States of America\",\"logo\":\"/assets/images/array-technologies-logo.jpg\"},\"market\":{\"code\":\"NQGB\",\"name\":\"Nasdaq Global\",\"currency\":\"USD\"},\"priceFrom\":\"$19\",\"priceTo\":\"\",\"expectedDate\":\"2020-10-15 00:00:00 +0000 UTC\"},{\"alias\":\"pinterest\",\"company\":{\"symbol\":\"PINS\",\"name\":\"Pinterest\",\"sector\":\"Communication Services\",\"country\":\"United States of America\",\"logo\":\"/assets/images/pinterest-logo.jpg\"},\"market\":{\"code\":\"NQGB\",\"name\":\"Nasdaq Global\",\"currency\":\"USD\"},\"priceFrom\":\"$22\",\"priceTo\":\"\",\"expectedDate\":\"2019-04-18 00:00:00 +0000 UTC\"}]}", string(body))
 
 }
