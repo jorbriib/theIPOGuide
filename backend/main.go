@@ -81,7 +81,7 @@ func main() {
 	)
 
 	_ = r.Get("/v1/{notFound}", notFound)
-	_ = r.Get("/healt-check", healthCheck)
+  _ = r.Get("/health-check", healthCheck)
 	_ = r.Get("/{notFound}", notFound)
 
 	log.Println("Server listening")
