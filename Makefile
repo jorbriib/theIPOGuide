@@ -36,6 +36,16 @@ up:
 down:
 	@docker-compose down --remove-orphans
 
+## Execute migrations to the DB
+db_migrate:
+	@docker-compose exec api sh /database/migrate.sh
+
+## Seeds test data to the DB
+db_seed_test:
+	@docker-compose exec api sh /database/clean_database.sh
+	@docker-compose exec api sh /database/migrate.sh
+	@docker-compose exec api sh /database/seed_test.sh
+
 ## Re-starts all application services
 restart: down up
 
@@ -56,9 +66,12 @@ build:
 ## Build docker production images with tag
 build_prod:
 	@docker build --target production -t theipoguide_backend_prod -f backend/Dockerfile backend
+	@docker build --target migrations -t theipoguide_migrations_prod -f database/Dockerfile database
 
 ## Push docker production images to ECR
 push_prod:
 	@$$(aws ecr get-login --no-include-email --region ${AWS_REGION})
 	@docker tag theipoguide_backend_prod:latest ${AWS_ECR_URL}/${AWS_ECR_REPO}:latest
 	@docker push ${AWS_ECR_URL}/${AWS_ECR_REPO}:latest
+	@docker tag theipoguide_migrations_prod:latest ${AWS_ECR_URL}/${AWS_ECR_MIGRATIONS_REPO}:latest
+	@docker push ${AWS_ECR_URL}/${AWS_ECR_MIGRATIONS_REPO}:latest

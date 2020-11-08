@@ -6,6 +6,7 @@ services:
       target: development
     volumes:
       - ./backend:/app
+      - ./database:/database
     ports:
       - 80:80
     env_file:
@@ -19,8 +20,6 @@ services:
     restart: always
     env_file:
       - backend/.env
-    volumes:
-      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     ports:
       - 3306:3306
 
