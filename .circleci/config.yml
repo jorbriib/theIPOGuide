@@ -6,19 +6,22 @@ jobs:
     steps:
       - checkout
       - run: make test
-  build:
+  build_and_push:
     machine: true
     working_directory: ~/repo
     steps:
       - checkout
       - run: make build_prod
+      - run: make push_prod
+
 
 workflows:
   version: 2
-  test_build_deploy:
+  test_build_push_deploy:
     jobs:
       - test
-      - build:
+      - build_and_push:
+          context: theIPOguide-prod
           requires:
             - test
           filters:
