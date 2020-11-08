@@ -36,8 +36,8 @@ resource "aws_db_instance" "ipo-db" {
   allocated_storage = 10
   storage_type      = "gp2"
 
-  engine            = "mariadb"
-  engine_version    = "10.4.13"
+  engine            = "mysql"
+  engine_version    = "8.0.20"
   instance_class    = "db.t2.micro"
 
   name     = var.database_name
@@ -46,7 +46,7 @@ resource "aws_db_instance" "ipo-db" {
 
   db_subnet_group_name   = aws_db_subnet_group.ipo-sn-db.name
   vpc_security_group_ids = [aws_security_group.ipo-sg-db.id]
-  parameter_group_name   = "default.mariadb10.4"
+  parameter_group_name   = "default.mysql8.0"
 
   skip_final_snapshot       = true
   storage_encrypted = false
