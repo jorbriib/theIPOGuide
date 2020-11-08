@@ -3,11 +3,10 @@ services:
   api_test:
     build:
       context: ./backend
-      target: test
     volumes:
       - ./backend:/app
     entrypoint: >
-      sh -c "go test ./..."
+      sh -c "sh wait_for_mysql.sh && go test ./..."
     env_file:
       - backend/.env.test
     depends_on:

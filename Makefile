@@ -45,8 +45,6 @@ prune:
 	@docker rmi theipoguide_frontend
 	@docker rmi theipoguide_api
 
-
-
 ## Runs tests for src using local code
 test:
 	@docker-compose -f docker-compose.test.yml up --abort-on-container-exit
@@ -55,7 +53,12 @@ test:
 build:
 	@docker-compose build
 
-## Build docker production images with tag $IMAGE_TAG
+## Build docker production images with tag
 build_prod:
-	docker build --target production -t theipoguide_backend_prod -f backend/Dockerfile backend
-	docker build --target production --build-arg APP_URL --build-arg API_URL  --build-arg RECAPTCHA_SITE_KEY -t theipoguide_web_prod -f web/Dockerfile web
+	@docker build --target production -t theipoguide_backend_prod -f backend/Dockerfile backend
+
+## Push docker production images to ECR
+push_prod:
+	@$$(aws ecr get-login --no-include-email --region ${AWS_REGION})
+	@docker tag theipoguide_backend_prod:latest ${AWS_ECR_URL}/${AWS_ECR_REPO}:latest
+	@docker push ${AWS_ECR_URL}/${AWS_ECR_REPO}:latest
