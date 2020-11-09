@@ -75,3 +75,6 @@ push_prod:
 	@docker push ${AWS_ECR_URL}/${AWS_ECR_REPO}:latest
 	@docker tag theipoguide_migrations_prod:latest ${AWS_ECR_URL}/${AWS_ECR_MIGRATIONS_REPO}:latest
 	@docker push ${AWS_ECR_URL}/${AWS_ECR_MIGRATIONS_REPO}:latest
+
+deploy_prod:
+	sh backend/deploy.sh
