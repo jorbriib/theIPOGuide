@@ -13,17 +13,34 @@ jobs:
       - checkout
       - run: make build_prod
       - run: make push_prod
+  deploy:
+    machine: true
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "ce:bd:07:44:62:3f:fe:b6:6a:35:e5:68:ee:44:39:46"
+      - run: make deploy_prod
 
 
 workflows:
   version: 2
   test_build_push_deploy:
     jobs:
-      - test
+      - test:
+          filters:
+            branches:
+              ignore: master
       - build_and_push:
           context: theIPOguide-prod
+          filters:
+            branches:
+              only: master
+      - deploy:
+          context: theIPOguide-prod
           requires:
-            - test
+            - build_and_push
           filters:
             branches:
               only: master
