@@ -13,7 +13,7 @@ jobs:
       - checkout
       - run: make build_prod
       - run: make push_prod
-  deploy:
+  deploy_backend:
     machine: true
     working_directory: ~/repo
     steps:
@@ -21,7 +21,14 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "ce:bd:07:44:62:3f:fe:b6:6a:35:e5:68:ee:44:39:46"
-      - run: make deploy_prod
+      - run: make deploy_backend_prod
+  deploy_web:
+    docker:
+      - image: circleci/node:12.7
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run: make deploy_web_prod
 
 
 workflows:
@@ -37,10 +44,17 @@ workflows:
           filters:
             branches:
               only: master
-      - deploy:
+      - deploy_backend:
           context: theIPOguide-prod
           requires:
-            - build_and_push
+           - build_and_push
           filters:
             branches:
               only: master
+      - deploy_web:
+          context: theIPOguide-prod
+          requires:
+           - deploy_backend
+          filters:
+            branches:
+              ignore: master
