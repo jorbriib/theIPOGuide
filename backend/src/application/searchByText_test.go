@@ -98,29 +98,29 @@ func TestSearchByTextService_Run(t *testing.T) {
 	expectedIpoReturn[2] = domain.HydrateIpo("3-ipo-id", "3-alias", "intro","2-market-id", "3-company-id", 0, 0, 0, nil)
 
 	expectedMarketReturn := make([]domain.Market, 2)
-	expectedMarketReturn[0] = domain.HydrateMarket("1-market-id", "market-code-1", "Market 1", domain.HydrateCurrency("", "", ""))
-	expectedMarketReturn[1] = domain.HydrateMarket("2-market-id", "market-code-2", "Market 2", domain.HydrateCurrency("", "", ""))
+	expectedMarketReturn[0] = domain.HydrateMarket("1-market-id", "market-code-1", "Market 1", domain.HydrateCurrency("", "", ""), "image", 11)
+	expectedMarketReturn[1] = domain.HydrateMarket("2-market-id", "market-code-2", "Market 2", domain.HydrateCurrency("", "", ""), "image", 111)
 
 	expectedCompanyReturn := make([]domain.Company, 3)
 	expectedCompanyReturn[0] = domain.HydrateCompany(
 		"1-company-id", "", "",
-		domain.HydrateSector("1-sector-id", "sector", "Sector"),
+		domain.HydrateSector("1-sector-id", "sector", "Sector", "image", 11),
 		domain.HydrateIndustry("1-industry-id", "industry", "Industry"), "",
-		domain.HydrateCountry("1-country-id", "es", "Spain"), "",
+		domain.HydrateCountry("1-country-id", "es", "Spain", "image", 13), "",
 		"", "", 0, "", "",
 		"", "", "", "", 2000, "", "", "", "", "")
 	expectedCompanyReturn[1] = domain.HydrateCompany(
 		"2-company-id", "", "",
-		domain.HydrateSector("1-sector-id", "sector", "Sector"),
+		domain.HydrateSector("1-sector-id", "sector", "Sector", "image", 11),
 		domain.HydrateIndustry("1-industry-id", "industry", "Industry"), "",
-		domain.HydrateCountry("1-country-id", "es", "Spain"), "",
+		domain.HydrateCountry("1-country-id", "es", "Spain", "image", 13), "",
 		"", "", 0, "", "",
 		"", "", "", "", 2000, "", "", "", "", "")
 	expectedCompanyReturn[2] = domain.HydrateCompany(
 		"3-company-id", "", "",
-		domain.HydrateSector("2-sector-id", "2-sector", "Sector 2" ),
+		domain.HydrateSector("2-sector-id", "2-sector", "Sector 2" , "image", 133),
 		domain.HydrateIndustry("2-industry-id", "2-industry", "Industry 2"), "",
-		domain.HydrateCountry("2-country-id", "us", "USA"), "",
+		domain.HydrateCountry("2-country-id", "us", "USA", "image", 15), "",
 		"", "", 0, "", "",
 		"", "", "", "", 2000, "", "", "", "", "")
 

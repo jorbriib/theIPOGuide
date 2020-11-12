@@ -52,7 +52,7 @@ func TestService_GetIPO_FailsWhenCompanyRepositoryReturnsError(t *testing.T) {
 	alias := "pinterest"
 
 	expectedIpoReturn := HydrateIpo("1-ipo-id", "1-alias", "intro", "1-market-id", "1-company-id", 0, 0, 0, nil)
-	expectedMarketReturn := HydrateMarket("1-market-id", "", "", HydrateCurrency("", "", ""))
+	expectedMarketReturn := HydrateMarket("1-market-id", "", "", HydrateCurrency("", "", ""), "", 2)
 
 	r := IpoRepositoryMock{}
 	r.On("GetByAlias", alias).Return(&expectedIpoReturn, nil)
@@ -99,13 +99,13 @@ func TestService_GetIPO(t *testing.T) {
 	alias := "pinterest"
 
 	expectedIpoReturn := HydrateIpo("1-ipo-id", "1-alias", "intro", "1-market-id", "1-company-id", 0, 0, 0, nil)
-	expectedMarketReturn := HydrateMarket("1-market-id", "", "", HydrateCurrency("", "", ""))
+	expectedMarketReturn := HydrateMarket("1-market-id", "", "", HydrateCurrency("", "", ""), "image", 2)
 
 	expectedCompanyReturn := HydrateCompany(
 		"1-company-id", "", "",
-		HydrateSector("1-sector", "1-alias", "sector"),
+		HydrateSector("1-sector", "1-alias", "sector", "image", 2),
 		HydrateIndustry("1-industry", "1-alias", "industry"), "",
-		HydrateCountry("1-country", "1-code", "country"), "",
+		HydrateCountry("1-country", "1-code", "country", "image", 3), "",
 		"", "", 0, "", "",
 		"", "", "", "", 2000, "", "", "", "", "")
 

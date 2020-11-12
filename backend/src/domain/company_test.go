@@ -7,9 +7,9 @@ import (
 )
 
 func TestHydrateCompany(t *testing.T) {
-	sector := HydrateSector("1-sector", "communication", "Communication")
+	sector := HydrateSector("1-sector", "communication", "Communication", "image", 10)
 	industry := HydrateIndustry("1-industry", "tech", "Tech")
-	country := HydrateCountry("1-contry", "US", "USA")
+	country := HydrateCountry("1-contry", "US", "USA", "image", 2)
 	company := HydrateCompany(
 		"uuid",
 		"PINS",

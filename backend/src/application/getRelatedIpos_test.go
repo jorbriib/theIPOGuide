@@ -87,17 +87,17 @@ func TestGetRelatedIposService_Run(t *testing.T) {
 	assertion := assert.New(t)
 
 	expectedMarketReturn := make([]domain.Market, 2)
-	expectedMarketReturn[0] = domain.HydrateMarket("1-market-id", "market-code-1", "Market 1", domain.HydrateCurrency("", "", ""))
-	expectedMarketReturn[1] = domain.HydrateMarket("2-market-id", "market-code-2", "Market 2", domain.HydrateCurrency("", "", ""))
+	expectedMarketReturn[0] = domain.HydrateMarket("1-market-id", "market-code-1", "Market 1", domain.HydrateCurrency("", "", ""), "image", 111)
+	expectedMarketReturn[1] = domain.HydrateMarket("2-market-id", "market-code-2", "Market 2", domain.HydrateCurrency("", "", ""), "image", 222)
 
 
 	expectedCountryReturn := make([]domain.Country, 2)
-	expectedCountryReturn[0] = domain.HydrateCountry("1-country-id", "es", "Spain")
-	expectedCountryReturn[1] = domain.HydrateCountry("2-country-id", "us", "USA")
+	expectedCountryReturn[0] = domain.HydrateCountry("1-country-id", "es", "Spain", "image", 11)
+	expectedCountryReturn[1] = domain.HydrateCountry("2-country-id", "us", "USA", "image", 14)
 
 	expectedSectorReturn := make([]domain.Sector, 2)
-	expectedSectorReturn[0] = domain.HydrateSector("1-sector-id", "sector", "Sector")
-	expectedSectorReturn[1] = domain.HydrateSector("2-sector-id", "2-sector", "Sector 2" )
+	expectedSectorReturn[0] = domain.HydrateSector("1-sector-id", "sector", "Sector", "image", 11)
+	expectedSectorReturn[1] = domain.HydrateSector("2-sector-id", "2-sector", "Sector 2" , "image", 156)
 
 
 	mr := MarketRepositoryMock{}

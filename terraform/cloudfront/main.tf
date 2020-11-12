@@ -38,7 +38,7 @@ resource "aws_cloudfront_distribution" "ipo-cf-web" {
     response_page_path = "/index.html"
   }
 
-  aliases = [var.domain]
+  aliases = [var.domain, "static.${var.domain}"]
 
   restrictions {
     geo_restriction {
