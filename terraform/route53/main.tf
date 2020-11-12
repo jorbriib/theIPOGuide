@@ -34,6 +34,31 @@ resource "aws_route53_record" "frontend_record" {
   }
 }
 
+resource "aws_route53_record" "ipo-static-pb-dns" {
+  zone_id = var.dns_pb_zone
+  name = "static.${var.domain}"
+  type = "A"
+
+  alias {
+    name = var.cf-domain-name
+    zone_id = var.cf-hosted-zone
+    evaluate_target_health = false
+  }
+}
+
+
+resource "aws_route53_record" "ipo-static-pb-dns-v6" {
+  zone_id = var.dns_pb_zone
+  name = "static.${var.domain}"
+  type = "AAAA"
+
+  alias {
+    name = var.cf-domain-name
+    zone_id = var.cf-hosted-zone
+    evaluate_target_health = false
+  }
+}
+
 resource "aws_route53_record" "ipo-cert-validation" {
   for_each = {
     for dvo in var.acm-domain-val : dvo.domain_name => {
