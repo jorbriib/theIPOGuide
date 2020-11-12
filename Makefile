@@ -81,3 +81,6 @@ deploy_backend_prod:
 
 deploy_web_prod:
 	sh web/deploy.sh
+
+deploy_infra_prod:
+	sh terraform/deploy.sh

@@ -57,4 +57,4 @@ workflows:
            - deploy_backend
           filters:
             branches:
-              ignore: master
+              only: master
