@@ -7,9 +7,11 @@ import (
 )
 
 type sectorSQL struct {
-	Id   string `db:"id"`
-	Alias string `db:"alias"`
-	Name string `db:"name"`
+	Id        string `db:"id"`
+	Alias     string `db:"alias"`
+	Name      string `db:"name"`
+	ImageUrl  string `db:"imageUrl"`
+	TotalIpos int    `db:"totalIpos"`
 }
 
 type MySQLSectorRepository struct {
@@ -23,7 +25,8 @@ func NewMySQLSectorRepository(db *sql.DB) MySQLSectorRepository {
 
 func (r MySQLSectorRepository) All() ([]domain.Sector, error) {
 	query := `
-    SELECT BIN_TO_UUID(s.uuid) AS id, s.alias as alias, s.name as name 
+    SELECT BIN_TO_UUID(s.uuid) AS id, s.alias as alias, s.name as name, 
+	s.image_url as imageUrl, s.total_ipos as totalIpos
 	FROM sectors s`
 
 	rows, err := r.db.Query(query)
@@ -32,28 +35,9 @@ func (r MySQLSectorRepository) All() ([]domain.Sector, error) {
 	}
 	defer func() { _ = rows.Close() }()
 
-	var result []domain.Sector
-	for rows.Next() {
-		sectorSQL := &sectorSQL{}
-
-		_ = rows.Scan(
-			&sectorSQL.Id,
-			&sectorSQL.Alias,
-			&sectorSQL.Name,
-		)
-
-		sector := domain.HydrateSector(
-			domain.SectorId(sectorSQL.Id),
-			sectorSQL.Alias,
-			sectorSQL.Name,
-		)
-
-		result = append(result, sector)
-	}
-
+	result := r.resultFromRows(rows)
 	return result, nil
 }
-
 
 func (r MySQLSectorRepository) FindByAliases(aliases []string) ([]domain.Sector, error) {
 	args := make([]interface{}, len(aliases))
@@ -62,9 +46,10 @@ func (r MySQLSectorRepository) FindByAliases(aliases []string) ([]domain.Sector,
 	}
 
 	query := `
-    SELECT BIN_TO_UUID(s.uuid) AS id, s.alias as alias, s.name as name 
+    SELECT BIN_TO_UUID(s.uuid) AS id, s.alias as alias, s.name as name, 
+	s.image_url as imageUrl, s.total_ipos as totalIpos
 	FROM sectors s
-	WHERE s.alias IN (?`+strings.Repeat(",?", len(args)-1)+`)`
+	WHERE s.alias IN (?` + strings.Repeat(",?", len(args)-1) + `)`
 
 	rows, err := r.db.Query(query, args...)
 	if err != nil {
@@ -72,6 +57,11 @@ func (r MySQLSectorRepository) FindByAliases(aliases []string) ([]domain.Sector,
 	}
 	defer func() { _ = rows.Close() }()
 
+	result := r.resultFromRows(rows)
+	return result, nil
+}
+
+func (r MySQLSectorRepository) resultFromRows(rows *sql.Rows) []domain.Sector {
 	var result []domain.Sector
 	for rows.Next() {
 		sectorSQL := &sectorSQL{}
@@ -80,16 +70,19 @@ func (r MySQLSectorRepository) FindByAliases(aliases []string) ([]domain.Sector,
 			&sectorSQL.Id,
 			&sectorSQL.Alias,
 			&sectorSQL.Name,
+			&sectorSQL.ImageUrl,
+			&sectorSQL.TotalIpos,
 		)
 
 		sector := domain.HydrateSector(
 			domain.SectorId(sectorSQL.Id),
 			sectorSQL.Alias,
 			sectorSQL.Name,
+			sectorSQL.ImageUrl,
+			sectorSQL.TotalIpos,
 		)
 
 		result = append(result, sector)
 	}
-
-	return result, nil
+	return result
 }

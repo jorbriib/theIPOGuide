@@ -1,6 +1,6 @@
-INSERT INTO sectors (uuid, alias, name)
-VALUES (UUID_TO_BIN('04e182e6-7470-4dd7-bdf2-cb5e5599dc0e', true), 'communication-services', 'Communication Services'),
-       (UUID_TO_BIN('fff90079-e45a-4c9d-b25c-03fd4bfb38aa', true), 'technology', 'Technology');
+INSERT INTO sectors (uuid, alias, name, image_url, total_ipos)
+VALUES (UUID_TO_BIN('04e182e6-7470-4dd7-bdf2-cb5e5599dc0e', true), 'communication-services', 'Communication Services', 'https://mediacloud.kiplinger.com/image/private/s--VOJ0vx4I--/t_primary-image-desktop@1/v1580358788/slideshow/investing/T052-S001-10-communications-services-stocks-to-buy-for-2019/images/intro.jpg', 1),
+       (UUID_TO_BIN('fff90079-e45a-4c9d-b25c-03fd4bfb38aa', true), 'technology', 'Technology', 'https://www.universal-rights.org/wp-content/uploads/2019/09/30212411048_2a1d7200e2_z-1.jpg', 1);
 
 INSERT INTO industries (uuid, alias, name)
 VALUES (UUID_TO_BIN('0990dc7e-310a-41d3-bc25-a9141e7343c7', true), 'internet-content-and-information',
@@ -10,12 +10,12 @@ VALUES (UUID_TO_BIN('0990dc7e-310a-41d3-bc25-a9141e7343c7', true), 'internet-con
 INSERT INTO currencies (uuid, code, name, display)
 VALUES (UUID_TO_BIN('f0dd9459-6123-465c-aec7-03b82c1c5856', true), 'USD', 'American Dollar', '$%s');
 
-INSERT INTO countries (uuid, code, name)
-VALUES (UUID_TO_BIN('7ca2f739-a0f3-4e5f-848a-54887e762d3a', true), 'US', 'United States of America');
+INSERT INTO countries (uuid, code, name, image_url, total_ipos)
+VALUES (UUID_TO_BIN('7ca2f739-a0f3-4e5f-848a-54887e762d3a', true), 'US', 'United States of America', 'https://www.usawelcome.net/kimg/1200/usa-flag.jpg', 2);
 
-INSERT INTO markets (uuid, code, name, currency_id)
+INSERT INTO markets (uuid, code, name, currency_id, image_url, total_ipos)
 VALUES (UUID_TO_BIN('a9da11f6-bb30-47a0-9f27-b52510f1cc6a', true), 'NQGB', 'Nasdaq Global',
-        UUID_TO_BIN('f0dd9459-6123-465c-aec7-03b82c1c5856', true));
+        UUID_TO_BIN('f0dd9459-6123-465c-aec7-03b82c1c5856', true), 'https://elcandelerotecnologico.files.wordpress.com/2019/06/cambium-networks_nasdaq.jpg?w=558', 2);
 
 
 INSERT INTO companies (uuid, symbol, name, sector_id, industry_id,

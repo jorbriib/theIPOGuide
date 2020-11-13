@@ -15,6 +15,8 @@ type companySQL struct {
 	SectorId              string         `db:"sectorId"`
 	SectorAlias           string         `db:"sectorAlias"`
 	SectorName            string         `db:"sectorName"`
+	SectorImageUrl        string         `db:"sectorImageUrl"`
+	SectorTotalIpos       int            `db:"sectorTotalIpos"`
 	IndustryId            string         `db:"industryId"`
 	IndustryAlias         string         `db:"industryAlias"`
 	IndustryName          string         `db:"industryName"`
@@ -22,6 +24,8 @@ type companySQL struct {
 	CountryId             string         `db:"countryId"`
 	CountryCode           string         `db:"countryCode"`
 	CountryName           string         `db:"countryName"`
+	CountryImageUrl       string         `db:"countryImageUrl"`
+	CountryTotalIpos      int            `db:"countryTotalIpos"`
 	Phone                 string         `db:"phone"`
 	Email                 sql.NullString `db:"email"`
 	Website               string         `db:"website"`
@@ -84,8 +88,10 @@ func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Comp
 	query := `
     SELECT BIN_TO_UUID(c.uuid) AS id, c.symbol as symbol, c.name as name,
 	BIN_TO_UUID(s.uuid) as sectorId, s.alias as sectorAlias,  s.name as sectorName, 
+	s.image_url as sectorImageUrl, s.total_ipos as sectorTotalIpos, 
 	BIN_TO_UUID(i.uuid) as industryId,  i.alias as industryAlias, i.name as industryName,
-	c.address as address, BIN_TO_UUID(ct.uuid) as countryId, ct.code as countryCode, ct.name as countryName,
+	c.address as address, BIN_TO_UUID(ct.uuid) as countryId, ct.code as countryCode, ct.name as countryName, 
+	ct.image_url as countryImageUrl, ct.total_ipos as countryTotalIpos,
 	c.phone as phone, c.email as email, c.website as website, c.employees as employees,
 	c.facebook as facebook, c.twitter as twitter, c.linkedin as linkedin, c.pinterest as pinterest, c.instagram as instagram,
 	c.description as description, c.founded as founded, c.ceo as ceo, c.fiscal_year_end as fiscalYearEnd,
@@ -114,6 +120,8 @@ func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Comp
 			&companySql.SectorId,
 			&companySql.SectorAlias,
 			&companySql.SectorName,
+			&companySql.SectorImageUrl,
+			&companySql.SectorTotalIpos,
 			&companySql.IndustryId,
 			&companySql.IndustryAlias,
 			&companySql.IndustryName,
@@ -121,6 +129,8 @@ func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Comp
 			&companySql.CountryId,
 			&companySql.CountryCode,
 			&companySql.CountryName,
+			&companySql.CountryImageUrl,
+			&companySql.CountryTotalIpos,
 			&companySql.Phone,
 			&companySql.Email,
 			&companySql.Website,
@@ -143,9 +153,9 @@ func (r MySQLCompanyRepository) FindByIds(ids []domain.CompanyId) ([]domain.Comp
 			continue
 		}
 
-		sector := domain.HydrateSector(domain.SectorId(companySql.SectorId), companySql.SectorAlias, companySql.SectorName)
+		sector := domain.HydrateSector(domain.SectorId(companySql.SectorId), companySql.SectorAlias, companySql.SectorName, companySql.SectorImageUrl, companySql.SectorTotalIpos)
 		industry := domain.HydrateIndustry(domain.IndustryId(companySql.IndustryId), companySql.IndustryAlias, companySql.IndustryName)
-		country := domain.HydrateCountry(domain.CountryId(companySql.CountryId), companySql.CountryCode, companySql.CountryName)
+		country := domain.HydrateCountry(domain.CountryId(companySql.CountryId), companySql.CountryCode, companySql.CountryName, companySql.CountryImageUrl, companySql.CountryTotalIpos)
 
 		var email string
 		if companySql.Email.Valid {

@@ -1,12 +1,12 @@
 package api
 
 type GetIposJsonResponse struct {
-	Total uint                   `json:"total"`
+	Total uint                  `json:"total"`
 	List  []IpoListJsonResponse `json:"list"`
 }
 
 type SearchByTextJsonResponse struct {
-	List  []IpoListJsonResponse `json:"list"`
+	List []IpoListJsonResponse `json:"list"`
 }
 type IpoListJsonResponse struct {
 	Alias        string                   `json:"alias"`
@@ -31,14 +31,36 @@ type MarketJsonResponse struct {
 	Currency string `json:"currency"`
 }
 
+type ExtendedMarketJsonResponse struct {
+	Code      string `json:"code"`
+	Name      string `json:"name"`
+	Currency  string `json:"currency"`
+	Image     string `json:"image"`
+	TotalIpos int    `json:"totalIpos"`
+}
+
 type CountryJsonResponse struct {
 	Code string `json:"code"`
 	Name string `json:"name"`
 }
 
+type ExtendedCountryJsonResponse struct {
+	Code      string `json:"code"`
+	Name      string `json:"name"`
+	Image     string `json:"image"`
+	TotalIpos int    `json:"totalIpos"`
+}
+
 type SectorJsonResponse struct {
 	Alias string `json:"alias"`
 	Name  string `json:"name"`
+}
+
+type ExtendedSectorJsonResponse struct {
+	Alias     string `json:"alias"`
+	Name      string `json:"name"`
+	Image     string `json:"image"`
+	TotalIpos int    `json:"totalIpos"`
 }
 
 type IpoViewJsonResponse struct {
@@ -78,9 +100,9 @@ type CompanyViewJsonResponse struct {
 }
 
 type IpoRelations struct {
-	Markets   []*MarketJsonResponse  `json:"markets"`
-	Countries []*CountryJsonResponse `json:"countries"`
-	Sectors   []*SectorJsonResponse  `json:"sectors"`
+	Markets   []*ExtendedMarketJsonResponse  `json:"markets"`
+	Countries []*ExtendedCountryJsonResponse `json:"countries"`
+	Sectors   []*ExtendedSectorJsonResponse  `json:"sectors"`
 }
 
 // ErrorMessage is the error message to send to the clients

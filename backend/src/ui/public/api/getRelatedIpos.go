@@ -25,28 +25,34 @@ func (c GetRelatedIposController) Run(writer http.ResponseWriter, request *http.
 
 	markets, countries, sectors := response.Get()
 
-	var marketsJsonResponse []*MarketJsonResponse
+	var marketsJsonResponse []*ExtendedMarketJsonResponse
 	for _, market := range markets {
-		marketsJsonResponse = append(marketsJsonResponse, &MarketJsonResponse{
+		marketsJsonResponse = append(marketsJsonResponse, &ExtendedMarketJsonResponse{
 			Code:     market.Code(),
 			Name:     market.Name(),
 			Currency: market.Currency().Name(),
+			Image: market.Image(),
+			TotalIpos: market.TotalIpos(),
 		})
 	}
 
-	var countriesJsonResponse []*CountryJsonResponse
+	var countriesJsonResponse []*ExtendedCountryJsonResponse
 	for _, country := range countries {
-		countriesJsonResponse = append(countriesJsonResponse, &CountryJsonResponse{
+		countriesJsonResponse = append(countriesJsonResponse, &ExtendedCountryJsonResponse{
 			Code: country.Code(),
 			Name: country.Name(),
+			Image: country.Image(),
+			TotalIpos: country.TotalIpos(),
 		})
 	}
 
-	var sectorsJsonResponse []*SectorJsonResponse
+	var sectorsJsonResponse []*ExtendedSectorJsonResponse
 	for _, sector := range sectors {
-		sectorsJsonResponse = append(sectorsJsonResponse, &SectorJsonResponse{
+		sectorsJsonResponse = append(sectorsJsonResponse, &ExtendedSectorJsonResponse{
 			Alias: sector.Alias(),
 			Name:  sector.Name(),
+			Image: sector.Image(),
+			TotalIpos: sector.TotalIpos(),
 		})
 	}
 

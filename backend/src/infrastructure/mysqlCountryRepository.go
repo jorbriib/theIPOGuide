@@ -7,9 +7,11 @@ import (
 )
 
 type countrySQL struct {
-	Id   string `db:"id"`
-	Code string `db:"code"`
-	Name string `db:"name"`
+	Id        string `db:"id"`
+	Code      string `db:"code"`
+	Name      string `db:"name"`
+	ImageUrl  string `db:"imageUrl"`
+	TotalIpos int    `db:"totalIpos"`
 }
 
 type MySQLCountryRepository struct {
@@ -23,7 +25,8 @@ func NewMySQLCountryRepository(db *sql.DB) MySQLCountryRepository {
 
 func (r MySQLCountryRepository) All() ([]domain.Country, error) {
 	query := `
-    SELECT BIN_TO_UUID(c.uuid) AS id, c.code as code, c.name as name 
+    SELECT BIN_TO_UUID(c.uuid) AS id, c.code as code, c.name as name, 
+	c.image_url as imageUrl, c.total_ipos as totalIpos
 	FROM countries c`
 
 	rows, err := r.db.Query(query)
@@ -32,25 +35,7 @@ func (r MySQLCountryRepository) All() ([]domain.Country, error) {
 	}
 	defer func() { _ = rows.Close() }()
 
-	var result []domain.Country
-	for rows.Next() {
-		countrySQL := &countrySQL{}
-
-		_ = rows.Scan(
-			&countrySQL.Id,
-			&countrySQL.Code,
-			&countrySQL.Name,
-		)
-
-		country := domain.HydrateCountry(
-			domain.CountryId(countrySQL.Id),
-			countrySQL.Code,
-			countrySQL.Name,
-		)
-
-		result = append(result, country)
-	}
-
+	result := r.resultFromRows(rows)
 	return result, nil
 }
 
@@ -61,9 +46,10 @@ func (r MySQLCountryRepository) FindByCodes(codes []string) ([]domain.Country, e
 	}
 
 	query := `
-    SELECT BIN_TO_UUID(c.uuid) AS id, c.code as code, c.name as name 
+    SELECT BIN_TO_UUID(c.uuid) AS id, c.code as code, c.name as name, 
+	c.image_url as imageUrl, c.total_ipos as totalIpos
 	FROM countries c
-	WHERE c.code IN (?`+strings.Repeat(",?", len(args)-1)+`)`
+	WHERE c.code IN (?` + strings.Repeat(",?", len(args)-1) + `)`
 
 	rows, err := r.db.Query(query, args...)
 	if err != nil {
@@ -71,6 +57,11 @@ func (r MySQLCountryRepository) FindByCodes(codes []string) ([]domain.Country, e
 	}
 	defer func() { _ = rows.Close() }()
 
+	result := r.resultFromRows(rows)
+	return result, nil
+}
+
+func (r MySQLCountryRepository) resultFromRows(rows *sql.Rows) []domain.Country {
 	var result []domain.Country
 	for rows.Next() {
 		countrySQL := &countrySQL{}
@@ -79,16 +70,19 @@ func (r MySQLCountryRepository) FindByCodes(codes []string) ([]domain.Country, e
 			&countrySQL.Id,
 			&countrySQL.Code,
 			&countrySQL.Name,
+			&countrySQL.ImageUrl,
+			&countrySQL.TotalIpos,
 		)
 
 		country := domain.HydrateCountry(
 			domain.CountryId(countrySQL.Id),
 			countrySQL.Code,
 			countrySQL.Name,
+			countrySQL.ImageUrl,
+			countrySQL.TotalIpos,
 		)
 
 		result = append(result, country)
 	}
-
-	return result, nil
+	return result
 }
