@@ -10,12 +10,14 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import Contact from "./pages/Contact/Contact";
 import About from "./pages/About";
+import Home from "./pages/Home";
 
 const App = () => {
   return (
     <Fragment>
       <Switch>
-        <Route path={pageRoutes.home()} exact component={ListIpos} />
+        <Route path={pageRoutes.home()} exact component={Home} />
+        <Route path={pageRoutes.ipos()} exact component={ListIpos} />
         <Route
           path={pageRoutes.ipo(":alias")}
           exact
